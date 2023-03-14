@@ -49,16 +49,16 @@ components:
           example: 211
         gradeYear:
           type: string
-          example: 3_ANO_EM
+          example: EM_2ANO
           enum:
-            - 5_ANO_EF
-            - 6_ANO_EF
-            - 7_ANO_EF
-            - 8_ANO_EF
-            - 9_ANO_EF
-            - 1_ANO_EM
-            - 2_ANO_EM
-            - 3_ANO_EM
+            - EF_5ANO
+            - EF_6ANO
+            - EF_7ANO
+            - EF_8ANO
+            - EF_9ANO
+            - EM_1ANO
+            - EM_2ANO
+            - EM_3ANO
 
     ClassResponse:
       type: object
@@ -72,16 +72,7 @@ components:
           example: 211
         gradeYear:
           type: string
-          example: 3_ANO_EM
-          enum:
-            - 5_ANO_EF
-            - 6_ANO_EF
-            - 7_ANO_EF
-            - 8_ANO_EF
-            - 9_ANO_EF
-            - 1_ANO_EM
-            - 2_ANO_EM
-            - 3_ANO_EM
+          example: EM_2ANO
 
     BadRequestResponse:
       type: object
