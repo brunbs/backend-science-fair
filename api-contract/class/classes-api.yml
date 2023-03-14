@@ -1,0 +1,92 @@
+openapi: 3.0.1
+info:
+  title: Science Fair System
+  description: Documentation of the Science Fair Endpoints
+  version: 0.0.1
+
+tags:
+  - name: class
+    description: Class endpoints
+
+paths:
+  /class:
+    post:
+      tags:
+        - class
+      summary: Create a new class
+      operationId: createClass
+      requestBody:
+        description: Class info to save
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateClassRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+
+components:
+  schemas:
+    CreateClassRequest:
+      type: object
+      required:
+        - name
+        - year
+      properties:
+        name:
+          type: string
+          maxLength: 10
+          example: 211
+        gradeYear:
+          type: string
+          example: 3_ANO_EM
+          enum:
+            - 5_ANO_EF
+            - 6_ANO_EF
+            - 7_ANO_EF
+            - 8_ANO_EF
+            - 9_ANO_EF
+            - 1_ANO_EM
+            - 2_ANO_EM
+            - 3_ANO_EM
+
+    ClassResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: 211
+        gradeYear:
+          type: string
+          example: 3_ANO_EM
+          enum:
+            - 5_ANO_EF
+            - 6_ANO_EF
+            - 7_ANO_EF
+            - 8_ANO_EF
+            - 9_ANO_EF
+            - 1_ANO_EM
+            - 2_ANO_EM
+            - 3_ANO_EM
+
+    BadRequestResponse:
+      type: object
+      properties:
+        propertyName:
+          type: string
+          description: Mensagem de erro
+          example: não deve ser nulo
