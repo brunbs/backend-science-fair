@@ -61,6 +61,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ClassNotFoundResponse'
+  /class/classes:
+    get:
+      tags:
+        - class
+      summary: Get a list of active classes
+      operationId: getAllActiveClasses
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClassResponse'
 
 
 components:
@@ -101,6 +116,9 @@ components:
         gradeYear:
           type: string
           example: EM_2ANO
+        active:
+          type: boolean
+          example: true
 
     BadRequestResponse:
       type: object

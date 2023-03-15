@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class ClassController implements ClassApi {
 
@@ -31,5 +33,13 @@ public class ClassController implements ClassApi {
     public ResponseEntity<ClassResponse> getClass(Long classId) {
         ClassDto foundClass = classService.getClass(classId);
         return ResponseEntity.ok(classMapper.dtoToResponse(foundClass));
+    }
+
+    @Override
+    public ResponseEntity<List<ClassResponse>> getAllActiveClasses() {
+
+        List<ClassDto> classes = classService.getAllActiveClasses();
+
+        return ResponseEntity.ok(classMapper.toClassResponseList(classes));
     }
 }

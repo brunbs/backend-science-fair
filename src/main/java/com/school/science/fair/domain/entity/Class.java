@@ -21,7 +21,10 @@ public class Class {
     private Long id;
 
     private String name;
+
     @Enumerated(EnumType.STRING)
     private GradeYearEnum gradeYear;
+
+    private boolean active = true;
 
 }

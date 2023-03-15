@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,6 +36,7 @@ public class ClassServiceImpl implements ClassService {
     public ClassDto createClass(CreateClassDto createClassDto) {
 
         Class classEntity = classMapper.dtoToEntity(createClassDto);
+        classEntity.setActive(true);
         Class createdClass = classRepository.save(classEntity);
         return classMapper.entityToDto(createdClass);
     }
@@ -42,6 +44,12 @@ public class ClassServiceImpl implements ClassService {
     public ClassDto getClass(Long id) {
         ClassDto foundClass = findClassOrThrowException(id);
         return foundClass;
+    }
+
+    @Override
+    public List<ClassDto> getAllActiveClasses() {
+        List<Class> classes = classRepository.findAllByActiveIsTrue();
+        return classMapper.toListDto(classes);
     }
 
 }
