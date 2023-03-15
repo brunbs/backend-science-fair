@@ -1,7 +1,7 @@
 package com.school.science.fair.service.impl;
 
 import com.school.science.fair.domain.dto.ClassDto;
-import com.school.science.fair.domain.dto.CreateClassDto;
+import com.school.science.fair.domain.dto.ClassRequestDto;
 import com.school.science.fair.domain.entity.Class;
 import com.school.science.fair.domain.enumeration.ExceptionMessage;
 import com.school.science.fair.domain.exception.ResourceNotFoundException;
@@ -24,26 +24,25 @@ public class ClassServiceImpl implements ClassService {
     @Autowired
     private ClassMapper classMapper;
 
-    private ClassDto findClassOrThrowException(Long id) {
+    private Class findClassOrThrowException(Long id) {
         Optional<Class> foundClassEntity = classRepository.findById(id);
         if(foundClassEntity.isEmpty()) {
             throw new ResourceNotFoundException(HttpStatus.NOT_FOUND, ExceptionMessage.CLASS_NOT_FOUND);
         }
-        return classMapper.entityToDto(foundClassEntity.get());
+        return foundClassEntity.get();
     }
 
     @Override
-    public ClassDto createClass(CreateClassDto createClassDto) {
-
-        Class classEntity = classMapper.createDtoToEntity(createClassDto);
+    public ClassDto createClass(ClassRequestDto classRequestDto) {
+        Class classEntity = classMapper.createDtoToEntity(classRequestDto);
         classEntity.setActive(true);
         Class createdClass = classRepository.save(classEntity);
         return classMapper.entityToDto(createdClass);
     }
 
     public ClassDto getClass(Long classId) {
-        ClassDto foundClass = findClassOrThrowException(classId);
-        return foundClass;
+        Class foundClass = findClassOrThrowException(classId);
+        return classMapper.entityToDto(foundClass);
     }
 
     @Override
@@ -54,11 +53,18 @@ public class ClassServiceImpl implements ClassService {
 
     @Override
     public ClassDto deleteClass(Long classId) {
-        ClassDto foundClass = findClassOrThrowException(classId);
+        Class foundClass = findClassOrThrowException(classId);
         foundClass.setActive(false);
-        Class classToDelete = classMapper.createDtoToEntity(foundClass);
-        Class deletedClass = classRepository.save(classToDelete);
+        Class deletedClass = classRepository.save(foundClass);
         return classMapper.entityToDto(deletedClass);
+    }
+
+    @Override
+    public ClassDto updateClass(Long classId, ClassRequestDto classRequestDto) {
+        Class foundClass = findClassOrThrowException(classId);
+        classMapper.updateModelFromDto(classRequestDto, foundClass);
+        Class updatedClass = classRepository.save(foundClass);
+        return classMapper.entityToDto(updatedClass);
     }
 
 }
