@@ -17,13 +17,14 @@ import static org.mapstruct.ReportingPolicy.IGNORE;
 @Mapper(componentModel = "spring",  unmappedTargetPolicy = IGNORE)
 public interface ClassMapper {
 
-    Class dtoToEntity(CreateClassDto createClassDto);
+    Class createDtoToEntity(CreateClassDto createClassDto);
     ClassDto entityToDto(Class classEntity);
     CreateClassDto requestToDto(CreateClassRequest createClassRequest);
     @Mapping(source = "gradeYear", target = "gradeYear", qualifiedByName = "getEnumDescription")
     ClassResponse dtoToResponse(ClassDto classDto);
     List<ClassDto> toListDto(List<Class> classes);
     List<ClassResponse> toClassResponseList(List<ClassDto> classDtos);
+    Class createDtoToEntity(ClassDto classDto);
 
     @Named("getEnumDescription")
     public static String getEnumDescription(GradeYearEnum gradeYearEnum) {

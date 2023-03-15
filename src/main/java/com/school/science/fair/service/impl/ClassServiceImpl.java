@@ -35,14 +35,14 @@ public class ClassServiceImpl implements ClassService {
     @Override
     public ClassDto createClass(CreateClassDto createClassDto) {
 
-        Class classEntity = classMapper.dtoToEntity(createClassDto);
+        Class classEntity = classMapper.createDtoToEntity(createClassDto);
         classEntity.setActive(true);
         Class createdClass = classRepository.save(classEntity);
         return classMapper.entityToDto(createdClass);
     }
 
-    public ClassDto getClass(Long id) {
-        ClassDto foundClass = findClassOrThrowException(id);
+    public ClassDto getClass(Long classId) {
+        ClassDto foundClass = findClassOrThrowException(classId);
         return foundClass;
     }
 
@@ -50,6 +50,15 @@ public class ClassServiceImpl implements ClassService {
     public List<ClassDto> getAllActiveClasses() {
         List<Class> classes = classRepository.findAllByActiveIsTrue();
         return classMapper.toListDto(classes);
+    }
+
+    @Override
+    public ClassDto deleteClass(Long classId) {
+        ClassDto foundClass = findClassOrThrowException(classId);
+        foundClass.setActive(false);
+        Class classToDelete = classMapper.createDtoToEntity(foundClass);
+        Class deletedClass = classRepository.save(classToDelete);
+        return classMapper.entityToDto(deletedClass);
     }
 
 }
