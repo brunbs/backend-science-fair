@@ -25,6 +25,6 @@ public class Class {
     @Enumerated(EnumType.STRING)
     private GradeYearEnum gradeYear;
 
-    private boolean active = true;
+    private boolean active;
 
 }
