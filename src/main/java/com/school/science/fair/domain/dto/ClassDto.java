@@ -8,4 +8,5 @@ public class ClassDto {
     private Long id;
     private String name;
     private GradeYearEnum gradeYear;
+    private boolean active;
 }
