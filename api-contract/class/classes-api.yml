@@ -34,6 +34,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequestResponse'
+
   /class/{classId}:
     get:
       tags:
@@ -87,8 +88,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ClassNotFoundResponse'
+    patch:
+      tags:
+        - class
+      summary: Update a Class
+      operationId: updateClass
+      parameters:
+        - name: classId
+          in: path
+          description: Class id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Class info to save
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateClassRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassResponse'
+        '404':
+          description: Class not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassNotFoundResponse'
 
-  /class/classes:
+  /class/classes/active:
     get:
       tags:
         - class
@@ -112,6 +145,26 @@ components:
       required:
         - name
         - year
+      properties:
+        name:
+          type: string
+          maxLength: 10
+          example: 211
+        gradeYear:
+          type: string
+          example: EM_2ANO
+          enum:
+            - EF_5ANO
+            - EF_6ANO
+            - EF_7ANO
+            - EF_8ANO
+            - EF_9ANO
+            - EM_1ANO
+            - EM_2ANO
+            - EM_3ANO
+
+    UpdateClassRequest:
+      type: object
       properties:
         name:
           type: string

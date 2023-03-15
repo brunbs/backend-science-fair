@@ -2,13 +2,12 @@ package com.school.science.fair.domain.mapper;
 
 import com.school.science.fair.domain.ClassResponse;
 import com.school.science.fair.domain.CreateClassRequest;
+import com.school.science.fair.domain.UpdateClassRequest;
 import com.school.science.fair.domain.dto.ClassDto;
-import com.school.science.fair.domain.dto.CreateClassDto;
+import com.school.science.fair.domain.dto.ClassRequestDto;
 import com.school.science.fair.domain.entity.Class;
 import com.school.science.fair.domain.enumeration.GradeYearEnum;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -17,15 +16,16 @@ import static org.mapstruct.ReportingPolicy.IGNORE;
 @Mapper(componentModel = "spring",  unmappedTargetPolicy = IGNORE)
 public interface ClassMapper {
 
-    Class createDtoToEntity(CreateClassDto createClassDto);
+    Class createDtoToEntity(ClassRequestDto classRequestDto);
     ClassDto entityToDto(Class classEntity);
-    CreateClassDto requestToDto(CreateClassRequest createClassRequest);
+    ClassRequestDto toRequestDto(CreateClassRequest createClassRequest);
     @Mapping(source = "gradeYear", target = "gradeYear", qualifiedByName = "getEnumDescription")
     ClassResponse dtoToResponse(ClassDto classDto);
     List<ClassDto> toListDto(List<Class> classes);
     List<ClassResponse> toClassResponseList(List<ClassDto> classDtos);
-    Class createDtoToEntity(ClassDto classDto);
-
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateModelFromDto(ClassRequestDto classRequestDto, @MappingTarget Class entity);
+    ClassRequestDto toRequestDto(UpdateClassRequest updateClassRequest);
     @Named("getEnumDescription")
     public static String getEnumDescription(GradeYearEnum gradeYearEnum) {
         return gradeYearEnum.getDescription();

@@ -3,7 +3,9 @@ package com.school.science.fair.controller;
 import com.school.science.fair.api.ClassApi;
 import com.school.science.fair.domain.ClassResponse;
 import com.school.science.fair.domain.CreateClassRequest;
+import com.school.science.fair.domain.UpdateClassRequest;
 import com.school.science.fair.domain.dto.ClassDto;
+import com.school.science.fair.domain.dto.ClassRequestDto;
 import com.school.science.fair.domain.mapper.ClassMapper;
 import com.school.science.fair.service.ClassService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,7 @@ public class ClassController implements ClassApi {
 
     @Override
     public ResponseEntity<ClassResponse> createClass(CreateClassRequest createClassRequest) {
-        ClassDto createdClass = classService.createClass(classMapper.requestToDto(createClassRequest));
+        ClassDto createdClass = classService.createClass(classMapper.toRequestDto(createClassRequest));
         ClassResponse classResponse = classMapper.dtoToResponse(createdClass);
         return ResponseEntity.status(HttpStatus.CREATED).body(classResponse);
     }
@@ -37,9 +39,7 @@ public class ClassController implements ClassApi {
 
     @Override
     public ResponseEntity<List<ClassResponse>> getAllActiveClasses() {
-
         List<ClassDto> classes = classService.getAllActiveClasses();
-
         return ResponseEntity.ok(classMapper.toClassResponseList(classes));
     }
 
@@ -47,5 +47,12 @@ public class ClassController implements ClassApi {
     public ResponseEntity<ClassResponse> deleteClass(Long classId) {
         ClassDto deletedClass = classService.deleteClass(classId);
         return ResponseEntity.ok(classMapper.dtoToResponse(deletedClass));
+    }
+
+    @Override
+    public ResponseEntity<ClassResponse> updateClass(Long classId, UpdateClassRequest updateClassRequest) {
+        ClassRequestDto classToUpdate = classMapper.toRequestDto(updateClassRequest);
+        ClassDto updatedClass = classService.updateClass(classId, classToUpdate);
+        return ResponseEntity.ok(classMapper.dtoToResponse(updatedClass));
     }
 }
