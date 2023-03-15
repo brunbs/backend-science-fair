@@ -8,7 +8,8 @@ import java.util.List;
 public interface ClassService {
 
     ClassDto createClass(CreateClassDto createClassDto);
-    ClassDto getClass(Long id);
+    ClassDto getClass(Long classId);
     List<ClassDto> getAllActiveClasses();
+    ClassDto deleteClass(Long classId);
 
 }

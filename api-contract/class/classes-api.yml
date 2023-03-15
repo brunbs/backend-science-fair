@@ -61,6 +61,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ClassNotFoundResponse'
+    delete:
+      tags:
+        - class
+      summary: Delete a Class
+      operationId: deleteClass
+      parameters:
+        - name: classId
+          in: path
+          description: Class id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassResponse'
+        '404':
+          description: Class not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassNotFoundResponse'
+
   /class/classes:
     get:
       tags:

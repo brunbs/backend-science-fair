@@ -42,4 +42,10 @@ public class ClassController implements ClassApi {
 
         return ResponseEntity.ok(classMapper.toClassResponseList(classes));
     }
+
+    @Override
+    public ResponseEntity<ClassResponse> deleteClass(Long classId) {
+        ClassDto deletedClass = classService.deleteClass(classId);
+        return ResponseEntity.ok(classMapper.dtoToResponse(deletedClass));
+    }
 }
