@@ -6,5 +6,6 @@ import com.school.science.fair.domain.dto.CreateClassDto;
 public interface ClassService {
 
     ClassDto createClass(CreateClassDto createClassDto);
+    ClassDto getClass(Long id);
 
 }
