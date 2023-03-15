@@ -34,6 +34,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequestResponse'
+  /class/{classId}:
+    get:
+      tags:
+        - class
+      summary: Get a Class
+      operationId: getClass
+      parameters:
+        - name: classId
+          in: path
+          description: Class id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassResponse'
+        '404':
+          description: Class not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassNotFoundResponse'
+
 
 components:
   schemas:
@@ -79,5 +107,17 @@ components:
       properties:
         propertyName:
           type: string
-          description: Mensagem de erro
-          example: não deve ser nulo
+          description: Error message
+          example: can't be empty
+
+    ClassNotFoundResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: Error timestamp
+          example: 17-Feb-2023 04:07:04
+        message:
+          type: string
+          description: Error message
+          example: Class not found

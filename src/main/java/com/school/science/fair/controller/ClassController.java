@@ -26,4 +26,10 @@ public class ClassController implements ClassApi {
         ClassResponse classResponse = classMapper.dtoToResponse(createdClass);
         return ResponseEntity.status(HttpStatus.CREATED).body(classResponse);
     }
+
+    @Override
+    public ResponseEntity<ClassResponse> getClass(Long classId) {
+        ClassDto foundClass = classService.getClass(classId);
+        return ResponseEntity.ok(classMapper.dtoToResponse(foundClass));
+    }
 }
