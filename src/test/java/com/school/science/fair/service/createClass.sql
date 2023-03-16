@@ -1,0 +1,1 @@
+INSERT INTO class(id,name,active) VALUES (1,'Zaphod Beeblebrox',true),(2,'Zaphod Beeblebrox2',false),(3,'Zaphod Beeblebrox3',true);
