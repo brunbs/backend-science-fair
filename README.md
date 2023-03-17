@@ -16,9 +16,9 @@
 
 <h2 align="center"> :alembic: Introduction / Introdução :alembic: </h2>
 <p> :us: Hello! And welcome to this project for a school science fair. The main objective behind this project is to study and to use as portfolio.
-Below you will find a summary so you can find out what technologies are used, how to build this project locally, what is currently developed and what will be developed in the future. Hope you enjoy as much as I do.
+Hope you enjoy as much as I do.
 
-:brazil: Olá! E bem-vindo a este projeto para uma feira de ciências escolar. O principal objetivo do projeto é estudar e usá-lo como portfólio. Abaixo você encontrará o sumário onde você irá descobrir quais tecnologias foram utilizadas, como rodar o projeto localmente, o que já está desenvolvido e o que ainda será desenvolvido. Espero que goste tanto quanto eu!
+:brazil: Olá! E bem-vindo a este projeto para uma feira de ciências escolar. O principal objetivo do projeto é estudar e usá-lo como portfólio. Espero que goste tanto quanto eu!
 </p>
 
 <h2 align="center"> :woman_technologist: Technologies, APIs and Libraries / Tecnologias, APIs e Bibliotecas :man_technologist: </h2>
