@@ -149,6 +149,38 @@
 							</importMappings>
 						</configuration>
 					</execution>
+					<execution>
+						<id>student</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>
+								./api-contract/student/students-api.yml
+							</inputSpec>
+							<generatorName>spring</generatorName>
+							<apiPackage>com.school.science.fair.api</apiPackage>
+							<modelPackage>com.school.science.fair.domain</modelPackage>
+							<supportingFilesToGenerate>
+								ApiUtil.java
+							</supportingFilesToGenerate>
+							<configOptions>
+								<sourceFolder>swagger</sourceFolder>
+								<delegatePattern>true</delegatePattern>
+								<interfaceOnly>true</interfaceOnly>
+								<!--suppress UnresolvedMavenProperty -->
+								<additionalModelTypeAnnotations>@lombok.Builder @lombok.NoArgsConstructor
+									@lombok.AllArgsConstructor
+								</additionalModelTypeAnnotations>
+							</configOptions>
+							<typeMappings>
+								<typeMapping>OffsetDateTime=java.time.LocalDateTime</typeMapping>
+							</typeMappings>
+							<importMappings>
+								<importMapping>java.time.OffsetDateTime=java.time.LocalDateTime</importMapping>
+							</importMappings>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 		</plugins>

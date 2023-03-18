@@ -1,0 +1,82 @@
+openapi: 3.0.1
+info:
+  title: Science Fair System
+  description: Documentation of the Science Fair Endpoints
+  version: 0.0.1
+
+tags:
+  - name: student
+    description: Students endpoints
+
+paths:
+  /student:
+    post:
+      tags:
+        - student
+      summary: Create a new student
+      operationId: createStudent
+      requestBody:
+        description: Student info to save
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStudentRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+
+
+components:
+  schemas:
+    CreateStudentRequest:
+      type: object
+      required:
+        - name
+        - registration
+        - email
+      properties:
+        name:
+          type: string
+          example: Ricardo Randolfo dos Santos
+        registration:
+          type: integer
+          format: int64
+          example: 123456
+        email:
+          type: string
+          example: ricardo@email.com
+
+    StudentResponse:
+      type: object
+      properties:
+        registration:
+          type: integer
+          format: int64
+          example: 123456
+        name:
+          type: string
+          example: Ricardo Randolfo dos Santos
+        email:
+          type: string
+          example: ricardo@email.com
+        active:
+          type: boolean
+          example: true
+
+    BadRequestResponse:
+      type: object
+      properties:
+        propertyName:
+          type: string
+          description: Error message
+          example: can't be empty
