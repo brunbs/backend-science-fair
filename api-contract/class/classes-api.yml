@@ -61,7 +61,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ClassNotFoundResponse'
+                $ref: '#/components/schemas/ResourceNotFoundResponse'
     delete:
       tags:
         - class
@@ -87,7 +87,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ClassNotFoundResponse'
+                $ref: '#/components/schemas/ResourceNotFoundResponse'
     patch:
       tags:
         - class
@@ -119,7 +119,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ClassNotFoundResponse'
+                $ref: '#/components/schemas/ResourceNotFoundResponse'
 
   /class/classes/active:
     get:
@@ -208,7 +208,7 @@ components:
           description: Error message
           example: can't be empty
 
-    ClassNotFoundResponse:
+    ResourceNotFoundResponse:
       type: object
       properties:
         timestamp:

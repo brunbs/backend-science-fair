@@ -35,6 +35,33 @@ paths:
               schema:
                 $ref: '#/components/schemas/BadRequestResponse'
 
+  /student/{studentRegistration}:
+    get:
+      tags:
+        - student
+      summary: Get a Student
+      operationId: getStudent
+      parameters:
+        - name: studentRegistration
+          in: path
+          description: Student registration
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentResponse'
+        '404':
+          description: Student not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundResponse'
 
 components:
   schemas:
@@ -80,3 +107,15 @@ components:
           type: string
           description: Error message
           example: can't be empty
+
+    ResourceNotFoundResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: Error timestamp
+          example: 17-Feb-2023 04:07:04
+        message:
+          type: string
+          description: Error message
+          example: Student not found

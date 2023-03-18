@@ -27,4 +27,10 @@ public class StudentController implements StudentApi {
         StudentDto createdStudent = studentService.createStudent(studentRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(studentMapper.dtoToResponse(createdStudent));
     }
+
+    @Override
+    public ResponseEntity<StudentResponse> getStudent(Long studentRegistration) {
+        StudentDto foundStudent = studentService.getStudent(studentRegistration);
+        return ResponseEntity.ok().body(studentMapper.dtoToResponse(foundStudent));
+    }
 }

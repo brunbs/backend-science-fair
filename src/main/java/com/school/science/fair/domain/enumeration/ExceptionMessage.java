@@ -9,7 +9,12 @@ public enum ExceptionMessage {
   INTERNAL_SERVER_ERROR("error.generic.internal-server-error"),
 
   // Class exception messages
-  CLASS_NOT_FOUND("error.class.not-found-error");
+  CLASS_NOT_FOUND("error.class.not-found-error"),
+
+  // Student exception messages
+  STUDENT_NOT_FOUND("error.student.not-found-error"),
+  STUDENT_ALREADY_EXISTS("error.student.already-exists-error");
+
   private final String messageKey;
 
   ExceptionMessage(String messageKey) {
