@@ -6,5 +6,6 @@ import com.school.science.fair.domain.dto.StudentRequestDto;
 public interface StudentService {
 
     StudentDto createStudent(StudentRequestDto createStudentDto);
+    StudentDto getStudent(Long studentRegistration);
 
 }
