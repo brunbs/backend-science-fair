@@ -8,6 +8,8 @@ import com.school.science.fair.domain.dto.AreaOfKnowledgeRequestDto;
 import com.school.science.fair.domain.entity.AreaOfKnowledge;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 import static org.mapstruct.ReportingPolicy.IGNORE;
 
 @Mapper(componentModel = "spring",  unmappedTargetPolicy = IGNORE)
@@ -18,4 +20,6 @@ public interface AreaOfKnowledgeMapper {
     AreaOfKnowledgeRequestDto createRequestToRequestDto(CreateAreaOfKnowledgeRequest createAreaOfKnowledgeRequest);
     AreaOfKnowledgeResponse dtoToResponse(AreaOfKnowledgeDto areaOfKnowledgeDto);
     AreaOfKnowledgeRequestDto updateRequestToRequestDto(UpdateAreaOfKnowledgeRequest updateAreaOfKnowledgeRequest);
+    List<AreaOfKnowledgeDto> listEntityToListDto(List<AreaOfKnowledge> areaOfKnowledgeEntities);
+    List<AreaOfKnowledgeResponse> listDtoToListResponse(List<AreaOfKnowledgeDto> areaOfKnowledgeDtos);
 }

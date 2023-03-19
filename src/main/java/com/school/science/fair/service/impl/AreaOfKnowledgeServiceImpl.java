@@ -60,6 +60,12 @@ public class AreaOfKnowledgeServiceImpl implements AreaOfKnowledgeService {
         return areaOfKnowledgeMapper.entityToDto(updatedAreaOfKnowledge);
     }
 
+    @Override
+    public List<AreaOfKnowledgeDto> getAllAreasOfKnowledge() {
+        List<AreaOfKnowledge> areasOfKnowledgeFromDatabase = areaOfKnowledgeRepository.findAll();
+        return areaOfKnowledgeMapper.listEntityToListDto(areasOfKnowledgeFromDatabase);
+    }
+
     private void throwExceptionIfAreaOfKnowledgeNameAlreadyExists(String areaOfKnowledgeName) {
         Optional<AreaOfKnowledge> foundAreaOfKnowledge = areaOfKnowledgeRepository.findByName(areaOfKnowledgeName);
         if(foundAreaOfKnowledge.isPresent()) {
