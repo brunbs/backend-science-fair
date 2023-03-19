@@ -1,6 +1,5 @@
 package com.school.science.fair.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.school.science.fair.domain.ClassResponse;
@@ -9,8 +8,6 @@ import com.school.science.fair.domain.UpdateClassRequest;
 import com.school.science.fair.domain.builder.ExceptionResponseBuilder;
 import com.school.science.fair.domain.dto.ClassDto;
 import com.school.science.fair.domain.dto.ClassRequestDto;
-import com.school.science.fair.domain.entity.Class;
-import com.school.science.fair.domain.enumeration.ExceptionMessage;
 import com.school.science.fair.domain.exception.ResourceNotFoundException;
 import com.school.science.fair.domain.mapper.ClassMapper;
 import com.school.science.fair.service.impl.ClassServiceImpl;
@@ -32,7 +29,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
@@ -43,15 +39,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
 @EnableWebMvc
 @AutoConfigureMockMvc
 public class ClassControllerUnitTest {
-
-    private static final String CLASS_NOT_FOUND_MESSAGE = "Turma não encontrada";
 
     @Autowired
     MockMvc mockMvc;

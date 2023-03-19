@@ -5,29 +5,29 @@ info:
   version: 0.0.1
 
 tags:
-  - name: class
-    description: Class endpoints
+  - name: student
+    description: Students endpoints
 
 paths:
-  /class:
+  /student:
     post:
       tags:
-        - class
-      summary: Create a new class
-      operationId: createClass
+        - student
+      summary: Create a new student
+      operationId: createStudent
       requestBody:
-        description: Class info to save
+        description: Student info to save
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateClassRequest'
+              $ref: '#/components/schemas/CreateStudentRequest'
       responses:
         '201':
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ClassResponse'
+                $ref: '#/components/schemas/StudentResponse'
         '400':
           description: Bad Request
           content:
@@ -35,16 +35,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/BadRequestResponse'
 
-  /class/{classId}:
+  /student/{studentRegistration}:
     get:
       tags:
-        - class
-      summary: Get a Class
-      operationId: getClass
+        - student
+      summary: Get a Student
+      operationId: getStudent
       parameters:
-        - name: classId
+        - name: studentRegistration
           in: path
-          description: Class id
+          description: Student registration
           required: true
           schema:
             type: integer
@@ -55,22 +55,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ClassResponse'
+                $ref: '#/components/schemas/StudentResponse'
         '404':
-          description: Class not Found
+          description: Student not Found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResourceNotFoundResponse'
     delete:
       tags:
-        - class
-      summary: Delete a Class
-      operationId: deleteClass
+        - student
+      summary: Delete a Student
+      operationId: deleteStudent
       parameters:
-        - name: classId
+        - name: studentRegistration
           in: path
-          description: Class id
+          description: Student registration
           required: true
           schema:
             type: integer
@@ -81,121 +81,88 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ClassResponse'
+                $ref: '#/components/schemas/StudentResponse'
         '404':
-          description: Class not Found
+          description: Student not Found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResourceNotFoundResponse'
     patch:
       tags:
-        - class
-      summary: Update a Class
-      operationId: updateClass
+        - student
+      summary: Update a Student
+      operationId: updateStudent
       parameters:
-        - name: classId
+        - name: studentRegistration
           in: path
-          description: Class id
+          description: Student registration
           required: true
           schema:
             type: integer
             format: int64
       requestBody:
-        description: Class info to save
+        description: Student info to save
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateClassRequest'
+              $ref: '#/components/schemas/UpdateStudentRequest'
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ClassResponse'
+                $ref: '#/components/schemas/StudentResponse'
         '404':
-          description: Class not Found
+          description: Student not Found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResourceNotFoundResponse'
 
-  /class/classes/active:
-    get:
-      tags:
-        - class
-      summary: Get a list of active classes
-      operationId: getAllActiveClasses
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ClassResponse'
-
-
 components:
   schemas:
-    CreateClassRequest:
+    CreateStudentRequest:
       type: object
       required:
         - name
-        - gradeYear
+        - registration
+        - email
       properties:
         name:
           type: string
-          maxLength: 10
-          example: 211
-        gradeYear:
-          type: string
-          example: EM_2ANO
-          enum:
-            - EF_5ANO
-            - EF_6ANO
-            - EF_7ANO
-            - EF_8ANO
-            - EF_9ANO
-            - EM_1ANO
-            - EM_2ANO
-            - EM_3ANO
-
-    UpdateClassRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          maxLength: 10
-          example: 211
-        gradeYear:
-          type: string
-          example: EM_2ANO
-          enum:
-            - EF_5ANO
-            - EF_6ANO
-            - EF_7ANO
-            - EF_8ANO
-            - EF_9ANO
-            - EM_1ANO
-            - EM_2ANO
-            - EM_3ANO
-
-    ClassResponse:
-      type: object
-      properties:
-        id:
+          example: Ricardo Randolfo dos Santos
+        registration:
           type: integer
           format: int64
-          example: 1
+          example: 123456
+        email:
+          type: string
+          example: ricardo@email.com
+    UpdateStudentRequest:
+      type: object
+      properties:
         name:
           type: string
-          example: 211
-        gradeYear:
+          example: Ricardo Randolfo dos Santos
+        email:
           type: string
-          example: EM_2ANO
+          example: ricardo@email.com
+
+    StudentResponse:
+      type: object
+      properties:
+        registration:
+          type: integer
+          format: int64
+          example: 123456
+        name:
+          type: string
+          example: Ricardo Randolfo dos Santos
+        email:
+          type: string
+          example: ricardo@email.com
         active:
           type: boolean
           example: true
@@ -218,4 +185,4 @@ components:
         message:
           type: string
           description: Error message
-          example: Class not found
+          example: Student not found

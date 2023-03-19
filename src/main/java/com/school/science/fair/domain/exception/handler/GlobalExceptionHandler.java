@@ -2,6 +2,7 @@ package com.school.science.fair.domain.exception.handler;
 
 import com.school.science.fair.domain.builder.ExceptionResponseBuilder;
 import com.school.science.fair.domain.enumeration.ExceptionMessage;
+import com.school.science.fair.domain.exception.ResourceAlreadyExistsException;
 import com.school.science.fair.domain.exception.ResourceNotFoundException;
 import com.school.science.fair.domain.response.ExceptionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,13 @@ public class GlobalExceptionHandler {
     private ExceptionResponseBuilder responseBuilder;
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public final ResponseEntity<ExceptionResponse> handleBusinessError(ResourceNotFoundException exception) {
+    public final ResponseEntity<ExceptionResponse> handleNotFoundError(ResourceNotFoundException exception) {
+        return ResponseEntity.status(exception.getStatus())
+                .body(responseBuilder.getExceptionResponse(exception.getReason()));
+    }
+
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public final ResponseEntity<ExceptionResponse> handleAlreadyExistsError(ResourceAlreadyExistsException exception) {
         return ResponseEntity.status(exception.getStatus())
                 .body(responseBuilder.getExceptionResponse(exception.getReason()));
     }
