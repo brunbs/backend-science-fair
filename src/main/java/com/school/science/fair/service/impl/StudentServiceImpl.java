@@ -26,7 +26,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentDto createStudent(StudentRequestDto createStudentDto) {
-        findIfStudentAlreadyRegisteredByRegistrationOrEmail(createStudentDto.getEmail(), createStudentDto.getRegistration());
+        findIfStudentAlreadyExistsByRegistrationOrEmail(createStudentDto.getEmail(), createStudentDto.getRegistration());
         Student studentToCreate = studentMapper.createDtoToEntity(createStudentDto);
         studentToCreate.setPassword(studentToCreate.getRegistration().toString());
         studentToCreate.setActive(true);
@@ -67,7 +67,7 @@ public class StudentServiceImpl implements StudentService {
         return foundStudentEntity.get();
     }
 
-    private void findIfStudentAlreadyRegisteredByRegistrationOrEmail(String email, Long registration) {
+    private void findIfStudentAlreadyExistsByRegistrationOrEmail(String email, Long registration) {
         Optional<Student> foundStudentEntity = studentRepository.findByEmailOrRegistration(email, registration);
         if(!foundStudentEntity.isEmpty()) {
             throw new ResourceAlreadyExistsException(HttpStatus.BAD_REQUEST, ExceptionMessage.STUDENT_ALREADY_EXISTS);
