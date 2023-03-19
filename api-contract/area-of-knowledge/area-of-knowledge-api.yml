@@ -35,6 +35,34 @@ paths:
               schema:
                 $ref: '#/components/schemas/BadRequestResponse'
 
+  /area-of-knowledge/{id}:
+    get:
+      tags:
+        - areaOfKnowledge
+      summary: Get Area of Knowledge Details
+      operationId: getAreaOfKnowledge
+      parameters:
+        - name: id
+          in: path
+          description: Area of Knowledge Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AreaOfKnowledgeResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundResponse'
+
 components:
   schemas:
     CreateAreaOfKnowledgeRequest:
