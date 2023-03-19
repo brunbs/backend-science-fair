@@ -62,6 +62,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResourceNotFoundResponse'
+    patch:
+      tags:
+        - areaOfKnowledge
+      summary: Update an Area of Knowledge with a list of Topics
+      operationId: updateAreaOfKnowledge
+      parameters:
+        - name: id
+          in: path
+          description: Area of Knowledge Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Area of Knowledge info to save
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAreaOfKnowledgeRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AreaOfKnowledgeResponse'
+        '404':
+          description: Area of Knowledge not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundResponse'
 
 components:
   schemas:
@@ -69,6 +101,17 @@ components:
       type: object
       required:
         - name
+      properties:
+        name:
+          type: string
+          example: Natural Science
+        topics:
+          type: array
+          items:
+            $ref: '#/components/schemas/TopicRequest'
+
+    UpdateAreaOfKnowledgeRequest:
+      type: object
       properties:
         name:
           type: string
