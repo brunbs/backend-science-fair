@@ -1,13 +1,12 @@
 package com.school.science.fair.repository;
 
-import com.school.science.fair.domain.entity.Student;
+import com.school.science.fair.domain.entity.AreaOfKnowledge;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface StudentRepository extends JpaRepository<Student, Long> {
+public interface AreaOfKnowledgeRepository extends JpaRepository<AreaOfKnowledge, Long> {
 
-    Optional<Student> findByEmailOrRegistration(String email, Long registration);
-    Optional<Student> findByEmail(String email);
+    Optional<AreaOfKnowledge> findByName(String name);
 
 }
