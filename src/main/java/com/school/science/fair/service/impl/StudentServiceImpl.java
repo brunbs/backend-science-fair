@@ -36,19 +36,30 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentDto getStudent(Long studentRegistration) {
-        Student foundStudent = findStudentOrThrowException(studentRegistration);
+        Student foundStudent = findStudentByRegistrationOrThrowException(studentRegistration);
         return studentMapper.entityToDto(foundStudent);
     }
 
     @Override
     public StudentDto deleteStudent(Long studentRegistration) {
-        Student foundStudent = findStudentOrThrowException(studentRegistration);
+        Student foundStudent = findStudentByRegistrationOrThrowException(studentRegistration);
         foundStudent.setActive(false);
         Student deletedStudent = studentRepository.save(foundStudent);
         return studentMapper.entityToDto(deletedStudent);
     }
 
-    private Student findStudentOrThrowException(Long id) {
+    @Override
+    public StudentDto updateStudent(Long studentRegistration, StudentRequestDto updateStudentDto) {
+        Student foundStudent = findStudentByRegistrationOrThrowException(studentRegistration);
+        if(updateStudentDto.getEmail() != null) {
+            findStudentByEmailOrThrowException(updateStudentDto.getEmail());
+        }
+        studentMapper.updateModelFromDto(updateStudentDto, foundStudent);
+        Student updatedStudent = studentRepository.save(foundStudent);
+        return studentMapper.entityToDto(updatedStudent);
+    }
+
+    private Student findStudentByRegistrationOrThrowException(Long id) {
         Optional<Student> foundStudentEntity = studentRepository.findById(id);
         if(foundStudentEntity.isEmpty()) {
             throw new ResourceNotFoundException(HttpStatus.NOT_FOUND, ExceptionMessage.STUDENT_NOT_FOUND);
@@ -63,5 +74,11 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
+    private void findStudentByEmailOrThrowException(String email) {
+        Optional<Student> foundStudentEntity = studentRepository.findByEmail(email);
+        if(!foundStudentEntity.isEmpty()) {
+            throw new ResourceAlreadyExistsException(HttpStatus.BAD_REQUEST, ExceptionMessage.EMAIL_ALREADY_EXISTS);
+        }
+    }
 
 }

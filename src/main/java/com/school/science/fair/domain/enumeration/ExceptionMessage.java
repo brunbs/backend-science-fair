@@ -7,6 +7,7 @@ public enum ExceptionMessage {
 
   // Generic exception messages
   INTERNAL_SERVER_ERROR("error.generic.internal-server-error"),
+  EMAIL_ALREADY_EXISTS("error.email.already-exists-error"),
 
   // Class exception messages
   CLASS_NOT_FOUND("error.class.not-found-error"),

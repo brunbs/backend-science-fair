@@ -3,6 +3,7 @@ package com.school.science.fair.controller;
 import com.school.science.fair.api.StudentApi;
 import com.school.science.fair.domain.CreateStudentRequest;
 import com.school.science.fair.domain.StudentResponse;
+import com.school.science.fair.domain.UpdateStudentRequest;
 import com.school.science.fair.domain.dto.StudentDto;
 import com.school.science.fair.domain.dto.StudentRequestDto;
 import com.school.science.fair.domain.mapper.StudentMapper;
@@ -38,5 +39,12 @@ public class StudentController implements StudentApi {
     public ResponseEntity<StudentResponse> deleteStudent(Long studentRegistration) {
         StudentDto deletedStudent = studentService.deleteStudent(studentRegistration);
         return ResponseEntity.ok().body(studentMapper.dtoToResponse(deletedStudent));
+    }
+
+    @Override
+    public ResponseEntity<StudentResponse> updateStudent(Long studentRegistration, UpdateStudentRequest updateStudentRequest) {
+        StudentRequestDto studentRequestDto = studentMapper.updateToDto(updateStudentRequest);
+        StudentDto updatedStudent = studentService.updateStudent(studentRegistration, studentRequestDto);
+        return ResponseEntity.ok().body(studentMapper.dtoToResponse(updatedStudent));
     }
 }
