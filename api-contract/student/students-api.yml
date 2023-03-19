@@ -62,6 +62,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResourceNotFoundResponse'
+    delete:
+      tags:
+        - student
+      summary: Delete a Student
+      operationId: deleteStudent
+      parameters:
+        - name: studentRegistration
+          in: path
+          description: Student registration
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentResponse'
+        '404':
+          description: Student not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundResponse'
 
 components:
   schemas:
