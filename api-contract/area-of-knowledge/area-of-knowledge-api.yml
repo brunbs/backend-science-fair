@@ -95,6 +95,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/ResourceNotFoundResponse'
 
+  /area-of-knowledge/all:
+    get:
+      tags:
+        - areaOfKnowledge
+      summary: Get a list of Areas Of Knowledge
+      operationId: getAllAreasOfKnowledge
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AreaOfKnowledgeResponse'
+
 components:
   schemas:
     CreateAreaOfKnowledgeRequest:

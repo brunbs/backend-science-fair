@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class AreaOfKnowledgeController implements AreaOfKnowledgeApi {
 
@@ -41,5 +43,11 @@ public class AreaOfKnowledgeController implements AreaOfKnowledgeApi {
         AreaOfKnowledgeRequestDto areaOfKnowledgeRequestDto = areaOfKnowledgeMapper.updateRequestToRequestDto(createAreaOfKnowledgeRequest);
         AreaOfKnowledgeDto updatedAreaOfKnowledgeDto =areaOfKnowledgeService.updateAreaOfKnowledge(id, areaOfKnowledgeRequestDto);
         return ResponseEntity.ok().body(areaOfKnowledgeMapper.dtoToResponse(updatedAreaOfKnowledgeDto));
+    }
+
+    @Override
+    public ResponseEntity<List<AreaOfKnowledgeResponse>> getAllAreasOfKnowledge() {
+        List<AreaOfKnowledgeDto> foundAreasOfKnowledgeDto = areaOfKnowledgeService.getAllAreasOfKnowledge();
+        return ResponseEntity.ok().body(areaOfKnowledgeMapper.listDtoToListResponse(foundAreasOfKnowledgeDto));
     }
 }
