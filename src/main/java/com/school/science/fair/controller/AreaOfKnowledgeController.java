@@ -28,4 +28,10 @@ public class AreaOfKnowledgeController implements AreaOfKnowledgeApi {
         AreaOfKnowledgeDto createdAreaOfKnowledge = areaOfKnowledgeService.createAreaOfKnowledge(areaOfKnowledgeToCreate);
         return ResponseEntity.status(HttpStatus.CREATED).body(areaOfKnowledgeMapper.dtoToResponse(createdAreaOfKnowledge));
     }
+
+    @Override
+    public ResponseEntity<AreaOfKnowledgeResponse> getAreaOfKnowledge(Long id) {
+        AreaOfKnowledgeDto foundAreaOfKnowledge = areaOfKnowledgeService.getAreaOfKnowledge(id);
+        return ResponseEntity.ok().body(areaOfKnowledgeMapper.dtoToResponse(foundAreaOfKnowledge));
+    }
 }

@@ -6,6 +6,7 @@ import com.school.science.fair.domain.entity.AreaOfKnowledge;
 import com.school.science.fair.domain.entity.Topic;
 import com.school.science.fair.domain.enumeration.ExceptionMessage;
 import com.school.science.fair.domain.exception.ResourceAlreadyExistsException;
+import com.school.science.fair.domain.exception.ResourceNotFoundException;
 import com.school.science.fair.domain.mapper.AreaOfKnowledgeMapper;
 import com.school.science.fair.repository.AreaOfKnowledgeRepository;
 import com.school.science.fair.repository.TopicRepository;
@@ -39,11 +40,25 @@ public class AreaOfKnowledgeServiceImpl implements AreaOfKnowledgeService {
         return areaOfKnowledgeMapper.entityToDto(savedAreaOfKnowledge);
     }
 
+    @Override
+    public AreaOfKnowledgeDto getAreaOfKnowledge(Long id) {
+        AreaOfKnowledge foundAreaOfKnowledge = findAreaOfKnowledgeOrThrowException(id);
+        return areaOfKnowledgeMapper.entityToDto(foundAreaOfKnowledge);
+    }
+
     private void throwExceptionIfAreaOfKnowledgeNameAlreadyExists(String areaOfKnowledgeName) {
         Optional<AreaOfKnowledge> foundAreaOfKnowledge = areaOfKnowledgeRepository.findByName(areaOfKnowledgeName);
         if(foundAreaOfKnowledge.isPresent()) {
             throw new ResourceAlreadyExistsException(HttpStatus.BAD_REQUEST, ExceptionMessage.AREA_OF_KNOWLEDGE_ALREADY_EXISTS);
         }
+    }
+
+    private AreaOfKnowledge findAreaOfKnowledgeOrThrowException(Long id) {
+        Optional<AreaOfKnowledge> foundAreaOfKnowledge = areaOfKnowledgeRepository.findById(id);
+        if(foundAreaOfKnowledge.isPresent()) {
+            return foundAreaOfKnowledge.get();
+        }
+        throw new ResourceNotFoundException(HttpStatus.NOT_FOUND, ExceptionMessage.AREA_OF_KNOWLEDGE_NOT_FOUND);
     }
 
     private List<Topic> getListOfTopicsToSave(List<Topic> topics) {

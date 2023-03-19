@@ -6,5 +6,6 @@ import com.school.science.fair.domain.dto.AreaOfKnowledgeRequestDto;
 public interface AreaOfKnowledgeService {
 
     AreaOfKnowledgeDto createAreaOfKnowledge(AreaOfKnowledgeRequestDto createAreaOfKnowledgeRequestDto);
+    AreaOfKnowledgeDto getAreaOfKnowledge(Long id);
 
 }
