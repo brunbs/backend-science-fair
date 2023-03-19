@@ -105,9 +105,11 @@ Versões futuras virão com mais informações e formas de rodar, com uma versã
 
 :us:
 - Creation, Read, Update and Deletion of classes
+- Creation, Read, Update and Deletion of students
 
 :brazil:
 - Criação, edição, deleção e listagem de turmas
+- Criação, edição, deleção e detalhes de estudante
 </p>
 <h2 align="center"> :bicyclist: Upcoming Features / Próximas funcionalidades :bicyclist:</h2>
 <p>
