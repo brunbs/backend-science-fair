@@ -88,6 +88,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResourceNotFoundResponse'
+    patch:
+      tags:
+        - student
+      summary: Update a Student
+      operationId: updateStudent
+      parameters:
+        - name: studentRegistration
+          in: path
+          description: Student registration
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Student info to save
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateStudentRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentResponse'
+        '404':
+          description: Student not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundResponse'
 
 components:
   schemas:
@@ -105,6 +137,15 @@ components:
           type: integer
           format: int64
           example: 123456
+        email:
+          type: string
+          example: ricardo@email.com
+    UpdateStudentRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Ricardo Randolfo dos Santos
         email:
           type: string
           example: ricardo@email.com
