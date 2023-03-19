@@ -53,6 +53,7 @@ public class AreaOfKnowledgeServiceImpl implements AreaOfKnowledgeService {
     @Override
     public AreaOfKnowledgeDto updateAreaOfKnowledge(Long id, AreaOfKnowledgeRequestDto updateAreaOfKnowledgeRequestDto) {
         AreaOfKnowledge foundAreaOfKnowledge = findAreaOfKnowledgeOrThrowException(id);
+        foundAreaOfKnowledge.setName(updateAreaOfKnowledgeRequestDto.getName());
         List<Topic> topics = createNewTopicsAndReturn(topicMapper.listDtoToListEntity(updateAreaOfKnowledgeRequestDto.getTopics()));
         foundAreaOfKnowledge.setTopics(topics);
         AreaOfKnowledge updatedAreaOfKnowledge = areaOfKnowledgeRepository.save(foundAreaOfKnowledge);
