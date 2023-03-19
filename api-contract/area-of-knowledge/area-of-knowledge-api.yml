@@ -1,0 +1,110 @@
+openapi: 3.0.1
+info:
+  title: Science Fair System
+  description: Documentation of the Science Fair Endpoints
+  version: 0.0.1
+
+tags:
+  - name: areaOfKnowledge
+    description: Area of Knowledge's topic endpoints
+
+paths:
+  /area-of-knowledge:
+    post:
+      tags:
+        - areaOfKnowledge
+      summary: Create Area of Knowledge
+      operationId: createAreaOfKnowledge
+      requestBody:
+        description: Area of Knowledge info to save
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAreaOfKnowledgeRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AreaOfKnowledgeResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+
+components:
+  schemas:
+    CreateAreaOfKnowledgeRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: Natural Science
+        topics:
+          type: array
+          items:
+            $ref: '#/components/schemas/TopicRequest'
+
+    TopicRequest:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Biology
+
+    AreaOfKnowledgeResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Natural Science
+        topics:
+          type: array
+          items:
+            $ref: '#/components/schemas/TopicResponse'
+
+    TopicResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Biology
+
+    BadRequestResponse:
+      type: object
+      properties:
+        propertyName:
+          type: string
+          description: Error message
+          example: can't be empty
+
+    ResourceNotFoundResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: Error timestamp
+          example: 17-Feb-2023 04:07:04
+        message:
+          type: string
+          description: Error message
+          example: Area of Knowledge not found
