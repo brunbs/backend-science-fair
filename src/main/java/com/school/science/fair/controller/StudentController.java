@@ -33,4 +33,10 @@ public class StudentController implements StudentApi {
         StudentDto foundStudent = studentService.getStudent(studentRegistration);
         return ResponseEntity.ok().body(studentMapper.dtoToResponse(foundStudent));
     }
+
+    @Override
+    public ResponseEntity<StudentResponse> deleteStudent(Long studentRegistration) {
+        StudentDto deletedStudent = studentService.deleteStudent(studentRegistration);
+        return ResponseEntity.ok().body(studentMapper.dtoToResponse(deletedStudent));
+    }
 }

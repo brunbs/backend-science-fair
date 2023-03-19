@@ -2,7 +2,6 @@ package com.school.science.fair.service.impl;
 
 import com.school.science.fair.domain.dto.StudentDto;
 import com.school.science.fair.domain.dto.StudentRequestDto;
-import com.school.science.fair.domain.entity.Class;
 import com.school.science.fair.domain.entity.Student;
 import com.school.science.fair.domain.enumeration.ExceptionMessage;
 import com.school.science.fair.domain.exception.ResourceAlreadyExistsException;
@@ -27,7 +26,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentDto createStudent(StudentRequestDto createStudentDto) {
-        findStudentByEmail(createStudentDto.getEmail());
+        findIfStudentAlreadyRegisteredByRegistrationOrEmail(createStudentDto.getEmail(), createStudentDto.getRegistration());
         Student studentToCreate = studentMapper.createDtoToEntity(createStudentDto);
         studentToCreate.setPassword(studentToCreate.getRegistration().toString());
         studentToCreate.setActive(true);
@@ -41,6 +40,14 @@ public class StudentServiceImpl implements StudentService {
         return studentMapper.entityToDto(foundStudent);
     }
 
+    @Override
+    public StudentDto deleteStudent(Long studentRegistration) {
+        Student foundStudent = findStudentOrThrowException(studentRegistration);
+        foundStudent.setActive(false);
+        Student deletedStudent = studentRepository.save(foundStudent);
+        return studentMapper.entityToDto(deletedStudent);
+    }
+
     private Student findStudentOrThrowException(Long id) {
         Optional<Student> foundStudentEntity = studentRepository.findById(id);
         if(foundStudentEntity.isEmpty()) {
@@ -49,8 +56,8 @@ public class StudentServiceImpl implements StudentService {
         return foundStudentEntity.get();
     }
 
-    private void findStudentByEmail(String email) {
-        Optional<Student> foundStudentEntity = studentRepository.findByEmail(email);
+    private void findIfStudentAlreadyRegisteredByRegistrationOrEmail(String email, Long registration) {
+        Optional<Student> foundStudentEntity = studentRepository.findByEmailOrRegistration(email, registration);
         if(!foundStudentEntity.isEmpty()) {
             throw new ResourceAlreadyExistsException(HttpStatus.BAD_REQUEST, ExceptionMessage.STUDENT_ALREADY_EXISTS);
         }

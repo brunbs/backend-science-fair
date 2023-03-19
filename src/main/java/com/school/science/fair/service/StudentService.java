@@ -7,5 +7,6 @@ public interface StudentService {
 
     StudentDto createStudent(StudentRequestDto createStudentDto);
     StudentDto getStudent(Long studentRegistration);
+    StudentDto deleteStudent(Long studentRegistration);
 
 }
