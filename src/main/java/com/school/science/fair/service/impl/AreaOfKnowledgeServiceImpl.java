@@ -8,6 +8,7 @@ import com.school.science.fair.domain.enumeration.ExceptionMessage;
 import com.school.science.fair.domain.exception.ResourceAlreadyExistsException;
 import com.school.science.fair.domain.exception.ResourceNotFoundException;
 import com.school.science.fair.domain.mapper.AreaOfKnowledgeMapper;
+import com.school.science.fair.domain.mapper.TopicMapper;
 import com.school.science.fair.repository.AreaOfKnowledgeRepository;
 import com.school.science.fair.repository.TopicRepository;
 import com.school.science.fair.service.AreaOfKnowledgeService;
@@ -26,6 +27,9 @@ public class AreaOfKnowledgeServiceImpl implements AreaOfKnowledgeService {
     private AreaOfKnowledgeMapper areaOfKnowledgeMapper;
 
     @Autowired
+    private TopicMapper topicMapper;
+
+    @Autowired
     private AreaOfKnowledgeRepository areaOfKnowledgeRepository;
 
     @Autowired
@@ -35,7 +39,7 @@ public class AreaOfKnowledgeServiceImpl implements AreaOfKnowledgeService {
     public AreaOfKnowledgeDto createAreaOfKnowledge(AreaOfKnowledgeRequestDto createAreaOfKnowledgeRequestDto) {
         throwExceptionIfAreaOfKnowledgeNameAlreadyExists(createAreaOfKnowledgeRequestDto.getName());
         AreaOfKnowledge areaOfKnowledgeEntity = areaOfKnowledgeMapper.requestDtoToEntity(createAreaOfKnowledgeRequestDto);
-        areaOfKnowledgeEntity.setTopics(getListOfTopicsToSave(areaOfKnowledgeEntity.getTopics()));
+        areaOfKnowledgeEntity.setTopics(createNewTopicsAndReturn(areaOfKnowledgeEntity.getTopics()));
         AreaOfKnowledge savedAreaOfKnowledge = areaOfKnowledgeRepository.save(areaOfKnowledgeEntity);
         return areaOfKnowledgeMapper.entityToDto(savedAreaOfKnowledge);
     }
@@ -44,6 +48,16 @@ public class AreaOfKnowledgeServiceImpl implements AreaOfKnowledgeService {
     public AreaOfKnowledgeDto getAreaOfKnowledge(Long id) {
         AreaOfKnowledge foundAreaOfKnowledge = findAreaOfKnowledgeOrThrowException(id);
         return areaOfKnowledgeMapper.entityToDto(foundAreaOfKnowledge);
+    }
+
+    @Override
+    public AreaOfKnowledgeDto updateAreaOfKnowledge(Long id, AreaOfKnowledgeRequestDto updateAreaOfKnowledgeRequestDto) {
+        AreaOfKnowledge foundAreaOfKnowledge = findAreaOfKnowledgeOrThrowException(id);
+        foundAreaOfKnowledge.setName(updateAreaOfKnowledgeRequestDto.getName());
+        List<Topic> topics = createNewTopicsAndReturn(topicMapper.listDtoToListEntity(updateAreaOfKnowledgeRequestDto.getTopics()));
+        foundAreaOfKnowledge.setTopics(topics);
+        AreaOfKnowledge updatedAreaOfKnowledge = areaOfKnowledgeRepository.save(foundAreaOfKnowledge);
+        return areaOfKnowledgeMapper.entityToDto(updatedAreaOfKnowledge);
     }
 
     private void throwExceptionIfAreaOfKnowledgeNameAlreadyExists(String areaOfKnowledgeName) {
@@ -61,7 +75,7 @@ public class AreaOfKnowledgeServiceImpl implements AreaOfKnowledgeService {
         throw new ResourceNotFoundException(HttpStatus.NOT_FOUND, ExceptionMessage.AREA_OF_KNOWLEDGE_NOT_FOUND);
     }
 
-    private List<Topic> getListOfTopicsToSave(List<Topic> topics) {
+    private List<Topic> createNewTopicsAndReturn(List<Topic> topics) {
         List<Topic> topicsToReturn = new ArrayList<>();
         for(Topic topic : topics) {
             if(topic.getId() == null) {

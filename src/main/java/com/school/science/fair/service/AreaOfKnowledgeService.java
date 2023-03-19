@@ -7,5 +7,6 @@ public interface AreaOfKnowledgeService {
 
     AreaOfKnowledgeDto createAreaOfKnowledge(AreaOfKnowledgeRequestDto createAreaOfKnowledgeRequestDto);
     AreaOfKnowledgeDto getAreaOfKnowledge(Long id);
+    AreaOfKnowledgeDto updateAreaOfKnowledge(Long id, AreaOfKnowledgeRequestDto updateAreaOfKnowledgeRequestDto);
 
 }
