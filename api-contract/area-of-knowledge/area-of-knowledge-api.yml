@@ -138,6 +138,22 @@ paths:
                 items:
                   $ref: '#/components/schemas/AreaOfKnowledgeResponse'
 
+  /area-of-knowledge/all/active:
+    get:
+      tags:
+        - areaOfKnowledge
+      summary: Get a list of Active Areas of Knowledge
+      operationId: getAllActiveAreasOfKnowledge
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AreaOfKnowledgeResponse'
+
 components:
   schemas:
     CreateAreaOfKnowledgeRequest:

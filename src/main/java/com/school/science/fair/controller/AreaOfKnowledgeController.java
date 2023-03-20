@@ -56,4 +56,10 @@ public class AreaOfKnowledgeController implements AreaOfKnowledgeApi {
         AreaOfKnowledgeDto deactivatedAreaOfKnowledge = areaOfKnowledgeService.deleteAreaOfKnowledge(id);
         return ResponseEntity.ok().body(areaOfKnowledgeMapper.dtoToResponse(deactivatedAreaOfKnowledge));
     }
+
+    @Override
+    public ResponseEntity<List<AreaOfKnowledgeResponse>> getAllActiveAreasOfKnowledge() {
+        List<AreaOfKnowledgeDto> foundActiveAreasOfKnowledgeDto = areaOfKnowledgeService.getAllActiveAreasOfKnowledge();
+        return ResponseEntity.ok().body(areaOfKnowledgeMapper.listDtoToListResponse(foundActiveAreasOfKnowledgeDto));
+    }
 }

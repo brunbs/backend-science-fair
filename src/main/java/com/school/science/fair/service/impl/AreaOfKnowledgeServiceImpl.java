@@ -75,6 +75,13 @@ public class AreaOfKnowledgeServiceImpl implements AreaOfKnowledgeService {
         return areaOfKnowledgeMapper.entityToDto(deactivatedAreaOfKnowledge);
     }
 
+    @Override
+    public List<AreaOfKnowledgeDto> getAllActiveAreasOfKnowledge() {
+
+        List<AreaOfKnowledge> foundActiveAreasOfKnowledge = areaOfKnowledgeRepository.findAllByActiveTrue();
+        return areaOfKnowledgeMapper.listEntityToListDto(foundActiveAreasOfKnowledge);
+    }
+
     private void throwExceptionIfAreaOfKnowledgeNameAlreadyExists(String areaOfKnowledgeName) {
         Optional<AreaOfKnowledge> foundAreaOfKnowledge = areaOfKnowledgeRepository.findByName(areaOfKnowledgeName);
         if(foundAreaOfKnowledge.isPresent()) {
