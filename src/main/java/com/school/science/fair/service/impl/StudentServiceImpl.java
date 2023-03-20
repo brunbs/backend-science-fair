@@ -69,14 +69,14 @@ public class StudentServiceImpl implements StudentService {
 
     private void findIfStudentAlreadyExistsByRegistrationOrEmail(String email, Long registration) {
         Optional<Student> foundStudentEntity = studentRepository.findByEmailOrRegistration(email, registration);
-        if(!foundStudentEntity.isEmpty()) {
+        if(foundStudentEntity.isPresent()) {
             throw new ResourceAlreadyExistsException(HttpStatus.BAD_REQUEST, ExceptionMessage.STUDENT_ALREADY_EXISTS);
         }
     }
 
     private void findStudentByEmailOrThrowException(String email) {
         Optional<Student> foundStudentEntity = studentRepository.findByEmail(email);
-        if(!foundStudentEntity.isEmpty()) {
+        if(foundStudentEntity.isPresent()) {
             throw new ResourceAlreadyExistsException(HttpStatus.BAD_REQUEST, ExceptionMessage.EMAIL_ALREADY_EXISTS);
         }
     }
