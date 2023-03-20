@@ -34,6 +34,8 @@ Hope you enjoy as much as I do.
 - Spring Security
 - Spring Data JPA
 - Hibernate
+- JUnit 5
+- Mockito
 - H2Console
 - MySQL
 - Mapstruct
@@ -48,6 +50,8 @@ Hope you enjoy as much as I do.
 - Spring Security
 - Spring Data JPA
 - Hibernate
+- JUnit 5
+- Mockito
 - H2Console
 - MySQL
 - Mapstruct
