@@ -84,7 +84,7 @@ O front end da aplicação pode ser encontrado aqui: **** SERÁ DESENVOLVIDO AP�
 <h2 align="center"> :hammer_and_wrench: How can I build this project locally? / Como posso rodar esse projeto localmente? </h2>
 <p>
 
-:us: To run it in the current state of development, you can just clone this repository, under the main branch you will find the latest stable release, you can open it using the IDE you like, download dependencies and run it! Then, use Postman to make requests to the API.
+:us: To run it in the current state of development, you can just clone this repository, under the main branch you will find the latest stable release, you can open it using the IDE you like, download dependencies and run it (OBS: it is important to run mvn clean compile before running the project)! Then, use Postman to make requests to the API.
 It runs in the localhost 8080 port, so you can use the links:
 
 - Swagger: http://localhost:8080/swagger-ui/index.html
@@ -92,7 +92,7 @@ It runs in the localhost 8080 port, so you can use the links:
 
 Future releases will come with more info and ways to run, with a version hosted so you can see how it works remotely.
 
-:brazil: Para executá-lo no estado atual de desenvolvimento, você pode apenas clonar este repositório, nabranch main você encontrará a versão funcional mais recente, você pode abri-lo usando a IDE que você gosta, baixar as dependências e executá-lo! Então é só usar Postman para fazer suas requisições à API.
+:brazil: Para executá-lo no estado atual de desenvolvimento, você pode apenas clonar este repositório, nabranch main você encontrará a versão funcional mais recente, você pode abri-lo usando a IDE que você gosta, baixar as dependências e executá-lo (OBS: é importante executar mvn clean compile antes de executar o projeto)! Então é só usar Postman para fazer suas requisições à API.
 Ele roda na porta localhost 8080, então você pode usar os links:
 
 - Swagger: http://localhost:8080/swagger-ui/index.html
