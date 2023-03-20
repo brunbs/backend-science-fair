@@ -15,6 +15,10 @@
     :construction:  Project in Development  :construction:
 </h3>
 
+![tests](https://img.shields.io/badge/passed%20tests-57-informational)
+
+![version](https://img.shields.io/badge/version-v0.0.4-brightgreen)
+
 <h2 align="center"> :alembic: Introduction / Introdução :alembic: </h2>
 <p> :us: Hello! And welcome to this project for a school science fair. The main objective behind this project is to study and to use as portfolio.
 Hope you enjoy as much as I do.
@@ -110,16 +114,17 @@ Versões futuras virão com mais informações e formas de rodar, com uma versã
 :us:
 - Creation, Read, Update and Deletion of classes
 - Creation, Read, Update and Deletion of students
+- Creation, Read, Update and Deletion of Areas of Knowledge
 
 :brazil:
 - Criação, edição, deleção e listagem de turmas
 - Criação, edição, deleção e detalhes de estudante
+- Criação, edição, deleção, listagem e detalhes de área do conhecimento
 </p>
 <h2 align="center"> :bicyclist: Upcoming Features / Próximas funcionalidades :bicyclist:</h2>
 <p>
 
 :us:
-- creating, listing, editing and deleting job themes
 - creating, listing, editing and deleting students
 - creation, listing, editing and deletion of evaluation systems
 - creating, listing, editing and deleting assessments
@@ -128,7 +133,6 @@ Versões futuras virão com mais informações e formas de rodar, com uma versã
 - creation of teachers, users and permissions
 
 :brazil:
-- criação, listagem, edição e deleção de temas de trabalhos
 - criação, listagem, edição e deleção de estudantes
 - criação, listagem, edição e deleção de sistemas avaliativos
 - criação, listagem, edição e deleção de avaliações
