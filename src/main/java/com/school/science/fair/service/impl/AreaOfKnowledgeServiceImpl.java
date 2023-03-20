@@ -78,7 +78,6 @@ public class AreaOfKnowledgeServiceImpl implements AreaOfKnowledgeService {
 
     @Override
     public List<AreaOfKnowledgeDto> getAllActiveAreasOfKnowledge() {
-
         List<AreaOfKnowledge> foundActiveAreasOfKnowledge = areaOfKnowledgeRepository.findAllByActiveTrue();
         return areaOfKnowledgeMapper.listEntityToListDto(foundActiveAreasOfKnowledge);
     }

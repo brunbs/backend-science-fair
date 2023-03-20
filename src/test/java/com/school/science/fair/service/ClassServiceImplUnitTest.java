@@ -93,7 +93,7 @@ public class ClassServiceImplUnitTest {
         assertThat(returnedClass).usingRecursiveComparison().isEqualTo(classEntity);
     }
 
-    @DisplayName("Should Throw Resource Not Found Exception When Get Inexistent Class")
+    @DisplayName("Should Throw Resource Not Found Exception When Get Nonexistent Class")
     @Test
     void givenInvalidClassIdWhenGetClassThenThrowsResourceNotFoundException() {
 
