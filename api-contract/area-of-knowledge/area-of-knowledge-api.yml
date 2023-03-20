@@ -154,6 +154,22 @@ paths:
                 items:
                   $ref: '#/components/schemas/AreaOfKnowledgeResponse'
 
+  /area-of-knowledge/topics/all:
+    get:
+      tags:
+        - areaOfKnowledge
+      summary: Get a list of all Topics
+      operationId: getAllAreaOfKnowledgeTopics
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TopicResponse'
+
 components:
   schemas:
     CreateAreaOfKnowledgeRequest:

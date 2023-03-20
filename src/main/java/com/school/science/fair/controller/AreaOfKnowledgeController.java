@@ -3,10 +3,13 @@ package com.school.science.fair.controller;
 import com.school.science.fair.api.AreaOfKnowledgeApi;
 import com.school.science.fair.domain.AreaOfKnowledgeResponse;
 import com.school.science.fair.domain.CreateAreaOfKnowledgeRequest;
+import com.school.science.fair.domain.TopicResponse;
 import com.school.science.fair.domain.UpdateAreaOfKnowledgeRequest;
 import com.school.science.fair.domain.dto.AreaOfKnowledgeDto;
 import com.school.science.fair.domain.dto.AreaOfKnowledgeRequestDto;
+import com.school.science.fair.domain.dto.TopicDto;
 import com.school.science.fair.domain.mapper.AreaOfKnowledgeMapper;
+import com.school.science.fair.domain.mapper.TopicMapper;
 import com.school.science.fair.service.AreaOfKnowledgeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +26,9 @@ public class AreaOfKnowledgeController implements AreaOfKnowledgeApi {
 
     @Autowired
     private AreaOfKnowledgeMapper areaOfKnowledgeMapper;
+
+    @Autowired
+    private TopicMapper topicMapper;
 
     @Override
     public ResponseEntity<AreaOfKnowledgeResponse> createAreaOfKnowledge(CreateAreaOfKnowledgeRequest createAreaOfKnowledgeRequest) {
@@ -61,5 +67,11 @@ public class AreaOfKnowledgeController implements AreaOfKnowledgeApi {
     public ResponseEntity<List<AreaOfKnowledgeResponse>> getAllActiveAreasOfKnowledge() {
         List<AreaOfKnowledgeDto> foundActiveAreasOfKnowledgeDto = areaOfKnowledgeService.getAllActiveAreasOfKnowledge();
         return ResponseEntity.ok().body(areaOfKnowledgeMapper.listDtoToListResponse(foundActiveAreasOfKnowledgeDto));
+    }
+
+    @Override
+    public ResponseEntity<List<TopicResponse>> getAllAreaOfKnowledgeTopics() {
+        List<TopicDto> foundTopics = areaOfKnowledgeService.getAllTopics();
+        return ResponseEntity.ok().body(topicMapper.listDtoToListResponse(foundTopics));
     }
 }

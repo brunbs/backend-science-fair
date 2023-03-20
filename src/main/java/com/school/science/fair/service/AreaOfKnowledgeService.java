@@ -2,6 +2,7 @@ package com.school.science.fair.service;
 
 import com.school.science.fair.domain.dto.AreaOfKnowledgeDto;
 import com.school.science.fair.domain.dto.AreaOfKnowledgeRequestDto;
+import com.school.science.fair.domain.dto.TopicDto;
 
 import java.util.List;
 
@@ -13,5 +14,6 @@ public interface AreaOfKnowledgeService {
     List<AreaOfKnowledgeDto> getAllAreasOfKnowledge();
     AreaOfKnowledgeDto deleteAreaOfKnowledge(Long id);
     List<AreaOfKnowledgeDto> getAllActiveAreasOfKnowledge();
+    List<TopicDto> getAllTopics();
 
 }

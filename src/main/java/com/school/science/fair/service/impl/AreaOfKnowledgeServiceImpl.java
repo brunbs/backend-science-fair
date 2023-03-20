@@ -2,6 +2,7 @@ package com.school.science.fair.service.impl;
 
 import com.school.science.fair.domain.dto.AreaOfKnowledgeDto;
 import com.school.science.fair.domain.dto.AreaOfKnowledgeRequestDto;
+import com.school.science.fair.domain.dto.TopicDto;
 import com.school.science.fair.domain.entity.AreaOfKnowledge;
 import com.school.science.fair.domain.entity.Topic;
 import com.school.science.fair.domain.enumeration.ExceptionMessage;
@@ -80,6 +81,12 @@ public class AreaOfKnowledgeServiceImpl implements AreaOfKnowledgeService {
 
         List<AreaOfKnowledge> foundActiveAreasOfKnowledge = areaOfKnowledgeRepository.findAllByActiveTrue();
         return areaOfKnowledgeMapper.listEntityToListDto(foundActiveAreasOfKnowledge);
+    }
+
+    @Override
+    public List<TopicDto> getAllTopics() {
+        List<Topic> foundTopics = topicRepository.findAll();
+        return topicMapper.listEntityToListDto(foundTopics);
     }
 
     private void throwExceptionIfAreaOfKnowledgeNameAlreadyExists(String areaOfKnowledgeName) {
