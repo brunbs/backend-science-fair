@@ -11,5 +11,6 @@ public interface AreaOfKnowledgeService {
     AreaOfKnowledgeDto getAreaOfKnowledge(Long id);
     AreaOfKnowledgeDto updateAreaOfKnowledge(Long id, AreaOfKnowledgeRequestDto updateAreaOfKnowledgeRequestDto);
     List<AreaOfKnowledgeDto> getAllAreasOfKnowledge();
+    AreaOfKnowledgeDto deleteAreaOfKnowledge(Long id);
 
 }

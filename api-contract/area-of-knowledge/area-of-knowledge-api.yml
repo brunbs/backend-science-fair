@@ -95,6 +95,33 @@ paths:
               schema:
                 $ref: '#/components/schemas/ResourceNotFoundResponse'
 
+    delete:
+      tags:
+        - areaOfKnowledge
+      summary: Delete an Area of Knowledge
+      operationId: deleteAreaOfKnowledge
+      parameters:
+        - name: id
+          in: path
+          description: Area of Knowledge id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AreaOfKnowledgeResponse'
+        '404':
+          description: Area of Knowledge not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundResponse'
+
   /area-of-knowledge/all:
     get:
       tags:
@@ -160,6 +187,9 @@ components:
         name:
           type: string
           example: Natural Science
+        active:
+          type: boolean
+          example: true
         topics:
           type: array
           items:

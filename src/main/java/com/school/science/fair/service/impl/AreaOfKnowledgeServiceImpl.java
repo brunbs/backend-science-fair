@@ -40,6 +40,7 @@ public class AreaOfKnowledgeServiceImpl implements AreaOfKnowledgeService {
         throwExceptionIfAreaOfKnowledgeNameAlreadyExists(createAreaOfKnowledgeRequestDto.getName());
         AreaOfKnowledge areaOfKnowledgeEntity = areaOfKnowledgeMapper.requestDtoToEntity(createAreaOfKnowledgeRequestDto);
         areaOfKnowledgeEntity.setTopics(createNewTopicsAndReturn(areaOfKnowledgeEntity.getTopics()));
+        areaOfKnowledgeEntity.setActive(true);
         AreaOfKnowledge savedAreaOfKnowledge = areaOfKnowledgeRepository.save(areaOfKnowledgeEntity);
         return areaOfKnowledgeMapper.entityToDto(savedAreaOfKnowledge);
     }
@@ -64,6 +65,14 @@ public class AreaOfKnowledgeServiceImpl implements AreaOfKnowledgeService {
     public List<AreaOfKnowledgeDto> getAllAreasOfKnowledge() {
         List<AreaOfKnowledge> areasOfKnowledgeFromDatabase = areaOfKnowledgeRepository.findAll();
         return areaOfKnowledgeMapper.listEntityToListDto(areasOfKnowledgeFromDatabase);
+    }
+
+    @Override
+    public AreaOfKnowledgeDto deleteAreaOfKnowledge(Long id) {
+        AreaOfKnowledge foundAreaOfKnowledge = findAreaOfKnowledgeOrThrowException(id);
+        foundAreaOfKnowledge.setActive(false);
+        AreaOfKnowledge deactivatedAreaOfKnowledge = areaOfKnowledgeRepository.save(foundAreaOfKnowledge);
+        return areaOfKnowledgeMapper.entityToDto(deactivatedAreaOfKnowledge);
     }
 
     private void throwExceptionIfAreaOfKnowledgeNameAlreadyExists(String areaOfKnowledgeName) {
