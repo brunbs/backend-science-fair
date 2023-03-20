@@ -2,6 +2,7 @@ package com.school.science.fair.service.impl;
 
 import com.school.science.fair.domain.dto.AreaOfKnowledgeDto;
 import com.school.science.fair.domain.dto.AreaOfKnowledgeRequestDto;
+import com.school.science.fair.domain.dto.TopicDto;
 import com.school.science.fair.domain.entity.AreaOfKnowledge;
 import com.school.science.fair.domain.entity.Topic;
 import com.school.science.fair.domain.enumeration.ExceptionMessage;
@@ -40,6 +41,7 @@ public class AreaOfKnowledgeServiceImpl implements AreaOfKnowledgeService {
         throwExceptionIfAreaOfKnowledgeNameAlreadyExists(createAreaOfKnowledgeRequestDto.getName());
         AreaOfKnowledge areaOfKnowledgeEntity = areaOfKnowledgeMapper.requestDtoToEntity(createAreaOfKnowledgeRequestDto);
         areaOfKnowledgeEntity.setTopics(createNewTopicsAndReturn(areaOfKnowledgeEntity.getTopics()));
+        areaOfKnowledgeEntity.setActive(true);
         AreaOfKnowledge savedAreaOfKnowledge = areaOfKnowledgeRepository.save(areaOfKnowledgeEntity);
         return areaOfKnowledgeMapper.entityToDto(savedAreaOfKnowledge);
     }
@@ -64,6 +66,27 @@ public class AreaOfKnowledgeServiceImpl implements AreaOfKnowledgeService {
     public List<AreaOfKnowledgeDto> getAllAreasOfKnowledge() {
         List<AreaOfKnowledge> areasOfKnowledgeFromDatabase = areaOfKnowledgeRepository.findAll();
         return areaOfKnowledgeMapper.listEntityToListDto(areasOfKnowledgeFromDatabase);
+    }
+
+    @Override
+    public AreaOfKnowledgeDto deleteAreaOfKnowledge(Long id) {
+        AreaOfKnowledge foundAreaOfKnowledge = findAreaOfKnowledgeOrThrowException(id);
+        foundAreaOfKnowledge.setActive(false);
+        AreaOfKnowledge deactivatedAreaOfKnowledge = areaOfKnowledgeRepository.save(foundAreaOfKnowledge);
+        return areaOfKnowledgeMapper.entityToDto(deactivatedAreaOfKnowledge);
+    }
+
+    @Override
+    public List<AreaOfKnowledgeDto> getAllActiveAreasOfKnowledge() {
+
+        List<AreaOfKnowledge> foundActiveAreasOfKnowledge = areaOfKnowledgeRepository.findAllByActiveTrue();
+        return areaOfKnowledgeMapper.listEntityToListDto(foundActiveAreasOfKnowledge);
+    }
+
+    @Override
+    public List<TopicDto> getAllTopics() {
+        List<Topic> foundTopics = topicRepository.findAll();
+        return topicMapper.listEntityToListDto(foundTopics);
     }
 
     private void throwExceptionIfAreaOfKnowledgeNameAlreadyExists(String areaOfKnowledgeName) {

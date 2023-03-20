@@ -21,5 +21,6 @@ public class AreaOfKnowledge {
     private String name;
     @OneToMany
     private List<Topic> topics;
+    private boolean active;
 
 }

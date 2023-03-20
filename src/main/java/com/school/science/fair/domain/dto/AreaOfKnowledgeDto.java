@@ -12,5 +12,6 @@ public class AreaOfKnowledgeDto {
     private Long id;
     private String name;
     private List<TopicDto> topics;
+    private boolean active;
 
 }
