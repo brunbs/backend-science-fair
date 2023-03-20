@@ -12,6 +12,10 @@ public enum ExceptionMessage {
   // Class exception messages
   CLASS_NOT_FOUND("error.class.not-found-error"),
 
+  //Area of Knowledge and Topics messages
+  AREA_OF_KNOWLEDGE_ALREADY_EXISTS("error.area-of-knowledge.already-exists-error"),
+  AREA_OF_KNOWLEDGE_NOT_FOUND("error.area-of-knowledge.not-found-error"),
+
   // Student exception messages
   STUDENT_NOT_FOUND("error.student.not-found-error"),
   STUDENT_ALREADY_EXISTS("error.student.already-exists-error");
