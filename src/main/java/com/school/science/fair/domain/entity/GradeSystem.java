@@ -21,6 +21,7 @@ public class GradeSystem {
     private String name;
     private String description;
     private Double maxValue;
+    private boolean active;
     @OneToMany
     private List<Grade> grades;
 

@@ -13,6 +13,7 @@ public class GradeSystemDto {
     private String name;
     private String description;
     private Double maxValue;
+    private boolean active;
     private List<GradeDto> grades;
 
 }
