@@ -53,6 +53,12 @@ public class GradeSystemServiceImpl implements GradeSystemService {
         return gradeSystemMapper.entityToDto(foundGradeSystem);
     }
 
+    @Override
+    public List<GradeSystemDto> getAllGradeSystem() {
+        List<GradeSystem> foundGradeSystems = gradeSystemRepository.findAll();
+        return gradeSystemMapper.listEntityToListDto(foundGradeSystems);
+    }
+
     private GradeSystem getGradeSystemOrThrowException(Long id) {
         Optional<GradeSystem> foundGradeSystem = gradeSystemRepository.findById(id);
         if(foundGradeSystem.isPresent()) {

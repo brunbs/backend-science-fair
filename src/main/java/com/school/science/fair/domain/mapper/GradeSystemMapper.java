@@ -7,6 +7,8 @@ import com.school.science.fair.domain.dto.GradeSystemRequestDto;
 import com.school.science.fair.domain.entity.GradeSystem;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 import static org.mapstruct.ReportingPolicy.IGNORE;
 
 @Mapper(componentModel = "spring",  unmappedTargetPolicy = IGNORE)
@@ -16,4 +18,6 @@ public interface GradeSystemMapper {
     GradeSystemDto entityToDto(GradeSystem gradeSystemEntity);
     GradeSystemRequestDto requestToRequestDto (CreateGradeSystemRequest gradeSystemRequest);
     GradeSystemResponse dtoToResponse (GradeSystemDto gradeSystemDto);
+    List<GradeSystemDto> listEntityToListDto(List<GradeSystem> gradeSystems);
+    List<GradeSystemResponse> listDtoToListResponse(List<GradeSystemDto> gradeSystemDtos);
 }

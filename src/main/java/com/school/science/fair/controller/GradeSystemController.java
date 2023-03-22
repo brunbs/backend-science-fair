@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class GradeSystemController implements GradeSystemApi {
 
@@ -32,5 +34,11 @@ public class GradeSystemController implements GradeSystemApi {
     public ResponseEntity<GradeSystemResponse> getGradeSystem(Long id) {
         GradeSystemDto foundGradeSystem = gradeSystemService.getGradeSystem(id);
         return ResponseEntity.ok().body(gradeSystemMapper.dtoToResponse(foundGradeSystem));
+    }
+
+    @Override
+    public ResponseEntity<List<GradeSystemResponse>> getAllGradeSystem() {
+        List<GradeSystemDto> foundGradeSystems = gradeSystemService.getAllGradeSystem();
+        return ResponseEntity.ok().body(gradeSystemMapper.listDtoToListResponse(foundGradeSystems));
     }
 }
