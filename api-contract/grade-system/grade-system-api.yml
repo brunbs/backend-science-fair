@@ -63,6 +63,28 @@ paths:
               schema:
                 $ref: '#/components/schemas/ResourceNotFoundResponse'
 
+  /grade-system/all:
+    get:
+      tags:
+        - grade-system
+      summary: Get All Grade Systems
+      operationId: getAllGradeSystem
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GradeSystemResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundResponse'
+
 components:
   schemas:
     CreateGradeSystemRequest:
