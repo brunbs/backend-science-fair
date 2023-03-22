@@ -12,5 +12,6 @@ public interface GradeSystemService {
     List<GradeSystemDto> getAllGradeSystem();
     GradeSystemDto updateGradeSystem(Long id, GradeSystemRequestDto gradeSystemRequestDto);
     GradeSystemDto deleteGradeSystem(Long id);
+    List<GradeSystemDto> getAllActiveGradeSystems();
 
 }

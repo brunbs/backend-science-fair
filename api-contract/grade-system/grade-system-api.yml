@@ -143,6 +143,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/ResourceNotFoundResponse'
 
+  /grade-system/all/active:
+    get:
+      tags:
+        - grade-system
+      summary: Get a list of Active Grade Systems
+      operationId: getAllActiveGradeSystems
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GradeSystemResponse'
+
 components:
   schemas:
     CreateGradeSystemRequest:
