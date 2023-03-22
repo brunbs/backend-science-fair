@@ -7,6 +7,7 @@ import com.school.science.fair.domain.entity.Grade;
 import com.school.science.fair.domain.entity.GradeSystem;
 import com.school.science.fair.domain.enumeration.ExceptionMessage;
 import com.school.science.fair.domain.exception.GradeException;
+import com.school.science.fair.domain.exception.ResourceNotFoundException;
 import com.school.science.fair.domain.mapper.GradeMapper;
 import com.school.science.fair.domain.mapper.GradeSystemMapper;
 import com.school.science.fair.repository.GradeRepository;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GradeSystemServiceImpl implements GradeSystemService {
@@ -43,6 +45,20 @@ public class GradeSystemServiceImpl implements GradeSystemService {
         gradeSystemToCreate.setGrades(grades);
         GradeSystem createdGradeSystem = gradeSystemRepository.save(gradeSystemToCreate);
         return gradeSystemMapper.entityToDto(createdGradeSystem);
+    }
+
+    @Override
+    public GradeSystemDto getGradeSystem(Long id) {
+        GradeSystem foundGradeSystem = getGradeSystemOrThrowException(id);
+        return gradeSystemMapper.entityToDto(foundGradeSystem);
+    }
+
+    private GradeSystem getGradeSystemOrThrowException(Long id) {
+        Optional<GradeSystem> foundGradeSystem = gradeSystemRepository.findById(id);
+        if(foundGradeSystem.isPresent()) {
+            return foundGradeSystem.get();
+        }
+        throw new ResourceNotFoundException(HttpStatus.BAD_REQUEST, ExceptionMessage.GRADE_SYSTEM_NOT_FOUND);
     }
 
     private List<Grade> createGradesAndReturnListOfGradesEntity(List<Grade> gradesToCreate) {

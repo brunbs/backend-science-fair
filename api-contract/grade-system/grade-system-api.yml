@@ -35,6 +35,34 @@ paths:
               schema:
                 $ref: '#/components/schemas/BadRequestResponse'
 
+  /grade-system/{id}:
+    get:
+      tags:
+        - grade-system
+      summary: Get Grade System Details
+      operationId: getGradeSystem
+      parameters:
+        - name: id
+          in: path
+          description: Grade System Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GradeSystemResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundResponse'
+
 components:
   schemas:
     CreateGradeSystemRequest:
@@ -129,4 +157,4 @@ components:
         message:
           type: string
           description: Error message
-          example: Evaluation System not found
+          example: Grade System not found

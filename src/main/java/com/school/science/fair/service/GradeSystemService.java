@@ -6,5 +6,6 @@ import com.school.science.fair.domain.dto.GradeSystemRequestDto;
 public interface GradeSystemService {
 
     GradeSystemDto createGradeSystem(GradeSystemRequestDto gradeSystemRequestDto);
+    GradeSystemDto getGradeSystem(Long id);
 
 }
