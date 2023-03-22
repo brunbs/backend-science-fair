@@ -5,14 +5,14 @@ info:
   version: 0.0.1
 
 tags:
-  - name: areaOfKnowledge
+  - name: area-of-knowledge
     description: Area of Knowledge's topic endpoints
 
 paths:
   /area-of-knowledge:
     post:
       tags:
-        - areaOfKnowledge
+        - area-of-knowledge
       summary: Create Area of Knowledge
       operationId: createAreaOfKnowledge
       requestBody:
@@ -38,7 +38,7 @@ paths:
   /area-of-knowledge/{id}:
     get:
       tags:
-        - areaOfKnowledge
+        - area-of-knowledge
       summary: Get Area of Knowledge Details
       operationId: getAreaOfKnowledge
       parameters:
@@ -64,7 +64,7 @@ paths:
                 $ref: '#/components/schemas/ResourceNotFoundResponse'
     patch:
       tags:
-        - areaOfKnowledge
+        - area-of-knowledge
       summary: Update an Area of Knowledge with a list of Topics
       operationId: updateAreaOfKnowledge
       parameters:
@@ -97,7 +97,7 @@ paths:
 
     delete:
       tags:
-        - areaOfKnowledge
+        - area-of-knowledge
       summary: Delete an Area of Knowledge
       operationId: deleteAreaOfKnowledge
       parameters:
@@ -125,7 +125,7 @@ paths:
   /area-of-knowledge/all:
     get:
       tags:
-        - areaOfKnowledge
+        - area-of-knowledge
       summary: Get a list of Areas Of Knowledge
       operationId: getAllAreasOfKnowledge
       responses:
@@ -141,7 +141,7 @@ paths:
   /area-of-knowledge/all/active:
     get:
       tags:
-        - areaOfKnowledge
+        - area-of-knowledge
       summary: Get a list of Active Areas of Knowledge
       operationId: getAllActiveAreasOfKnowledge
       responses:
@@ -157,7 +157,7 @@ paths:
   /area-of-knowledge/topics/all:
     get:
       tags:
-        - areaOfKnowledge
+        - area-of-knowledge
       summary: Get a list of all Topics
       operationId: getAllAreaOfKnowledgeTopics
       responses:
