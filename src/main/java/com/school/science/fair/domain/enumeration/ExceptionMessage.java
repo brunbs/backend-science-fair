@@ -18,6 +18,7 @@ public enum ExceptionMessage {
 
   // Grade System exception messages
   GRADE_VALUES_BIGGER_THEN_GRADE_SYSTEM_MAX_VALUE("error.grade.grades-values-bigger-than-grade-system-max-value-error"),
+  GRADE_SYSTEM_NOT_FOUND("error.grade-system.not-found-error"),
 
   // Student exception messages
   STUDENT_NOT_FOUND("error.student.not-found-error"),

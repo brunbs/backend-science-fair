@@ -27,4 +27,10 @@ public class GradeSystemController implements GradeSystemApi {
         GradeSystemDto gradeSystemDto = gradeSystemService.createGradeSystem(gradeSystemToCreate);
         return ResponseEntity.status(HttpStatus.CREATED).body(gradeSystemMapper.dtoToResponse(gradeSystemDto));
     }
+
+    @Override
+    public ResponseEntity<GradeSystemResponse> getGradeSystem(Long id) {
+        GradeSystemDto foundGradeSystem = gradeSystemService.getGradeSystem(id);
+        return ResponseEntity.ok().body(gradeSystemMapper.dtoToResponse(foundGradeSystem));
+    }
 }
