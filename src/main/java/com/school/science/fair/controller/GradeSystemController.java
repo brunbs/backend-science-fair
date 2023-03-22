@@ -55,4 +55,10 @@ public class GradeSystemController implements GradeSystemApi {
         GradeSystemDto deletedGradeSystem = gradeSystemService.deleteGradeSystem(id);
         return ResponseEntity.ok().body(gradeSystemMapper.dtoToResponse(deletedGradeSystem));
     }
+
+    @Override
+    public ResponseEntity<List<GradeSystemResponse>> getAllActiveGradeSystems() {
+        List<GradeSystemDto> foundActiveGradeSystems = gradeSystemService.getAllActiveGradeSystems();
+        return ResponseEntity.ok().body(gradeSystemMapper.listDtoToListResponse(foundActiveGradeSystems));
+    }
 }

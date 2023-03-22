@@ -82,6 +82,12 @@ public class GradeSystemServiceImpl implements GradeSystemService {
         return gradeSystemMapper.entityToDto(deletedGradeSystem);
     }
 
+    @Override
+    public List<GradeSystemDto> getAllActiveGradeSystems() {
+        List<GradeSystem> foundGradeSystems = gradeSystemRepository.findAllByActiveTrue();
+        return gradeSystemMapper.listEntityToListDto(foundGradeSystems);
+    }
+
     private GradeSystem getGradeSystemOrThrowException(Long id) {
         Optional<GradeSystem> foundGradeSystem = gradeSystemRepository.findById(id);
         if(foundGradeSystem.isPresent()) {
