@@ -2,6 +2,7 @@ package com.school.science.fair.domain.exception.handler;
 
 import com.school.science.fair.domain.builder.ExceptionResponseBuilder;
 import com.school.science.fair.domain.enumeration.ExceptionMessage;
+import com.school.science.fair.domain.exception.GradeException;
 import com.school.science.fair.domain.exception.ResourceAlreadyExistsException;
 import com.school.science.fair.domain.exception.ResourceNotFoundException;
 import com.school.science.fair.domain.response.ExceptionResponse;
@@ -32,6 +33,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceAlreadyExistsException.class)
     public final ResponseEntity<ExceptionResponse> handleAlreadyExistsError(ResourceAlreadyExistsException exception) {
+        return ResponseEntity.status(exception.getStatus())
+                .body(responseBuilder.getExceptionResponse(exception.getReason()));
+    }
+
+    @ExceptionHandler(GradeException.class)
+    public final ResponseEntity<ExceptionResponse> handleGradeError(GradeException exception) {
         return ResponseEntity.status(exception.getStatus())
                 .body(responseBuilder.getExceptionResponse(exception.getReason()));
     }
