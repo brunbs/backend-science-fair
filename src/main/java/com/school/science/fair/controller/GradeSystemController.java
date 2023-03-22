@@ -49,4 +49,10 @@ public class GradeSystemController implements GradeSystemApi {
         GradeSystemDto updatedGradeSystem = gradeSystemService.updateGradeSystem(id, gradeSystemToUpdate);
         return ResponseEntity.ok().body(gradeSystemMapper.dtoToResponse(updatedGradeSystem));
     }
+
+    @Override
+    public ResponseEntity<GradeSystemResponse> deleteGradeSystem(Long id) {
+        GradeSystemDto deletedGradeSystem = gradeSystemService.deleteGradeSystem(id);
+        return ResponseEntity.ok().body(gradeSystemMapper.dtoToResponse(deletedGradeSystem));
+    }
 }

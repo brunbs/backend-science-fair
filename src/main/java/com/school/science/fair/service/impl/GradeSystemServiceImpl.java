@@ -45,6 +45,7 @@ public class GradeSystemServiceImpl implements GradeSystemService {
         checkIfSumOfGradesIsLessOrEqualGradeSystemMaxValue(gradeSystemToCreate.getMaxValue(), gradeSystemToCreate.getGrades());
         List<Grade> grades = createGradesAndReturnListOfGradesEntity(gradeSystemToCreate.getGrades());
         gradeSystemToCreate.setGrades(grades);
+        gradeSystemToCreate.setActive(true);
         GradeSystem createdGradeSystem = gradeSystemRepository.save(gradeSystemToCreate);
         return gradeSystemMapper.entityToDto(createdGradeSystem);
     }
@@ -71,6 +72,14 @@ public class GradeSystemServiceImpl implements GradeSystemService {
         checkIfSumOfGradesIsLessOrEqualGradeSystemMaxValue(gradeSystemToUpdate.getMaxValue(), gradeSystemToUpdate.getGrades());
         GradeSystem updatedGradeSystem = gradeSystemRepository.save(gradeSystemToUpdate);
         return gradeSystemMapper.entityToDto(updatedGradeSystem);
+    }
+
+    @Override
+    public GradeSystemDto deleteGradeSystem(Long id) {
+        GradeSystem gradeSystemToDelete = getGradeSystemOrThrowException(id);
+        gradeSystemToDelete.setActive(false);
+        GradeSystem deletedGradeSystem = gradeSystemRepository.save(gradeSystemToDelete);
+        return gradeSystemMapper.entityToDto(deletedGradeSystem);
     }
 
     private GradeSystem getGradeSystemOrThrowException(Long id) {
