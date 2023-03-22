@@ -2,10 +2,16 @@ package com.school.science.fair.domain.mapper;
 
 import com.school.science.fair.domain.CreateGradeSystemRequest;
 import com.school.science.fair.domain.GradeSystemResponse;
+import com.school.science.fair.domain.UpdateGradeSystemRequest;
+import com.school.science.fair.domain.dto.GradeDto;
 import com.school.science.fair.domain.dto.GradeSystemDto;
 import com.school.science.fair.domain.dto.GradeSystemRequestDto;
+import com.school.science.fair.domain.entity.Grade;
 import com.school.science.fair.domain.entity.GradeSystem;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
 
@@ -20,4 +26,8 @@ public interface GradeSystemMapper {
     GradeSystemResponse dtoToResponse (GradeSystemDto gradeSystemDto);
     List<GradeSystemDto> listEntityToListDto(List<GradeSystem> gradeSystems);
     List<GradeSystemResponse> listDtoToListResponse(List<GradeSystemDto> gradeSystemDtos);
+    List<Grade> listDtoToListEntity(List<GradeDto> gradeDto);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateModelFromDto(GradeSystemRequestDto gradeSystemRequestDto, @MappingTarget GradeSystem entity);
+    GradeSystemRequestDto updateRequestToDto(UpdateGradeSystemRequest updateGradeSystemRequest);
 }

@@ -17,9 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class GradeSystemServiceImpl implements GradeSystemService {
@@ -59,6 +61,18 @@ public class GradeSystemServiceImpl implements GradeSystemService {
         return gradeSystemMapper.listEntityToListDto(foundGradeSystems);
     }
 
+    @Override
+    @Transactional
+    public GradeSystemDto updateGradeSystem(Long id, GradeSystemRequestDto gradeSystemRequestDto) {
+        GradeSystem gradeSystemToUpdate = getGradeSystemOrThrowException(id);
+        List<Grade> gradesToSave = updateGradesAndReturnListOfGradeEntity(gradeSystemToUpdate.getGrades(), gradeSystemMapper.listDtoToListEntity(gradeSystemRequestDto.getGrades()));
+        gradeSystemMapper.updateModelFromDto(gradeSystemRequestDto, gradeSystemToUpdate);
+        gradeSystemToUpdate.setGrades(gradesToSave);
+        checkIfSumOfGradesIsLessOrEqualGradeSystemMaxValue(gradeSystemToUpdate.getMaxValue(), gradeSystemToUpdate.getGrades());
+        GradeSystem updatedGradeSystem = gradeSystemRepository.save(gradeSystemToUpdate);
+        return gradeSystemMapper.entityToDto(updatedGradeSystem);
+    }
+
     private GradeSystem getGradeSystemOrThrowException(Long id) {
         Optional<GradeSystem> foundGradeSystem = gradeSystemRepository.findById(id);
         if(foundGradeSystem.isPresent()) {
@@ -76,6 +90,16 @@ public class GradeSystemServiceImpl implements GradeSystemService {
                 continue;
             }
             gradesToReturn.add(grade);
+        }
+        return gradesToReturn;
+    }
+
+    private List<Grade> updateGradesAndReturnListOfGradeEntity(List<Grade> grades, List<Grade> gradesToCreate) {
+        List<Grade> gradesToReturn = gradesToCreate.stream().filter(grades::contains).collect(Collectors.toList());
+        List<Grade> gradesToSave = gradesToCreate.stream().filter(g -> !grades.contains(g)).collect(Collectors.toList());
+        for(Grade grade : gradesToSave) {
+            Grade savedGrade = gradeRepository.save(grade);
+            gradesToReturn.add(savedGrade);
         }
         return gradesToReturn;
     }

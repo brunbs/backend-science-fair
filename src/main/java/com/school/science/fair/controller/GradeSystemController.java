@@ -3,6 +3,7 @@ package com.school.science.fair.controller;
 import com.school.science.fair.api.GradeSystemApi;
 import com.school.science.fair.domain.CreateGradeSystemRequest;
 import com.school.science.fair.domain.GradeSystemResponse;
+import com.school.science.fair.domain.UpdateGradeSystemRequest;
 import com.school.science.fair.domain.dto.GradeSystemDto;
 import com.school.science.fair.domain.dto.GradeSystemRequestDto;
 import com.school.science.fair.domain.mapper.GradeSystemMapper;
@@ -40,5 +41,12 @@ public class GradeSystemController implements GradeSystemApi {
     public ResponseEntity<List<GradeSystemResponse>> getAllGradeSystem() {
         List<GradeSystemDto> foundGradeSystems = gradeSystemService.getAllGradeSystem();
         return ResponseEntity.ok().body(gradeSystemMapper.listDtoToListResponse(foundGradeSystems));
+    }
+
+    @Override
+    public ResponseEntity<GradeSystemResponse> updateGradeSystem(Long id, UpdateGradeSystemRequest updateGradeSystemRequest) {
+        GradeSystemRequestDto gradeSystemToUpdate = gradeSystemMapper.updateRequestToDto(updateGradeSystemRequest);
+        GradeSystemDto updatedGradeSystem = gradeSystemService.updateGradeSystem(id, gradeSystemToUpdate);
+        return ResponseEntity.ok().body(gradeSystemMapper.dtoToResponse(updatedGradeSystem));
     }
 }
