@@ -8,10 +8,7 @@ import com.school.science.fair.domain.dto.GradeSystemDto;
 import com.school.science.fair.domain.dto.GradeSystemRequestDto;
 import com.school.science.fair.domain.entity.Grade;
 import com.school.science.fair.domain.entity.GradeSystem;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -28,6 +25,7 @@ public interface GradeSystemMapper {
     List<GradeSystemResponse> listDtoToListResponse(List<GradeSystemDto> gradeSystemDtos);
     List<Grade> listDtoToListEntity(List<GradeDto> gradeDto);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "grades", ignore = true)
     void updateModelFromDto(GradeSystemRequestDto gradeSystemRequestDto, @MappingTarget GradeSystem entity);
     GradeSystemRequestDto updateRequestToDto(UpdateGradeSystemRequest updateGradeSystemRequest);
 }

@@ -10,4 +10,5 @@ import static org.mapstruct.ReportingPolicy.IGNORE;
 public interface GradeMapper {
 
     Grade requestDtoToEntity (GradeDto gradeDto);
+    GradeDto entityToDto(Grade entity);
 }

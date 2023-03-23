@@ -63,7 +63,7 @@ public class AreaOfKnowledgeServiceImplUnitTest {
 
     @DisplayName("Database save topic and area of knowledge")
     @Test
-    void givenClassEntityWhenSaveClassThenReturnSavedEntityWithRightDetails() {
+    void givenAreaOfKnowledgeAndTopicEntityWhenSaveAreaOfKnowledgeThenReturnSavedEntityWithRightDetails() {
         Topic topicEntity = getTopicEntity();
         topicEntity.setId(null);
         AreaOfKnowledge areaOfKnowledgeEntity = getAreaOfKnowledgeTestEntity();

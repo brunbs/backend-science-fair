@@ -1,6 +1,5 @@
 package com.school.science.fair.service.impl;
 
-import com.school.science.fair.domain.dto.GradeDto;
 import com.school.science.fair.domain.dto.GradeSystemDto;
 import com.school.science.fair.domain.dto.GradeSystemRequestDto;
 import com.school.science.fair.domain.entity.Grade;
@@ -66,9 +65,11 @@ public class GradeSystemServiceImpl implements GradeSystemService {
     @Transactional
     public GradeSystemDto updateGradeSystem(Long id, GradeSystemRequestDto gradeSystemRequestDto) {
         GradeSystem gradeSystemToUpdate = getGradeSystemOrThrowException(id);
-        List<Grade> gradesToSave = updateGradesAndReturnListOfGradeEntity(gradeSystemToUpdate.getGrades(), gradeSystemMapper.listDtoToListEntity(gradeSystemRequestDto.getGrades()));
         gradeSystemMapper.updateModelFromDto(gradeSystemRequestDto, gradeSystemToUpdate);
-        gradeSystemToUpdate.setGrades(gradesToSave);
+        if(gradeSystemRequestDto.getGrades() != null) {
+            List<Grade> gradesToSave = updateGradesAndReturnListOfGradeEntity(gradeSystemToUpdate.getGrades(), gradeSystemMapper.listDtoToListEntity(gradeSystemRequestDto.getGrades()));
+            gradeSystemToUpdate.setGrades(gradesToSave);
+        }
         checkIfSumOfGradesIsLessOrEqualGradeSystemMaxValue(gradeSystemToUpdate.getMaxValue(), gradeSystemToUpdate.getGrades());
         GradeSystem updatedGradeSystem = gradeSystemRepository.save(gradeSystemToUpdate);
         return gradeSystemMapper.entityToDto(updatedGradeSystem);
