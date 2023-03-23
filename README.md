@@ -15,9 +15,9 @@
     :construction:  Project in Development  :construction:
 </h3>
 
-![tests](https://img.shields.io/badge/passed%20tests-57-informational)
+![tests](https://img.shields.io/badge/passed%20tests-78-informational)
 
-![version](https://img.shields.io/badge/version-v0.0.4-brightgreen)
+![version](https://img.shields.io/badge/version-v0.1.0-brightgreen)
 
 <h2 align="center"> :alembic: Introduction / Introdução :alembic: </h2>
 <p> :us: Hello! And welcome to this project for a school science fair. The main objective behind this project is to study and to use as portfolio.
@@ -115,26 +115,24 @@ Versões futuras virão com mais informações e formas de rodar, com uma versã
 - Creation, Read, Update and Deletion of classes
 - Creation, Read, Update and Deletion of students
 - Creation, Read, Update and Deletion of Areas of Knowledge
+- Creation, Read, Update and Deletion of Grade Systems
 
 :brazil:
 - Criação, edição, deleção e listagem de turmas
 - Criação, edição, deleção e detalhes de estudante
 - Criação, edição, deleção, listagem e detalhes de área do conhecimento
+- Criação, edição, deleção, listagem e detalhes de Sistemas Avaliativos
 </p>
 <h2 align="center"> :bicyclist: Upcoming Features / Próximas funcionalidades :bicyclist:</h2>
 <p>
 
 :us:
-- creating, listing, editing and deleting students
-- creation, listing, editing and deletion of evaluation systems
 - creating, listing, editing and deleting assessments
 - create, list, edit and delete science fair edition
 - link students in assessments and assessments in science fair issues
 - creation of teachers, users and permissions
 
 :brazil:
-- criação, listagem, edição e deleção de estudantes
-- criação, listagem, edição e deleção de sistemas avaliativos
 - criação, listagem, edição e deleção de avaliações
 - criação, listagem, edição e deleção de edição da feira de ciências
 - vincular estudantes em trabalhos e trabalhos em edições de feiras de ciências
