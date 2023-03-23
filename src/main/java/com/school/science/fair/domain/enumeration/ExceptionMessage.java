@@ -16,6 +16,10 @@ public enum ExceptionMessage {
   AREA_OF_KNOWLEDGE_ALREADY_EXISTS("error.area-of-knowledge.already-exists-error"),
   AREA_OF_KNOWLEDGE_NOT_FOUND("error.area-of-knowledge.not-found-error"),
 
+  // Grade System exception messages
+  GRADE_VALUES_BIGGER_THEN_GRADE_SYSTEM_MAX_VALUE("error.grade.grades-values-bigger-than-grade-system-max-value-error"),
+  GRADE_SYSTEM_NOT_FOUND("error.grade-system.not-found-error"),
+
   // Student exception messages
   STUDENT_NOT_FOUND("error.student.not-found-error"),
   STUDENT_ALREADY_EXISTS("error.student.already-exists-error");
