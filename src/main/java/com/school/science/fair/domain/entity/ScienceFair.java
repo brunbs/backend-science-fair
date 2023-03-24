@@ -6,25 +6,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
-@Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GradeSystem {
+@Entity
+public class ScienceFair {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String description;
-    private Double maxValue;
-    private boolean active;
-    @OneToMany
-    private List<Grade> grades;
+    private int editionYear;
+    @ManyToOne
+    private GradeSystem gradeSystem;
 
 }
