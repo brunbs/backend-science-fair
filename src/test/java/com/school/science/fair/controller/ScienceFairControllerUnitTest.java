@@ -28,10 +28,12 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import java.nio.charset.StandardCharsets;
 
 import static com.school.science.fair.domain.enumeration.ExceptionMessage.GRADE_SYSTEM_NOT_FOUND;
+import static com.school.science.fair.domain.enumeration.ExceptionMessage.SCIENCE_FAIR_NOT_FOUND;
 import static com.school.science.fair.domain.mother.ScienceFairMother.getCreateScienceFairRequest;
 import static com.school.science.fair.domain.mother.ScienceFairMother.getScienceFairDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -122,6 +124,33 @@ public class ScienceFairControllerUnitTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.gradeSystemId", Is.is("não deve ser nulo")))
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType(MediaType.APPLICATION_JSON));
+    }
+
+
+    @DisplayName("200 GET /science-fair/{id}")
+    @Test
+    void givenValidIdWhenGetScienceFairThenReturns200OkAndScienceFairResponse() throws Exception {
+        ScienceFairDto foundScienceFair = getScienceFairDto();
+
+        given(scienceFairService.getScienceFair(anyLong())).willReturn(foundScienceFair);
+
+        MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get("/science-fair/1"))
+                .andExpect(status().isOk()).andReturn().getResponse();
+
+        ScienceFairResponse scienceFairResponse = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), ScienceFairResponse.class);
+
+        assertThat(foundScienceFair).usingRecursiveComparison().isEqualTo(scienceFairResponse);
+    }
+
+    @DisplayName("404 GET /science-fair/{id} with invalid id")
+    @Test
+    void givenInvalidIdWhenGetScienceFairThenReturns404NotFoundAndCorrectMessage() throws Exception {
+        given(scienceFairService.getScienceFair(anyLong())).willThrow(new ResourceNotFoundException(HttpStatus.NOT_FOUND, SCIENCE_FAIR_NOT_FOUND));
+
+        MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get("/science-fair/1"))
+                .andExpect(status().isNotFound()).andReturn().getResponse();
+
+        assertThat(response.getContentAsString(StandardCharsets.UTF_8)).contains(responseBuilder.getExceptionResponse(SCIENCE_FAIR_NOT_FOUND).getMessage());
     }
 
 }

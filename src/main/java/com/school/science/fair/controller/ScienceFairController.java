@@ -27,4 +27,10 @@ public class ScienceFairController implements ScienceFairApi {
         ScienceFairDto createdScienceFair = scienceFairService.createScienceFair(scienceFairToCreate);
         return ResponseEntity.status(HttpStatus.CREATED).body(scienceFairMapper.dtoToResponse(createdScienceFair));
     }
+
+    @Override
+    public ResponseEntity<ScienceFairResponse> getScienceFair(Long id) {
+        ScienceFairDto foundScienceFair = scienceFairService.getScienceFair(id);
+        return ResponseEntity.ok().body(scienceFairMapper.dtoToResponse(foundScienceFair));
+    }
 }
