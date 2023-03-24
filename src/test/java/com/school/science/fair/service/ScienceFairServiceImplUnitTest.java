@@ -26,6 +26,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.HttpStatus;
 
+import java.util.Optional;
+
 import static com.school.science.fair.domain.enumeration.ExceptionMessage.GRADE_SYSTEM_NOT_FOUND;
 import static com.school.science.fair.domain.mother.GradeSystemMother.getGradeSystemDto;
 import static com.school.science.fair.domain.mother.GradeSystemMother.getGradesEntities;
@@ -38,7 +40,7 @@ import static org.mockito.BDDMockito.given;
 
 @ExtendWith({MockitoExtension.class, SoftAssertionsExtension.class})
 @DataJpaTest
-public class ScienceFairImplUnitTest {
+public class ScienceFairServiceImplUnitTest {
 
     @SpyBean
     private ScienceFairRepository scienceFairRepository;
@@ -94,5 +96,27 @@ public class ScienceFairImplUnitTest {
                 .hasMessage(GRADE_SYSTEM_NOT_FOUND.getMessageKey());
     }
 
+    @DisplayName("Get Science Fair")
+    @Test
+    void givenValidIdWhenGetScienceFairThenReturnsScienceFairDto() {
+        ScienceFair foundScienceFairFromDatabase = getScienceFairEntity();
+
+        given(scienceFairRepository.findById(anyLong())).willReturn(Optional.of(foundScienceFairFromDatabase));
+
+        ScienceFairDto returendScienceFair = scienceFairService.getScienceFair(1l);
+
+        assertThat(returendScienceFair).usingRecursiveComparison().isEqualTo(foundScienceFairFromDatabase);
+    }
+
+    @DisplayName("Get Science Fair with invalid id throws ResourceNotFoundException")
+    @Test
+    void givenInvalidIdWhenGetScienceFairThenThrowsResourceNotFoundException() {
+        given(scienceFairRepository.findById(anyLong())).willReturn(Optional.empty());
+
+        assertThatThrownBy(
+                () -> scienceFairService.getScienceFair(1l))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage(ExceptionMessage.SCIENCE_FAIR_NOT_FOUND.getMessageKey());
+    }
 
 }
