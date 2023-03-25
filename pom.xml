@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.school</groupId>
 	<artifactId>science.fair</artifactId>
-	<version>0.1.2</version>
+	<version>0.1.3</version>
 	<name>science.fair</name>
 	<description>Science fair system</description>
 	<properties>

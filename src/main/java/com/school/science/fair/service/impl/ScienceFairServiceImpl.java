@@ -3,6 +3,7 @@ package com.school.science.fair.service.impl;
 import com.school.science.fair.domain.dto.GradeSystemDto;
 import com.school.science.fair.domain.dto.ScienceFairDto;
 import com.school.science.fair.domain.dto.ScienceFairRequestDto;
+import com.school.science.fair.domain.dto.UpdateScienceFairDto;
 import com.school.science.fair.domain.entity.ScienceFair;
 import com.school.science.fair.domain.enumeration.ExceptionMessage;
 import com.school.science.fair.domain.exception.ResourceNotFoundException;
@@ -46,6 +47,14 @@ public class ScienceFairServiceImpl implements ScienceFairService {
     @Override
     public ScienceFairDto getScienceFair(Long id) {
         return scienceFairMapper.entityToDto(findScienceFairOrThrowException(id));
+    }
+
+    @Override
+    public ScienceFairDto updateScienceFair(Long id, UpdateScienceFairDto updateScienceFairDto) {
+        ScienceFair foundScienceFair = findScienceFairOrThrowException(id);
+        scienceFairMapper.updateModelFromDto(updateScienceFairDto, foundScienceFair);
+        ScienceFair updatedScienceFair = scienceFairRepository.save(foundScienceFair);
+        return scienceFairMapper.entityToDto(updatedScienceFair);
     }
 
     private ScienceFair findScienceFairOrThrowException(Long id) {
