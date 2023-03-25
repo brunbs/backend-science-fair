@@ -1,13 +1,18 @@
 package com.school.science.fair.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.school.science.fair.domain.CreateScienceFairRequest;
+import com.school.science.fair.domain.GradeSystemResponse;
 import com.school.science.fair.domain.ScienceFairResponse;
+import com.school.science.fair.domain.UpdateScienceFairRequest;
 import com.school.science.fair.domain.builder.ExceptionResponseBuilder;
 import com.school.science.fair.domain.dto.ScienceFairDto;
 import com.school.science.fair.domain.dto.ScienceFairRequestDto;
+import com.school.science.fair.domain.dto.UpdateScienceFairDto;
 import com.school.science.fair.domain.enumeration.ExceptionMessage;
 import com.school.science.fair.domain.exception.ResourceNotFoundException;
+import com.school.science.fair.service.ScienceFairService;
 import com.school.science.fair.service.impl.ScienceFairServiceImpl;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.DisplayName;
@@ -35,9 +40,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
+@SpringBootTest(properties = {"spring.main.allow-bean-definition-overriding=true"})
 @EnableWebMvc
 @AutoConfigureMockMvc
 public class ScienceFairControllerUnitTest {
@@ -149,6 +155,36 @@ public class ScienceFairControllerUnitTest {
 
         MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get("/science-fair/1"))
                 .andExpect(status().isNotFound()).andReturn().getResponse();
+
+        assertThat(response.getContentAsString(StandardCharsets.UTF_8)).contains(responseBuilder.getExceptionResponse(SCIENCE_FAIR_NOT_FOUND).getMessage());
+    }
+
+    @DisplayName("200 - PATCH /science-fair/{id} with valid id")
+    @Test
+    void givenValidIdWhenUpdateScienceFairThenReturns200OKAndUpdatedScienceFair() throws Exception {
+        UpdateScienceFairRequest updateScienceFairRequest = UpdateScienceFairRequest.builder().name("Updated Name").build();
+        ScienceFairDto scienceFairDto = getScienceFairDto();
+        scienceFairDto.setName(updateScienceFairRequest.getName());
+        given(scienceFairService.updateScienceFair(anyLong(), any(UpdateScienceFairDto.class))).willReturn(scienceFairDto);
+
+        MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.patch("/science-fair/1")
+                .content(new ObjectMapper().writeValueAsString(updateScienceFairRequest))
+                .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn().getResponse();
+
+        ScienceFairResponse returnedScienceFairResponse = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), ScienceFairResponse.class);
+        assertThat(returnedScienceFairResponse.getName()).isEqualTo(updateScienceFairRequest.getName());
+    }
+
+    @DisplayName("404 - PATCH /science-fair/{id} with invalid id")
+    @Test
+    void givenInvalidIdWhenUpdateScienceFairThenReturns404NotFoundAndCorrectMessage() throws Exception {
+        UpdateScienceFairRequest updateScienceFairRequest = UpdateScienceFairRequest.builder().build();
+
+        given(scienceFairService.updateScienceFair(anyLong(), any(UpdateScienceFairDto.class))).willThrow(new ResourceNotFoundException(HttpStatus.NOT_FOUND, SCIENCE_FAIR_NOT_FOUND));
+
+        MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.patch("/science-fair/1")
+                .content(new ObjectMapper().writeValueAsString(updateScienceFairRequest))
+                .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound()).andReturn().getResponse();
 
         assertThat(response.getContentAsString(StandardCharsets.UTF_8)).contains(responseBuilder.getExceptionResponse(SCIENCE_FAIR_NOT_FOUND).getMessage());
     }

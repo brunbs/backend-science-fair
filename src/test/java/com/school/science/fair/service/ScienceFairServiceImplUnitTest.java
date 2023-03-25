@@ -3,6 +3,8 @@ package com.school.science.fair.service;
 import com.school.science.fair.domain.dto.GradeSystemDto;
 import com.school.science.fair.domain.dto.ScienceFairDto;
 import com.school.science.fair.domain.dto.ScienceFairRequestDto;
+import com.school.science.fair.domain.dto.UpdateScienceFairDto;
+import com.school.science.fair.domain.entity.GradeSystem;
 import com.school.science.fair.domain.entity.ScienceFair;
 import com.school.science.fair.domain.enumeration.ExceptionMessage;
 import com.school.science.fair.domain.exception.ResourceNotFoundException;
@@ -29,14 +31,17 @@ import org.springframework.http.HttpStatus;
 import java.util.Optional;
 
 import static com.school.science.fair.domain.enumeration.ExceptionMessage.GRADE_SYSTEM_NOT_FOUND;
-import static com.school.science.fair.domain.mother.GradeSystemMother.getGradeSystemDto;
-import static com.school.science.fair.domain.mother.GradeSystemMother.getGradesEntities;
+import static com.school.science.fair.domain.enumeration.ExceptionMessage.SCIENCE_FAIR_NOT_FOUND;
+import static com.school.science.fair.domain.mother.GradeSystemMother.*;
 import static com.school.science.fair.domain.mother.ScienceFairMother.getCreateScienceFairRequestDto;
 import static com.school.science.fair.domain.mother.ScienceFairMother.getScienceFairEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith({MockitoExtension.class, SoftAssertionsExtension.class})
 @DataJpaTest
@@ -117,6 +122,61 @@ public class ScienceFairServiceImplUnitTest {
                 () -> scienceFairService.getScienceFair(1l))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage(ExceptionMessage.SCIENCE_FAIR_NOT_FOUND.getMessageKey());
+    }
+
+    @DisplayName("Update Science Fair name but not the description, editionYear and GradeSystem")
+    @Test
+    void givenValidIdAndUpdatedNameInUpdateScienceFairRequestWhenUpdateScienceFairThenReturnsUpdatedScienceFair() {
+        ScienceFair scienceFairEntity = getScienceFairEntity();
+        scienceFairEntity.setId(null);
+        UpdateScienceFairDto updateScienceFairDto = UpdateScienceFairDto.builder().name("Updated Name").build();
+        ScienceFair updatedScienceFair = getScienceFairEntity();
+        updatedScienceFair.setName(updateScienceFairDto.getName());
+
+        GradeSystem gradeSystem = testEntityManager.persistAndFlush(getGradeSystemTestEntity());
+        scienceFairEntity.setGradeSystem(gradeSystem);
+        ScienceFair scienceFairFromDatabase = testEntityManager.persistAndFlush(scienceFairEntity);
+
+        given(scienceFairRepository.findById(anyLong())).willReturn(Optional.of(scienceFairFromDatabase));
+        given(scienceFairRepository.save(scienceFairFromDatabase)).willReturn(updatedScienceFair);
+
+        ScienceFairDto returnedUpdatedScienceFair = scienceFairService.updateScienceFair(1l, updateScienceFairDto);
+
+        assertThat(returnedUpdatedScienceFair).usingRecursiveComparison().ignoringFields("name", "gradeSystem.id", "id").isEqualTo(scienceFairFromDatabase);
+        assertThat(returnedUpdatedScienceFair.getName()).isEqualTo(updateScienceFairDto.getName());
+    }
+
+    @DisplayName("Update Science Fair description but not the name, editionYear and GradeSystem")
+    @Test
+    void givenValidIdAndUpdatedDescriptionInUpdateScienceFairRequestWhenUpdateScienceFairThenReturnsUpdatedScienceFair() {
+        ScienceFair scienceFairEntity = getScienceFairEntity();
+        scienceFairEntity.setId(null);
+        UpdateScienceFairDto updateScienceFairDto = UpdateScienceFairDto.builder().description("Updated Description").build();
+
+        GradeSystem gradeSystem = testEntityManager.persistAndFlush(getGradeSystemTestEntity());
+        scienceFairEntity.setGradeSystem(gradeSystem);
+        ScienceFair scienceFairFromDatabase = testEntityManager.persistAndFlush(scienceFairEntity);
+
+        ScienceFair updatedScienceFair = getScienceFairEntity();
+        updatedScienceFair.setDescription(updateScienceFairDto.getDescription());
+
+        given(scienceFairRepository.findById(anyLong())).willReturn(Optional.of(scienceFairFromDatabase));
+        given(scienceFairRepository.save(scienceFairFromDatabase)).willReturn(updatedScienceFair);
+
+        ScienceFairDto returnedUpdatedScienceFair = scienceFairService.updateScienceFair(1l, updateScienceFairDto);
+
+        assertThat(returnedUpdatedScienceFair).usingRecursiveComparison().ignoringFields("description", "gradeSystem.id", "id").isEqualTo(scienceFairFromDatabase);
+        assertThat(returnedUpdatedScienceFair.getDescription()).isEqualTo(updateScienceFairDto.getDescription());
+    }
+
+    @DisplayName("Update Science Fair Throws Exception when invalid science fair id")
+    @Test
+    void givenInvalidIdWhenUpdateScienceFairThenThrowsResourceNotFoundException() {
+        given(scienceFairRepository.findById(anyLong())).willThrow(new ResourceNotFoundException(HttpStatus.NOT_FOUND, SCIENCE_FAIR_NOT_FOUND));
+
+        assertThatThrownBy(
+                () -> scienceFairService.updateScienceFair(1l, mock(UpdateScienceFairDto.class)))
+                .isInstanceOf(ResourceNotFoundException.class).hasMessage(SCIENCE_FAIR_NOT_FOUND.getMessageKey());
     }
 
 }
