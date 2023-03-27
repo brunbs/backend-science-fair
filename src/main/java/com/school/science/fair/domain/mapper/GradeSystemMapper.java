@@ -24,6 +24,7 @@ public interface GradeSystemMapper {
     List<GradeSystemDto> listEntityToListDto(List<GradeSystem> gradeSystems);
     List<GradeSystemResponse> listDtoToListResponse(List<GradeSystemDto> gradeSystemDtos);
     List<Grade> listDtoToListEntity(List<GradeDto> gradeDto);
+    GradeSystem dtoToEntity(GradeSystemDto gradeSystemDto);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "grades", ignore = true)
     void updateModelFromDto(GradeSystemRequestDto gradeSystemRequestDto, @MappingTarget GradeSystem entity);

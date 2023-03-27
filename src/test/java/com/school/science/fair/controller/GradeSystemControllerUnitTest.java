@@ -62,7 +62,7 @@ public class GradeSystemControllerUnitTest {
     @Spy
     private GradeSystemMapper gradeSystemMapper = Mappers.getMapper(GradeSystemMapper.class);
 
-    @DisplayName("200 - POST /grade-system")
+    @DisplayName("201 - POST /grade-system")
     @Test
     void givenCreateGradeSystemRequestWhenCreateGradeSystemReturns201CreatedAndGradeSystemResponse() throws Exception {
 
