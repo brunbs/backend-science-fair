@@ -2,7 +2,6 @@
 <p align="center">
   <img src="https://user-images.githubusercontent.com/62837683/226001451-a53c72be-f2c6-4f5c-9524-f0026338563b.png" />
 </p>
-</br>
 <p align="center">
   <img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white" />
   <img src="https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white" />
@@ -15,9 +14,9 @@
     :construction:  Project in Development  :construction:
 </h3>
 
-![tests](https://img.shields.io/badge/passed%20tests-78-informational)
+![tests](https://img.shields.io/badge/passed%20tests-100-informational)
 
-![version](https://img.shields.io/badge/version-v0.1.0-brightgreen)
+![version](https://img.shields.io/badge/version-v0.1.6-brightgreen)
 
 <h2 align="center"> :alembic: Introduction / Introdução :alembic: </h2>
 <p> :us: Hello! And welcome to this project for a school science fair. The main objective behind this project is to study and to use as portfolio.
@@ -116,25 +115,25 @@ Versões futuras virão com mais informações e formas de rodar, com uma versã
 - Creation, Read, Update and Deletion of students
 - Creation, Read, Update and Deletion of Areas of Knowledge
 - Creation, Read, Update and Deletion of Grade Systems
+- Creation, Read, Update and Deletion of Science Fair Editions
 
 :brazil:
-- Criação, edição, deleção e listagem de turmas
-- Criação, edição, deleção e detalhes de estudante
-- Criação, edição, deleção, listagem e detalhes de área do conhecimento
+- Criação, edição, deleção e listagem de Turmas
+- Criação, edição, deleção e detalhes de Estudante
+- Criação, edição, deleção, listagem e detalhes de Área do Conhecimento
 - Criação, edição, deleção, listagem e detalhes de Sistemas Avaliativos
+- Criação, edição, deleção, listagem e detalhes de Edição da Feira de Ciências
 </p>
 <h2 align="center"> :bicyclist: Upcoming Features / Próximas funcionalidades :bicyclist:</h2>
 <p>
 
 :us:
 - creating, listing, editing and deleting assessments
-- create, list, edit and delete science fair edition
 - link students in assessments and assessments in science fair issues
 - creation of teachers, users and permissions
 
 :brazil:
 - criação, listagem, edição e deleção de avaliações
-- criação, listagem, edição e deleção de edição da feira de ciências
 - vincular estudantes em trabalhos e trabalhos em edições de feiras de ciências
 - criação de professores, usuários e permissões
 </p>

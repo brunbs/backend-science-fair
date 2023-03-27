@@ -45,8 +45,8 @@ public class GradeSystemMother {
 
     public static List<Grade> getGradesEntities() {
         return Arrays.asList(
-                Grade.builder().id(1l).name("Grade A").description("Grade A Description").maxValue(0.5).build(),
-                Grade.builder().id(2l).name("Grade B").description("Grade B Description").maxValue(0.1).build()
+                Grade.builder().id(1l).name("Grade A").description("Grade A Description").maxValue(0.3).build(),
+                Grade.builder().id(2l).name("Grade B").description("Grade B Description").maxValue(0.2).build()
         );
     }
 
@@ -106,7 +106,7 @@ public class GradeSystemMother {
     public static CreateGradeSystemRequest getCreateGradeSystemRequest() {
         return CreateGradeSystemRequest.builder()
                 .name("Grade System A")
-                .description("Description of a Grade System")
+                .description("Grade System Description")
                 .maxValue(1.0)
                 .grades(Arrays.asList(
                         CreateGradeRequest.builder()
@@ -127,7 +127,7 @@ public class GradeSystemMother {
         return GradeSystemDto.builder()
                 .id(1l)
                 .name("Grade System A")
-                .description("Description of a Grade System")
+                .description("Grade System Description")
                 .maxValue(1.0)
                 .active(true)
                 .grades(Arrays.asList(

@@ -58,7 +58,7 @@ public class AreaOfKnowledgeControllerUnitTest {
     @Autowired
     private ExceptionResponseBuilder responseBuilder;
 
-    @DisplayName("200 POST /area-of-knowledge")
+    @DisplayName("201 POST /area-of-knowledge")
     @Test
     void givenValidCreateAreaOfKnowledgeRequestWhenCreateAreaOfKnowledgeThenReturn200OkAndCreatedAreaOfKnowledge() throws Exception {
 

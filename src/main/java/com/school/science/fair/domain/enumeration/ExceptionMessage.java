@@ -20,6 +20,9 @@ public enum ExceptionMessage {
   GRADE_VALUES_BIGGER_THEN_GRADE_SYSTEM_MAX_VALUE("error.grade.grades-values-bigger-than-grade-system-max-value-error"),
   GRADE_SYSTEM_NOT_FOUND("error.grade-system.not-found-error"),
 
+  // Science Fair Exception messages
+  SCIENCE_FAIR_NOT_FOUND("error.science-fair.not-found.error"),
+
   // Student exception messages
   STUDENT_NOT_FOUND("error.student.not-found-error"),
   STUDENT_ALREADY_EXISTS("error.student.already-exists-error");

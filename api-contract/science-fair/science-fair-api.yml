@@ -1,0 +1,317 @@
+openapi: 3.0.1
+info:
+  title: Science Fair System
+  description: Documentation of the Science Fair Endpoints
+  version: 0.0.1
+
+tags:
+  - name: science-fair
+    description: Science Fair endpoints
+
+paths:
+  /science-fair:
+    post:
+      tags:
+        - science-fair
+      summary: Create a new science fair
+      operationId: createScienceFair
+      requestBody:
+        description: Science Fair info to save
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateScienceFairRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScienceFairResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+
+  /science-fair/{id}:
+    get:
+      tags:
+        - science-fair
+      summary: Get Science Fair Details
+      operationId: getScienceFair
+      parameters:
+        - name: id
+          in: path
+          description: Science Fair Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScienceFairResponse'
+        '404':
+          description: Grade System Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundResponse'
+    patch:
+      tags:
+        - science-fair
+      summary: Update Science Fair Name and Description
+      operationId: updateScienceFair
+      parameters:
+        - name: id
+          in: path
+          description: Science Fair Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Science Fair info to save
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateScienceFairRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScienceFairResponse'
+        '404':
+          description: Science Fair not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundResponse'
+    delete:
+      tags:
+        - science-fair
+      summary: Delete a Science Fair
+      operationId: deleteScienceFair
+      parameters:
+        - name: id
+          in: path
+          description: Science Fair id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScienceFairResponse'
+        '404':
+          description: Grade System not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundResponse'
+
+  /science-fair/all:
+    get:
+      tags:
+        - science-fair
+      summary: Get All Science Fairs
+      operationId: getAllScienceFairs
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScienceFairListResponse'
+        '404':
+          description: Grade System Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundResponse'
+
+  /science-fair/all/active:
+    get:
+      tags:
+        - science-fair
+      summary: Get a list of Active Science Fairs
+      operationId: getAllActiveScienceFairs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScienceFairListResponse'
+
+components:
+  schemas:
+    CreateScienceFairRequest:
+      type: object
+      required:
+        - name
+        - gradeSystemId
+        - editionYear
+      properties:
+        name:
+          type: string
+          example: IC 2023
+        editionYear:
+          type: integer
+          format: int32
+          example: 2023
+        description:
+          type: string
+          example: Science Fair (IC) 2023 Edition
+        gradeSystemId:
+          type: integer
+          format: int64
+          example: 1
+
+    UpdateScienceFairRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: IC 2023
+        description:
+          type: string
+          example: Science Fair (IC) 2023 Edition
+
+    ScienceFairResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: IC 2023
+        description:
+          type: string
+          example: Science Fair (IC) 2023 Edition
+        editionYear:
+          type: integer
+          format: int32
+          example: 2023
+        active:
+          type: boolean
+          example: true
+        gradeSystem:
+          type: object
+          $ref: '#/components/schemas/GradeSystemResponse'
+
+    ScienceFairListResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: IC 2023
+        description:
+          type: string
+          example: Science Fair (IC) 2023 Edition
+        editionYear:
+          type: integer
+          format: int32
+          example: 2023
+        active:
+          type: boolean
+          example: true
+        gradeSystem:
+          type: object
+          $ref: '#/components/schemas/GradeSystemSimpleResponse'
+
+    GradeSystemSimpleResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: IC 2023 - 1,0 = 1 x 0,3 Manuscript + 2 x 0,1 Reading + 1 x 0,5 Presentation
+        description:
+          type: string
+          example: 1 point total considering 1 manuscript of value 0,3; 2 readings of value 0,1 and one presentation of value 0,5.
+
+    GradeSystemResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: IC 2023 - 1,0 = 1 x 0,3 Manuscript + 2 x 0,1 Reading + 1 x 0,5 Presentation
+        maxValue:
+          type: number
+          format: double
+        description:
+          type: string
+          example: 1 point total considering 1 manuscript of value 0,3; 2 readings of value 0,1 and one presentation of value 0,5.
+        active:
+          type: boolean
+          example: true
+        grades:
+          type: array
+          items:
+            $ref: '#/components/schemas/GradeResponse'
+
+    GradeResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Presentation
+        maxValue:
+          type: number
+          format: double
+        description:
+          type: string
+          example: Grade received for presenting the work in the conference
+
+    BadRequestResponse:
+      type: object
+      properties:
+        propertyName:
+          type: string
+          description: Error message
+          example: can't be empty
+
+    ResourceNotFoundResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: Error timestamp
+          example: 17-Feb-2023 04:07:04
+        message:
+          type: string
+          description: Error message
+          example: Science Fair not found
