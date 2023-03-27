@@ -20,6 +20,7 @@ public class ScienceFair {
     private String name;
     private String description;
     private int editionYear;
+    private boolean active;
     @ManyToOne
     private GradeSystem gradeSystem;
 

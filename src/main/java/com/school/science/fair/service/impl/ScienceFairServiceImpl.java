@@ -1,9 +1,6 @@
 package com.school.science.fair.service.impl;
 
-import com.school.science.fair.domain.dto.GradeSystemDto;
-import com.school.science.fair.domain.dto.ScienceFairDto;
-import com.school.science.fair.domain.dto.ScienceFairRequestDto;
-import com.school.science.fair.domain.dto.UpdateScienceFairDto;
+import com.school.science.fair.domain.dto.*;
 import com.school.science.fair.domain.entity.ScienceFair;
 import com.school.science.fair.domain.enumeration.ExceptionMessage;
 import com.school.science.fair.domain.exception.ResourceNotFoundException;
@@ -17,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -40,6 +38,7 @@ public class ScienceFairServiceImpl implements ScienceFairService {
         ScienceFair scienceFairToCreate = scienceFairMapper.requestDtoToEntity(scienceFairRequestDto);
         GradeSystemDto gradeSystemDto = gradeSystemService.getGradeSystem(scienceFairRequestDto.getGradeSystemId());
         scienceFairToCreate.setGradeSystem(gradeSystemMapper.dtoToEntity(gradeSystemDto));
+        scienceFairToCreate.setActive(true);
         ScienceFair createdScienceFair = scienceFairRepository.save(scienceFairToCreate);
         return scienceFairMapper.entityToDto(createdScienceFair);
     }
@@ -55,6 +54,19 @@ public class ScienceFairServiceImpl implements ScienceFairService {
         scienceFairMapper.updateModelFromDto(updateScienceFairDto, foundScienceFair);
         ScienceFair updatedScienceFair = scienceFairRepository.save(foundScienceFair);
         return scienceFairMapper.entityToDto(updatedScienceFair);
+    }
+
+    @Override
+    public List<ScienceFairDto> getAllScienceFairs() {
+        List<ScienceFair> foundScienceFairs = scienceFairRepository.findAll();
+        return scienceFairMapper.listEntityToListDto(foundScienceFairs);
+    }
+
+    @Override
+    public ScienceFairDto deleteScienceFair(Long id) {
+        ScienceFair foundScienceFair = findScienceFairOrThrowException(id);
+        foundScienceFair.setActive(false);
+        return scienceFairMapper.entityToDto(foundScienceFair);
     }
 
     private ScienceFair findScienceFairOrThrowException(Long id) {
