@@ -14,9 +14,9 @@
     :construction:  Project in Development  :construction:
 </h3>
 
-![tests](https://img.shields.io/badge/passed%20tests-98-informational)
+![tests](https://img.shields.io/badge/passed%20tests-100-informational)
 
-![version](https://img.shields.io/badge/version-v0.1.5-brightgreen)
+![version](https://img.shields.io/badge/version-v0.1.6-brightgreen)
 
 <h2 align="center"> :alembic: Introduction / Introdução :alembic: </h2>
 <p> :us: Hello! And welcome to this project for a school science fair. The main objective behind this project is to study and to use as portfolio.

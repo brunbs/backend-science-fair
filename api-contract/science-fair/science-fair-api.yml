@@ -143,6 +143,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/ResourceNotFoundResponse'
 
+  /science-fair/all/active:
+    get:
+      tags:
+        - science-fair
+      summary: Get a list of Active Science Fairs
+      operationId: getAllActiveScienceFairs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScienceFairListResponse'
+
 components:
   schemas:
     CreateScienceFairRequest:

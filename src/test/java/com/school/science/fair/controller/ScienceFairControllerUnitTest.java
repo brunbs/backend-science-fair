@@ -31,6 +31,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.school.science.fair.domain.enumeration.ExceptionMessage.GRADE_SYSTEM_NOT_FOUND;
 import static com.school.science.fair.domain.enumeration.ExceptionMessage.SCIENCE_FAIR_NOT_FOUND;
@@ -227,6 +228,22 @@ public class ScienceFairControllerUnitTest {
                 .andExpect(status().isNotFound()).andReturn().getResponse();
 
         assertThat(response.getContentAsString(StandardCharsets.UTF_8)).contains(responseBuilder.getExceptionResponse(SCIENCE_FAIR_NOT_FOUND).getMessage());
+    }
+
+    @DisplayName("200 - GET /science-fair/all/active")
+    @Test
+    void givenValidScienceFairsWhenGetAllActiveScienceFarisThenReturns200OkAndListOfActiveScienceFairs() throws Exception {
+        List<ScienceFairDto> foundActiveScienceFairs = getScienceFairDtoList().stream().filter(ScienceFairDto::isActive).collect(Collectors.toList());
+
+        given(scienceFairService.getAllActiveScienceFairs()).willReturn(foundActiveScienceFairs);
+
+        MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get("/science-fair/all/active"))
+                .andExpect(status().isOk()).andReturn().getResponse();
+        List<ScienceFairListResponse> scienceFairListResponses = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), new TypeReference<List<ScienceFairListResponse>>() {});
+
+        for(ScienceFairListResponse scienceFair : scienceFairListResponses) {
+            assertThat(scienceFair.getActive()).isTrue();
+        }
     }
 
 }
