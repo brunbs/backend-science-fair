@@ -115,25 +115,25 @@ Versões futuras virão com mais informações e formas de rodar, com uma versã
 - Creation, Read, Update and Deletion of students
 - Creation, Read, Update and Deletion of Areas of Knowledge
 - Creation, Read, Update and Deletion of Grade Systems
+- Creation, Read, Update and Deletion of Science Fair Editions
 
 :brazil:
-- Criação, edição, deleção e listagem de turmas
-- Criação, edição, deleção e detalhes de estudante
-- Criação, edição, deleção, listagem e detalhes de área do conhecimento
+- Criação, edição, deleção e listagem de Turmas
+- Criação, edição, deleção e detalhes de Estudante
+- Criação, edição, deleção, listagem e detalhes de Área do Conhecimento
 - Criação, edição, deleção, listagem e detalhes de Sistemas Avaliativos
+- Criação, edição, deleção, listagem e detalhes de Edição da Feira de Ciências
 </p>
 <h2 align="center"> :bicyclist: Upcoming Features / Próximas funcionalidades :bicyclist:</h2>
 <p>
 
 :us:
 - creating, listing, editing and deleting assessments
-- create, list, edit and delete science fair edition
 - link students in assessments and assessments in science fair issues
 - creation of teachers, users and permissions
 
 :brazil:
 - criação, listagem, edição e deleção de avaliações
-- criação, listagem, edição e deleção de edição da feira de ciências
 - vincular estudantes em trabalhos e trabalhos em edições de feiras de ciências
 - criação de professores, usuários e permissões
 </p>
