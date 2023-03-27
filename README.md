@@ -2,7 +2,6 @@
 <p align="center">
   <img src="https://user-images.githubusercontent.com/62837683/226001451-a53c72be-f2c6-4f5c-9524-f0026338563b.png" />
 </p>
-</br>
 <p align="center">
   <img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white" />
   <img src="https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white" />
@@ -15,9 +14,9 @@
     :construction:  Project in Development  :construction:
 </h3>
 
-![tests](https://img.shields.io/badge/passed%20tests-78-informational)
+![tests](https://img.shields.io/badge/passed%20tests-94-informational)
 
-![version](https://img.shields.io/badge/version-v0.1.0-brightgreen)
+![version](https://img.shields.io/badge/version-v0.1.4-brightgreen)
 
 <h2 align="center"> :alembic: Introduction / Introdução :alembic: </h2>
 <p> :us: Hello! And welcome to this project for a school science fair. The main objective behind this project is to study and to use as portfolio.

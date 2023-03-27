@@ -10,6 +10,7 @@ public class ScienceFairDto {
     private Long id;
     private String name;
     private String description;
+    private boolean active;
     private int editionYear;
     private GradeSystemDto gradeSystem;
 

@@ -2,7 +2,7 @@ package com.school.science.fair.controller;
 
 import com.school.science.fair.api.ScienceFairApi;
 import com.school.science.fair.domain.CreateScienceFairRequest;
-import com.school.science.fair.domain.GradeSystemResponse;
+import com.school.science.fair.domain.ScienceFairListResponse;
 import com.school.science.fair.domain.ScienceFairResponse;
 import com.school.science.fair.domain.UpdateScienceFairRequest;
 import com.school.science.fair.domain.dto.ScienceFairDto;
@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class ScienceFairController implements ScienceFairApi {
@@ -42,5 +44,11 @@ public class ScienceFairController implements ScienceFairApi {
         UpdateScienceFairDto scienceFairInfoToUpdate = scienceFairMapper.updateRequestToRequestDto(updateScienceFairRequest);
         ScienceFairDto updatedScienceFair = scienceFairService.updateScienceFair(id, scienceFairInfoToUpdate);
         return ResponseEntity.ok().body(scienceFairMapper.dtoToResponse(updatedScienceFair));
+    }
+
+    @Override
+    public ResponseEntity<List<ScienceFairListResponse>> getAllScienceFairs() {
+        List<ScienceFairDto> foundScienceFairs = scienceFairService.getAllScienceFairs();
+        return ResponseEntity.ok().body(scienceFairMapper.listDtoToListResponse(foundScienceFairs));
     }
 }

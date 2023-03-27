@@ -1,9 +1,6 @@
 package com.school.science.fair.service;
 
-import com.school.science.fair.domain.dto.GradeSystemDto;
-import com.school.science.fair.domain.dto.ScienceFairDto;
-import com.school.science.fair.domain.dto.ScienceFairRequestDto;
-import com.school.science.fair.domain.dto.UpdateScienceFairDto;
+import com.school.science.fair.domain.dto.*;
 import com.school.science.fair.domain.entity.GradeSystem;
 import com.school.science.fair.domain.entity.ScienceFair;
 import com.school.science.fair.domain.enumeration.ExceptionMessage;
@@ -28,13 +25,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.HttpStatus;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.school.science.fair.domain.enumeration.ExceptionMessage.GRADE_SYSTEM_NOT_FOUND;
 import static com.school.science.fair.domain.enumeration.ExceptionMessage.SCIENCE_FAIR_NOT_FOUND;
 import static com.school.science.fair.domain.mother.GradeSystemMother.*;
-import static com.school.science.fair.domain.mother.ScienceFairMother.getCreateScienceFairRequestDto;
-import static com.school.science.fair.domain.mother.ScienceFairMother.getScienceFairEntity;
+import static com.school.science.fair.domain.mother.ScienceFairMother.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -74,10 +71,12 @@ public class ScienceFairServiceImplUnitTest {
 
         ScienceFairRequestDto createScienceFairRequestDto = getCreateScienceFairRequestDto();
         ScienceFair createdScienceFair = getScienceFairEntity();
+        createdScienceFair.setActive(true);
         createdScienceFair.getGradeSystem().setGrades(getGradesEntities());
         ScienceFair scienceFairToCreateEntity = getScienceFairEntity();
         scienceFairToCreateEntity.setId(null);
         scienceFairToCreateEntity.setGradeSystem(null);
+        scienceFairToCreateEntity.setActive(true);
         GradeSystemDto foundGradeSystem = getGradeSystemDto();
 
         given(gradeSystemService.getGradeSystem(anyLong())).willReturn(foundGradeSystem);
@@ -86,7 +85,7 @@ public class ScienceFairServiceImplUnitTest {
         ScienceFairDto createdScienceFairDto = scienceFairService.createScienceFair(createScienceFairRequestDto);
 
         assertThat(createdScienceFairDto.getId()).isNotNull();
-        assertThat(createdScienceFairDto).usingRecursiveComparison().ignoringFields("id", "gradeSystemId", "gradeSystem").isEqualTo(createScienceFairRequestDto);
+        assertThat(createdScienceFairDto).usingRecursiveComparison().ignoringFields("id", "gradeSystemId", "gradeSystem", "active").isEqualTo(createScienceFairRequestDto);
         assertThat(createdScienceFairDto.getGradeSystem()).usingRecursiveComparison().isEqualTo(foundGradeSystem);
     }
 
@@ -177,6 +176,18 @@ public class ScienceFairServiceImplUnitTest {
         assertThatThrownBy(
                 () -> scienceFairService.updateScienceFair(1l, mock(UpdateScienceFairDto.class)))
                 .isInstanceOf(ResourceNotFoundException.class).hasMessage(SCIENCE_FAIR_NOT_FOUND.getMessageKey());
+    }
+
+    @DisplayName("Get all science fairs")
+    @Test
+    void givenValidScienceFairsWhenGetAllScienceFairsThenReturnsScienceFairListDto() {
+        List<ScienceFair> foundEntities = getScienceFairListEntity();
+
+        given(scienceFairRepository.findAll()).willReturn(foundEntities);
+
+        List<ScienceFairDto> foundScienceFairs = scienceFairService.getAllScienceFairs();
+
+        assertThat(foundScienceFairs).usingRecursiveComparison().isEqualTo(foundEntities);
     }
 
 }

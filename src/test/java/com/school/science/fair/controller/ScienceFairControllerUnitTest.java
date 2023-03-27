@@ -1,9 +1,9 @@
 package com.school.science.fair.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.school.science.fair.domain.CreateScienceFairRequest;
-import com.school.science.fair.domain.GradeSystemResponse;
+import com.school.science.fair.domain.ScienceFairListResponse;
 import com.school.science.fair.domain.ScienceFairResponse;
 import com.school.science.fair.domain.UpdateScienceFairRequest;
 import com.school.science.fair.domain.builder.ExceptionResponseBuilder;
@@ -12,7 +12,6 @@ import com.school.science.fair.domain.dto.ScienceFairRequestDto;
 import com.school.science.fair.domain.dto.UpdateScienceFairDto;
 import com.school.science.fair.domain.enumeration.ExceptionMessage;
 import com.school.science.fair.domain.exception.ResourceNotFoundException;
-import com.school.science.fair.service.ScienceFairService;
 import com.school.science.fair.service.impl.ScienceFairServiceImpl;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.DisplayName;
@@ -31,16 +30,15 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import static com.school.science.fair.domain.enumeration.ExceptionMessage.GRADE_SYSTEM_NOT_FOUND;
 import static com.school.science.fair.domain.enumeration.ExceptionMessage.SCIENCE_FAIR_NOT_FOUND;
-import static com.school.science.fair.domain.mother.ScienceFairMother.getCreateScienceFairRequest;
-import static com.school.science.fair.domain.mother.ScienceFairMother.getScienceFairDto;
+import static com.school.science.fair.domain.mother.ScienceFairMother.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(properties = {"spring.main.allow-bean-definition-overriding=true"})
@@ -66,6 +64,7 @@ public class ScienceFairControllerUnitTest {
 
         CreateScienceFairRequest createScienceFairRequest = getCreateScienceFairRequest();
         ScienceFairDto scienceFairDto = getScienceFairDto();
+        scienceFairDto.setActive(true);
 
         given(scienceFairService.createScienceFair(any(ScienceFairRequestDto.class))).willReturn(scienceFairDto);
 
@@ -77,8 +76,9 @@ public class ScienceFairControllerUnitTest {
 
         ScienceFairResponse returnedScienceFair = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), ScienceFairResponse.class);
 
-        assertThat(returnedScienceFair).usingRecursiveComparison().ignoringFields("gradeSystem", "gradeSystemId", "id").isEqualTo(createScienceFairRequest);
+        assertThat(returnedScienceFair).usingRecursiveComparison().ignoringFields("gradeSystem", "gradeSystemId", "id", "active").isEqualTo(createScienceFairRequest);
         assertThat(returnedScienceFair.getGradeSystem().getId()).isEqualTo(createScienceFairRequest.getGradeSystemId());
+        assertThat(returnedScienceFair.getActive()).isTrue();
     }
 
     @DisplayName("404 POST /science-fair - Invalid Grade System Returns 404 Not Found")
@@ -187,6 +187,20 @@ public class ScienceFairControllerUnitTest {
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound()).andReturn().getResponse();
 
         assertThat(response.getContentAsString(StandardCharsets.UTF_8)).contains(responseBuilder.getExceptionResponse(SCIENCE_FAIR_NOT_FOUND).getMessage());
+    }
+
+    @DisplayName("200 - GET /science-fair/all")
+    @Test
+    void givenValidScienceFairsWhenGetAllScienceFairsThenReturns200OkAndScienceFairList() throws Exception {
+        List<ScienceFairDto> scienceFairDtos = getScienceFairDtoList();
+
+        given(scienceFairService.getAllScienceFairs()).willReturn(scienceFairDtos);
+
+        MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get("/science-fair/all"))
+                .andExpect(status().isOk()).andReturn().getResponse();
+        List<ScienceFairListResponse> scienceFairListResponses = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), new TypeReference<List<ScienceFairListResponse>>() {});
+
+        assertThat(scienceFairListResponses).usingRecursiveComparison().isEqualTo(scienceFairDtos);
     }
 
 }
