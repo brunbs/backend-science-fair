@@ -27,6 +27,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.school.science.fair.domain.enumeration.ExceptionMessage.GRADE_SYSTEM_NOT_FOUND;
 import static com.school.science.fair.domain.enumeration.ExceptionMessage.SCIENCE_FAIR_NOT_FOUND;
@@ -193,9 +194,14 @@ public class ScienceFairServiceImplUnitTest {
     @DisplayName("Delete science fair")
     @Test
     void givenValidIdWhenDeleteScienceFairThenReturnsScienceFairDtoWithActiveFalse() {
-        ScienceFair foundScienceFair = getScienceFairEntity();
+        ScienceFair scienceFairToPersist = getScienceFairEntity();
+        scienceFairToPersist.setId(null);
+        GradeSystem gradeSystemToPersist = getGradeSystemTestEntity();
+        GradeSystem gradeSystemInDatabase = testEntityManager.persist(gradeSystemToPersist);
+        scienceFairToPersist.setGradeSystem(gradeSystemInDatabase);
+        ScienceFair scienceFairInDatabase = testEntityManager.persist(scienceFairToPersist);
 
-        given(scienceFairRepository.findById(anyLong())).willReturn(Optional.of(foundScienceFair));
+        given(scienceFairRepository.findById(anyLong())).willReturn(Optional.of(scienceFairInDatabase));
 
         ScienceFairDto deletedScienceFair = scienceFairService.deleteScienceFair(1l);
 
@@ -211,6 +217,21 @@ public class ScienceFairServiceImplUnitTest {
                 () -> scienceFairService.deleteScienceFair(1l))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage(ExceptionMessage.SCIENCE_FAIR_NOT_FOUND.getMessageKey());
+    }
+
+    @DisplayName("Get all active science fairs")
+    @Test
+    void givenValidScienceFairsWhenGetAllActiveScienceFairsThenReturnsScienceFairDtoWithActiveTrueOnly() {
+        List<ScienceFair> foundScienceFair = getScienceFairListEntity().stream().filter(ScienceFair::isActive).collect(Collectors.toList());
+
+        given(scienceFairRepository.findAllByActiveTrue()).willReturn(foundScienceFair);
+
+        List<ScienceFairDto> foundScienceFairDto = scienceFairService.getAllActiveScienceFairs();
+
+        for(ScienceFairDto scienceFair : foundScienceFairDto) {
+            assertThat(scienceFair.isActive()).isTrue();
+        }
+
     }
 
 }

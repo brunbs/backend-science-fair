@@ -13,5 +13,6 @@ public interface ScienceFairService {
     ScienceFairDto updateScienceFair(Long id, UpdateScienceFairDto scienceFairDto);
     List<ScienceFairDto> getAllScienceFairs();
     ScienceFairDto deleteScienceFair(Long id);
+    List<ScienceFairDto> getAllActiveScienceFairs();
 
 }
