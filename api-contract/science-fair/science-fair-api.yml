@@ -94,6 +94,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResourceNotFoundResponse'
+    delete:
+      tags:
+        - science-fair
+      summary: Delete a Science Fair
+      operationId: deleteScienceFair
+      parameters:
+        - name: id
+          in: path
+          description: Science Fair id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScienceFairResponse'
+        '404':
+          description: Grade System not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundResponse'
 
   /science-fair/all:
     get:

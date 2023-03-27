@@ -51,4 +51,10 @@ public class ScienceFairController implements ScienceFairApi {
         List<ScienceFairDto> foundScienceFairs = scienceFairService.getAllScienceFairs();
         return ResponseEntity.ok().body(scienceFairMapper.listDtoToListResponse(foundScienceFairs));
     }
+
+    @Override
+    public ResponseEntity<ScienceFairResponse> deleteScienceFair(Long id) {
+        ScienceFairDto deletedScienceFair = scienceFairService.deleteScienceFair(id);
+        return ResponseEntity.ok().body(scienceFairMapper.dtoToResponse(deletedScienceFair));
+    }
 }

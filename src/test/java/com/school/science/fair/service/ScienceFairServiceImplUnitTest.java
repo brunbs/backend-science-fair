@@ -190,4 +190,27 @@ public class ScienceFairServiceImplUnitTest {
         assertThat(foundScienceFairs).usingRecursiveComparison().isEqualTo(foundEntities);
     }
 
+    @DisplayName("Delete science fair")
+    @Test
+    void givenValidIdWhenDeleteScienceFairThenReturnsScienceFairDtoWithActiveFalse() {
+        ScienceFair foundScienceFair = getScienceFairEntity();
+
+        given(scienceFairRepository.findById(anyLong())).willReturn(Optional.of(foundScienceFair));
+
+        ScienceFairDto deletedScienceFair = scienceFairService.deleteScienceFair(1l);
+
+        assertThat(deletedScienceFair.isActive()).isFalse();
+    }
+
+    @DisplayName("Delete science fair with invalid id throws ResourceNotFoundException")
+    @Test
+    void givenInvalidIdWhenDeleteScienceFairThenThrowsResourceNotFoundException() {
+        given(scienceFairRepository.findById(anyLong())).willReturn(Optional.empty());
+
+        assertThatThrownBy(
+                () -> scienceFairService.deleteScienceFair(1l))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage(ExceptionMessage.SCIENCE_FAIR_NOT_FOUND.getMessageKey());
+    }
+
 }

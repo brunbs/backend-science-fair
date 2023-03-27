@@ -62,6 +62,13 @@ public class ScienceFairServiceImpl implements ScienceFairService {
         return scienceFairMapper.listEntityToListDto(foundScienceFairs);
     }
 
+    @Override
+    public ScienceFairDto deleteScienceFair(Long id) {
+        ScienceFair foundScienceFair = findScienceFairOrThrowException(id);
+        foundScienceFair.setActive(false);
+        return scienceFairMapper.entityToDto(foundScienceFair);
+    }
+
     private ScienceFair findScienceFairOrThrowException(Long id) {
         Optional<ScienceFair> foundScienceFair = scienceFairRepository.findById(id);
         if(foundScienceFair.isPresent()) {

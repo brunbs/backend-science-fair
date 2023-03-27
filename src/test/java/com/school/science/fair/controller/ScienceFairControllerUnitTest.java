@@ -36,6 +36,7 @@ import static com.school.science.fair.domain.enumeration.ExceptionMessage.GRADE_
 import static com.school.science.fair.domain.enumeration.ExceptionMessage.SCIENCE_FAIR_NOT_FOUND;
 import static com.school.science.fair.domain.mother.ScienceFairMother.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -201,6 +202,31 @@ public class ScienceFairControllerUnitTest {
         List<ScienceFairListResponse> scienceFairListResponses = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), new TypeReference<List<ScienceFairListResponse>>() {});
 
         assertThat(scienceFairListResponses).usingRecursiveComparison().isEqualTo(scienceFairDtos);
+    }
+
+    @DisplayName("200 - DELETE /science-fair/{id} with valid id")
+    @Test
+    void givenValidIfWhenDeleteScienceFairThenReturns200OkAndDeletedScienceFairWithActiveFalse() throws Exception {
+        ScienceFairDto deletedScienceFair = getScienceFairDto();
+        deletedScienceFair.setActive(false);
+
+        given(scienceFairService.deleteScienceFair(anyLong())).willReturn(deletedScienceFair);
+
+        MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.delete("/science-fair/1"))
+                .andExpect(status().isOk()).andReturn().getResponse();
+        ScienceFairResponse returnedScienceFairResponse = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), ScienceFairResponse.class);
+
+        assertThat(returnedScienceFairResponse.getActive()).isFalse();
+    }
+
+    @DisplayName("404 - DELETE /science-fair/{id} with invalid id")
+    @Test
+    void givenInvalidIdWhenDeleteScienceFairThenReturns404NotFoundWithCorrectMessage() throws Exception {
+        given(scienceFairService.deleteScienceFair(anyLong())).willThrow(new ResourceNotFoundException(HttpStatus.NOT_FOUND, SCIENCE_FAIR_NOT_FOUND));
+        MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.delete("/science-fair/1"))
+                .andExpect(status().isNotFound()).andReturn().getResponse();
+
+        assertThat(response.getContentAsString(StandardCharsets.UTF_8)).contains(responseBuilder.getExceptionResponse(SCIENCE_FAIR_NOT_FOUND).getMessage());
     }
 
 }
