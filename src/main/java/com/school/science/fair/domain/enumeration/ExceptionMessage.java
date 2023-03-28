@@ -25,7 +25,11 @@ public enum ExceptionMessage {
 
   // Student exception messages
   STUDENT_NOT_FOUND("error.student.not-found-error"),
-  STUDENT_ALREADY_EXISTS("error.student.already-exists-error");
+  USER_NOT_FOUND("error.user.not-found-error"),
+  TEACHER_NOT_FOUND("error.teacher.not-found-error"),
+  COORDINATOR_NOT_FOUND("error.coordinator.not-found-error"),
+
+  USER_ALREADY_EXISTS("error.user.already-exists-error");
 
   private final String messageKey;
 

@@ -1,50 +1,65 @@
 package com.school.science.fair.controller;
 
 import com.school.science.fair.api.StudentApi;
-import com.school.science.fair.domain.CreateStudentRequest;
-import com.school.science.fair.domain.StudentResponse;
-import com.school.science.fair.domain.UpdateStudentRequest;
-import com.school.science.fair.domain.dto.StudentDto;
-import com.school.science.fair.domain.dto.StudentRequestDto;
-import com.school.science.fair.domain.mapper.StudentMapper;
-import com.school.science.fair.service.StudentService;
+import com.school.science.fair.domain.CreateUserRequest;
+import com.school.science.fair.domain.UpdateUserRequest;
+import com.school.science.fair.domain.UserResponse;
+import com.school.science.fair.domain.dto.UserDto;
+import com.school.science.fair.domain.dto.UserRequestDto;
+import com.school.science.fair.domain.enumeration.UserTypeEnum;
+import com.school.science.fair.domain.mapper.UserMapper;
+import com.school.science.fair.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class StudentController implements StudentApi {
 
     @Autowired
-    private StudentService studentService;
+    private UserService userService;
 
     @Autowired
-    private StudentMapper studentMapper;
+    private UserMapper userMapper;
 
     @Override
-    public ResponseEntity<StudentResponse> createStudent(CreateStudentRequest createStudentRequest) {
-        StudentRequestDto studentRequestDto = studentMapper.createRequestToDto(createStudentRequest);
-        StudentDto createdStudent = studentService.createStudent(studentRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(studentMapper.dtoToResponse(createdStudent));
+    public ResponseEntity<UserResponse> createStudent(CreateUserRequest createStudentRequest) {
+        UserRequestDto userRequestDto = userMapper.createRequestToDto(createStudentRequest);
+        UserDto createdStudent = userService.createUser(userRequestDto, UserTypeEnum.STUDENT);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.dtoToResponse(createdStudent));
     }
 
     @Override
-    public ResponseEntity<StudentResponse> getStudent(Long studentRegistration) {
-        StudentDto foundStudent = studentService.getStudent(studentRegistration);
-        return ResponseEntity.ok().body(studentMapper.dtoToResponse(foundStudent));
+    public ResponseEntity<UserResponse> getStudent(Long studentRegistration) {
+        UserDto foundStudent = userService.getUser(studentRegistration, UserTypeEnum.STUDENT);
+        return ResponseEntity.ok().body(userMapper.dtoToResponse(foundStudent));
     }
 
     @Override
-    public ResponseEntity<StudentResponse> deleteStudent(Long studentRegistration) {
-        StudentDto deletedStudent = studentService.deleteStudent(studentRegistration);
-        return ResponseEntity.ok().body(studentMapper.dtoToResponse(deletedStudent));
+    public ResponseEntity<UserResponse> deleteStudent(Long studentRegistration) {
+        UserDto deletedStudent = userService.deleteUser(studentRegistration, UserTypeEnum.STUDENT);
+        return ResponseEntity.ok().body(userMapper.dtoToResponse(deletedStudent));
     }
 
     @Override
-    public ResponseEntity<StudentResponse> updateStudent(Long studentRegistration, UpdateStudentRequest updateStudentRequest) {
-        StudentRequestDto studentRequestDto = studentMapper.updateToDto(updateStudentRequest);
-        StudentDto updatedStudent = studentService.updateStudent(studentRegistration, studentRequestDto);
-        return ResponseEntity.ok().body(studentMapper.dtoToResponse(updatedStudent));
+    public ResponseEntity<UserResponse> updateStudent(Long studentRegistration, UpdateUserRequest updateStudentRequest) {
+        UserRequestDto userRequestDto = userMapper.updateToDto(updateStudentRequest);
+        UserDto updatedStudent = userService.updateUser(studentRegistration, userRequestDto, UserTypeEnum.STUDENT);
+        return ResponseEntity.ok().body(userMapper.dtoToResponse(updatedStudent));
+    }
+
+    @Override
+    public ResponseEntity<List<UserResponse>> getAllActiveStudents() {
+        List<UserDto> foundStudents = userService.getAllActiveUsersByType(UserTypeEnum.STUDENT);
+        return ResponseEntity.ok().body(userMapper.listDtoToListResponse(foundStudents));
+    }
+
+    @Override
+    public ResponseEntity<List<UserResponse>> getAllStudents() {
+        List<UserDto> foundStudents = userService.getAllUsersByType(UserTypeEnum.STUDENT);
+        return ResponseEntity.ok().body(userMapper.listDtoToListResponse(foundStudents));
     }
 }

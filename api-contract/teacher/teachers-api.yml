@@ -5,18 +5,18 @@ info:
   version: 0.0.1
 
 tags:
-  - name: student
-    description: Students endpoints
+  - name: teacher
+    description: Teachers endpoints
 
 paths:
-  /student:
+  /teacher:
     post:
       tags:
-        - student
-      summary: Create a new student
-      operationId: createStudent
+        - teacher
+      summary: Create a new teacher
+      operationId: createTeacher
       requestBody:
-        description: Student info to save
+        description: Teacher info to save
         content:
           application/json:
             schema:
@@ -35,16 +35,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/BadRequestResponse'
 
-  /student/{studentRegistration}:
+  /teacher/{teacherRegistration}:
     get:
       tags:
-        - student
-      summary: Get a Student
-      operationId: getStudent
+        - teacher
+      summary: Get a Teacher
+      operationId: getTeacher
       parameters:
-        - name: studentRegistration
+        - name: teacherRegistration
           in: path
-          description: Student registration
+          description: Teacher registration
           required: true
           schema:
             type: integer
@@ -57,20 +57,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserResponse'
         '404':
-          description: Student not Found
+          description: Teacher not Found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResourceNotFoundResponse'
     delete:
       tags:
-        - student
-      summary: Delete a Student
-      operationId: deleteStudent
+        - teacher
+      summary: Delete a Teacher
+      operationId: deleteTeacher
       parameters:
-        - name: studentRegistration
+        - name: teacherRegistration
           in: path
-          description: Student registration
+          description: Teacher registration
           required: true
           schema:
             type: integer
@@ -83,26 +83,26 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserResponse'
         '404':
-          description: Student not Found
+          description: Teacher not Found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResourceNotFoundResponse'
     patch:
       tags:
-        - student
-      summary: Update a Student
-      operationId: updateStudent
+        - teacher
+      summary: Update a Teacher
+      operationId: updateTeacher
       parameters:
-        - name: studentRegistration
+        - name: teacherRegistration
           in: path
-          description: Student registration
+          description: Teacher registration
           required: true
           schema:
             type: integer
             format: int64
       requestBody:
-        description: Student info to save
+        description: Teacher info to save
         content:
           application/json:
             schema:
@@ -121,12 +121,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ResourceNotFoundResponse'
 
-  /student/all:
+  /teacher/all:
     get:
       tags:
-        - student
-      summary: Get all Student
-      operationId: getAllStudents
+        - teacher
+      summary: Get all Teachers
+      operationId: getAllTeachers
       responses:
         '200':
           description: OK
@@ -137,12 +137,12 @@ paths:
                 items:
                   $ref: '#/components/schemas/UserResponse'
 
-  /student/all/active:
+  /teacher/all/active:
     get:
       tags:
-        - student
-      summary: Get all active Student
-      operationId: getAllActiveStudents
+        - teacher
+      summary: Get all active Teachers
+      operationId: getAllActiveTeachers
       responses:
         '200':
           description: OK
@@ -201,7 +201,7 @@ components:
           example: true
         userType:
           type: string
-          example: STUDENT
+          example: TEACHER
 
     BadRequestResponse:
       type: object
