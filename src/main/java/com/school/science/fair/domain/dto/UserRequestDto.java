@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class StudentRequestDto {
+public class UserRequestDto {
 
     private Long registration;
     private String name;
