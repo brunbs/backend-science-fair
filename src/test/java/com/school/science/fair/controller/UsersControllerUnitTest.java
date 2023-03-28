@@ -1,16 +1,17 @@
 package com.school.science.fair.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.school.science.fair.domain.CreateStudentRequest;
-import com.school.science.fair.domain.StudentResponse;
+import com.school.science.fair.domain.CreateUserRequest;
 import com.school.science.fair.domain.UpdateStudentRequest;
+import com.school.science.fair.domain.UserResponse;
 import com.school.science.fair.domain.builder.ExceptionResponseBuilder;
-import com.school.science.fair.domain.dto.StudentDto;
-import com.school.science.fair.domain.dto.StudentRequestDto;
+import com.school.science.fair.domain.dto.UserDto;
+import com.school.science.fair.domain.dto.UserRequestDto;
+import com.school.science.fair.domain.enumeration.UserTypeEnum;
 import com.school.science.fair.domain.exception.ResourceAlreadyExistsException;
 import com.school.science.fair.domain.exception.ResourceNotFoundException;
-import com.school.science.fair.domain.mapper.StudentMapper;
-import com.school.science.fair.service.impl.StudentServiceImpl;
+import com.school.science.fair.domain.mapper.UserMapper;
+import com.school.science.fair.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -40,16 +41,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
 @EnableWebMvc
 @AutoConfigureMockMvc
-public class StudentControllerUnitTest {
+public class UsersControllerUnitTest {
 
     @Autowired
     MockMvc mockMvc;
 
     @Spy
-    private StudentMapper studentMapper = Mappers.getMapper(StudentMapper.class);
+    private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
     @MockBean
-    private StudentServiceImpl studentService;
+    private UserServiceImpl studentService;
 
     @SpyBean
     private ObjectMapper mapper;
@@ -59,12 +60,12 @@ public class StudentControllerUnitTest {
     @DisplayName("201 - POST /student - Create a Student")
     @Test
     void givenValidCreateStudentRequestWhenCreateStudentThenReturnStudentDtoAnd201Created() throws Exception {
-        CreateStudentRequest createStudentRequest = getCreateStudentRequest();
+        CreateUserRequest createStudentRequest = getCreateStudentRequest();
 
-        StudentDto createdStudentDto = getStudentDto();
-        StudentResponse studentResponse = getStudentResponse();
+        UserDto createdUserDto = getStudentDto();
+        UserResponse studentResponse = getStudentResponse();
 
-        given(studentService.createStudent(any(StudentRequestDto.class))).willReturn(createdStudentDto);
+        given(studentService.createUser(any(UserRequestDto.class), any(UserTypeEnum.class))).willReturn(createdUserDto);
 
         MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.post("/student")
                         .accept(MediaType.APPLICATION_JSON)
@@ -72,7 +73,7 @@ public class StudentControllerUnitTest {
                         .content(new ObjectMapper().writeValueAsString(createStudentRequest)))
                 .andExpect(status().isCreated()).andReturn().getResponse();
 
-        StudentResponse returnedStudent = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), StudentResponse.class);
+        UserResponse returnedStudent = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), UserResponse.class);
         assertThat(returnedStudent).usingRecursiveComparison().isEqualTo(studentResponse);
         assertThat(createStudentRequest.getName()).isEqualTo(returnedStudent.getName());
         assertThat(createStudentRequest.getEmail()).isEqualTo(returnedStudent.getEmail());
@@ -83,7 +84,7 @@ public class StudentControllerUnitTest {
     @Test
     void givenExistingEmailOrRegistrationWhenCreateStudentThenReturn400BadRequestAndCorrectMessage() throws Exception {
 
-        given(studentService.createStudent(any(StudentRequestDto.class))).willThrow(new ResourceAlreadyExistsException(HttpStatus.BAD_REQUEST, STUDENT_ALREADY_EXISTS));
+        given(studentService.createUser(any(UserRequestDto.class), any(UserTypeEnum.class))).willThrow(new ResourceAlreadyExistsException(HttpStatus.BAD_REQUEST, USER_ALREADY_EXISTS));
 
         MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.post("/student")
                         .accept(MediaType.APPLICATION_JSON)
@@ -91,23 +92,23 @@ public class StudentControllerUnitTest {
                         .content(new ObjectMapper().writeValueAsString(getCreateStudentRequest())))
                 .andExpect(status().isBadRequest()).andReturn().getResponse();
 
-        assertThat(response.getContentAsString(StandardCharsets.UTF_8)).contains(responseBuilder.getExceptionResponse(STUDENT_ALREADY_EXISTS).getMessage());
+        assertThat(response.getContentAsString(StandardCharsets.UTF_8)).contains(responseBuilder.getExceptionResponse(USER_ALREADY_EXISTS).getMessage());
     }
 
     @DisplayName("200 - GET /student/{studentRegistration} with valid registration")
     @Test
     void givenValidRegistrationWhenGetStudentThenReturn200OkAndStudentResponse() throws Exception {
 
-        StudentDto returnedStudent = getStudentDto();
+        UserDto returnedStudent = getStudentDto();
 
-        given(studentService.getStudent(anyLong())).willReturn(returnedStudent);
+        given(studentService.getUser(anyLong(), any(UserTypeEnum.class))).willReturn(returnedStudent);
 
         MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get("/student/1")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType("application/json"))
                 .andExpect(status().isOk()).andReturn().getResponse();
 
-        StudentResponse studentResponse = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), StudentResponse.class);
+        UserResponse studentResponse = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), UserResponse.class);
 
         assertThat(returnedStudent.getRegistration()).isEqualTo(studentResponse.getRegistration());
         assertThat(returnedStudent.getName()).isEqualTo(studentResponse.getName());
@@ -119,7 +120,7 @@ public class StudentControllerUnitTest {
     @Test
     void givenInvalidRegistrationWhenGetStudentThenReturn404NotFound() throws Exception {
 
-        given(studentService.getStudent(anyLong())).willThrow(new ResourceNotFoundException(HttpStatus.NOT_FOUND, STUDENT_NOT_FOUND));
+        given(studentService.getUser(anyLong(), any(UserTypeEnum.class))).willThrow(new ResourceNotFoundException(HttpStatus.NOT_FOUND, STUDENT_NOT_FOUND));
 
         MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get("/student/1")
                         .accept(MediaType.APPLICATION_JSON)
@@ -133,17 +134,17 @@ public class StudentControllerUnitTest {
     @Test
     void givenValidRegistrationWhenDeleteStudentThenReturn200OkAndStudentWithActiveFalse() throws Exception {
 
-        StudentDto deletedStudent = getStudentDto();
+        UserDto deletedStudent = getStudentDto();
         deletedStudent.setActive(false);
 
-        given(studentService.deleteStudent(anyLong())).willReturn(deletedStudent);
+        given(studentService.deleteUser(anyLong(), any(UserTypeEnum.class))).willReturn(deletedStudent);
 
         MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.delete("/student/1")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType("application/json"))
                 .andExpect(status().isOk()).andReturn().getResponse();
 
-        StudentResponse studentResponse = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), StudentResponse.class);
+        UserResponse studentResponse = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), UserResponse.class);
 
         assertThat(studentResponse.getName()).isEqualTo(deletedStudent.getName());
         assertThat(studentResponse.getEmail()).isEqualTo(deletedStudent.getEmail());
@@ -155,7 +156,7 @@ public class StudentControllerUnitTest {
     @Test
     void givenInvalidRegistrationWhenDeleteStudentThenReturn404NotFound() throws Exception {
 
-        given(studentService.deleteStudent(anyLong())).willThrow(new ResourceNotFoundException(HttpStatus.NOT_FOUND, STUDENT_NOT_FOUND));
+        given(studentService.deleteUser(anyLong(), any(UserTypeEnum.class))).willThrow(new ResourceNotFoundException(HttpStatus.NOT_FOUND, STUDENT_NOT_FOUND));
 
         MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.delete("/student/1")
                         .accept(MediaType.APPLICATION_JSON)
@@ -170,10 +171,10 @@ public class StudentControllerUnitTest {
     void givenValidRegistrationAndRequestNameWhenUpdateStudentThenReturn200OkAndStudentResponse() throws Exception {
 
         UpdateStudentRequest updateStudentRequest = UpdateStudentRequest.builder().name("Student B").build();
-        StudentDto studentDto = getStudentDto();
-        studentDto.setName(updateStudentRequest.getName());
+        UserDto userDto = getStudentDto();
+        userDto.setName(updateStudentRequest.getName());
 
-        given(studentService.updateStudent(anyLong(), any(StudentRequestDto.class))).willReturn(studentDto);
+        given(studentService.updateUser(anyLong(), any(UserRequestDto.class), any(UserTypeEnum.class))).willReturn(userDto);
 
         MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.patch("/student/1")
                         .accept(MediaType.APPLICATION_JSON)
@@ -181,7 +182,7 @@ public class StudentControllerUnitTest {
                         .content(new ObjectMapper().writeValueAsString(updateStudentRequest)))
                 .andExpect(status().isOk()).andReturn().getResponse();
 
-        StudentResponse studentResponse = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), StudentResponse.class);
+        UserResponse studentResponse = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), UserResponse.class);
 
         assertThat(studentResponse.getName()).isEqualTo(updateStudentRequest.getName());
     }
@@ -191,10 +192,10 @@ public class StudentControllerUnitTest {
     void givenValidRegistrationAndRequestEmailWhenUpdateStudentThenReturn200OkAndStudentResponse() throws Exception {
 
         UpdateStudentRequest updateStudentRequest = UpdateStudentRequest.builder().email("newemail@email.com").build();
-        StudentDto studentDto = getStudentDto();
-        studentDto.setEmail(updateStudentRequest.getEmail());
+        UserDto userDto = getStudentDto();
+        userDto.setEmail(updateStudentRequest.getEmail());
 
-        given(studentService.updateStudent(anyLong(), any(StudentRequestDto.class))).willReturn(studentDto);
+        given(studentService.updateUser(anyLong(), any(UserRequestDto.class), any(UserTypeEnum.class))).willReturn(userDto);
 
         MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.patch("/student/1")
                         .accept(MediaType.APPLICATION_JSON)
@@ -202,7 +203,7 @@ public class StudentControllerUnitTest {
                         .content(new ObjectMapper().writeValueAsString(updateStudentRequest)))
                 .andExpect(status().isOk()).andReturn().getResponse();
 
-        StudentResponse studentResponse = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), StudentResponse.class);
+        UserResponse studentResponse = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), UserResponse.class);
 
         assertThat(studentResponse.getEmail()).isEqualTo(updateStudentRequest.getEmail());
     }
@@ -213,7 +214,7 @@ public class StudentControllerUnitTest {
 
         UpdateStudentRequest updateStudentRequest = UpdateStudentRequest.builder().email("newemail@email.com").build();
 
-        given(studentService.updateStudent(anyLong(), any(StudentRequestDto.class))).willThrow(new ResourceNotFoundException(HttpStatus.NOT_FOUND, STUDENT_NOT_FOUND));
+        given(studentService.updateUser(anyLong(), any(UserRequestDto.class), any(UserTypeEnum.class))).willThrow(new ResourceNotFoundException(HttpStatus.NOT_FOUND, STUDENT_NOT_FOUND));
 
         MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.patch("/student/1")
                         .accept(MediaType.APPLICATION_JSON)
@@ -230,7 +231,7 @@ public class StudentControllerUnitTest {
 
         UpdateStudentRequest updateStudentRequest = UpdateStudentRequest.builder().email("newemail@email.com").build();
 
-        given(studentService.updateStudent(anyLong(), any(StudentRequestDto.class))).willThrow(new ResourceAlreadyExistsException(HttpStatus.BAD_REQUEST, EMAIL_ALREADY_EXISTS));
+        given(studentService.updateUser(anyLong(), any(UserRequestDto.class), any(UserTypeEnum.class))).willThrow(new ResourceAlreadyExistsException(HttpStatus.BAD_REQUEST, EMAIL_ALREADY_EXISTS));
 
         MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.patch("/student/1")
                         .accept(MediaType.APPLICATION_JSON)

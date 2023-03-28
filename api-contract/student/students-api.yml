@@ -20,14 +20,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateStudentRequest'
+              $ref: '#/components/schemas/CreateUserRequest'
       responses:
         '201':
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StudentResponse'
+                $ref: '#/components/schemas/UserResponse'
         '400':
           description: Bad Request
           content:
@@ -55,7 +55,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StudentResponse'
+                $ref: '#/components/schemas/UserResponse'
         '404':
           description: Student not Found
           content:
@@ -81,7 +81,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StudentResponse'
+                $ref: '#/components/schemas/UserResponse'
         '404':
           description: Student not Found
           content:
@@ -113,7 +113,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StudentResponse'
+                $ref: '#/components/schemas/UserResponse'
         '404':
           description: Student not Found
           content:
@@ -123,7 +123,7 @@ paths:
 
 components:
   schemas:
-    CreateStudentRequest:
+    CreateUserRequest:
       type: object
       required:
         - name
@@ -150,7 +150,7 @@ components:
           type: string
           example: ricardo@email.com
 
-    StudentResponse:
+    UserResponse:
       type: object
       properties:
         registration:
@@ -166,6 +166,9 @@ components:
         active:
           type: boolean
           example: true
+        userType:
+          type: string
+          example: STUDENT
 
     BadRequestResponse:
       type: object
@@ -185,4 +188,4 @@ components:
         message:
           type: string
           description: Error message
-          example: Student not found
+          example: User not found

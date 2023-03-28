@@ -1,6 +1,6 @@
 <h1 align="center"> :microscope: Back end - Science Fair System :microscope: </h1>
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/62837683/226001451-a53c72be-f2c6-4f5c-9524-f0026338563b.png" />
+  <img src="https://users-images.githubusercontent.com/62837683/226001451-a53c72be-f2c6-4f5c-9524-f0026338563b.png" />
 </p>
 <p align="center">
   <img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white" />

@@ -1,55 +1,59 @@
 package com.school.science.fair.domain.mother;
 
-import com.school.science.fair.domain.CreateStudentRequest;
-import com.school.science.fair.domain.StudentResponse;
-import com.school.science.fair.domain.dto.StudentDto;
-import com.school.science.fair.domain.dto.StudentRequestDto;
-import com.school.science.fair.domain.entity.Student;
+import com.school.science.fair.domain.CreateUserRequest;
+import com.school.science.fair.domain.UserResponse;
+import com.school.science.fair.domain.dto.UserDto;
+import com.school.science.fair.domain.dto.UserRequestDto;
+import com.school.science.fair.domain.entity.Users;
+import com.school.science.fair.domain.enumeration.UserTypeEnum;
 
 public class StudentMother {
 
-    public static Student getStudentEntity() {
-        return Student.builder()
+    public static Users getStudentEntity() {
+        return Users.builder()
                 .registration(1l)
                 .name("Student A")
                 .email("student@email.com")
                 .active(true)
                 .password("1")
+                .userType(UserTypeEnum.STUDENT)
                 .build();
     }
 
-    public static StudentRequestDto getStudentRequestDto() {
-        return StudentRequestDto.builder()
+    public static UserRequestDto getStudentRequestDto() {
+        return UserRequestDto.builder()
                 .name("Student A")
                 .email("student@email.com")
                 .registration(1l)
                 .build();
     }
 
-    public static StudentDto getStudentDto() {
-        return StudentDto.builder()
+    public static UserDto getStudentDto() {
+        return UserDto.builder()
                 .registration(1l)
                 .email("student@email.com")
                 .name("Student A")
                 .password("1")
                 .active(true)
+                .userType(UserTypeEnum.STUDENT)
                 .build();
     }
 
-    public static CreateStudentRequest getCreateStudentRequest() {
-        return CreateStudentRequest.builder()
+    public static CreateUserRequest getCreateStudentRequest() {
+        return CreateUserRequest.builder()
                 .registration(1l)
                 .name("Student A")
                 .email("student@email.com")
                 .build();
     }
 
-    public static StudentResponse getStudentResponse() {
-        return StudentResponse.builder()
+    public static UserResponse getStudentResponse() {
+        return UserResponse.builder()
                 .active(true)
                 .email("student@email.com")
                 .registration(1l)
                 .name("Student A")
+                .userType(UserTypeEnum.STUDENT.toString())
                 .build();
     }
 
