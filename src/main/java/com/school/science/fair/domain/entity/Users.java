@@ -1,11 +1,14 @@
 package com.school.science.fair.domain.entity;
 
+import com.school.science.fair.domain.enumeration.UserTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 
 @Data
@@ -13,7 +16,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Student {
+public class Users {
 
     @Id
     private Long registration;
@@ -21,5 +24,7 @@ public class Student {
     private String email;
     private String password;
     private boolean active;
+    @Enumerated(EnumType.STRING)
+    private UserTypeEnum userType;
 
 }
