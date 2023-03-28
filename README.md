@@ -14,9 +14,9 @@
     :construction:  Project in Development  :construction:
 </h3>
 
-![tests](https://img.shields.io/badge/passed%20tests-111-informational)
+![tests](https://img.shields.io/badge/passed%20tests-117-informational)
 
-![version](https://img.shields.io/badge/version-v0.2.2-brightgreen)
+![version](https://img.shields.io/badge/version-v0.2.3-brightgreen)
 
 <h2 align="center"> :alembic: Introduction / Introdução :alembic: </h2>
 <p> :us: Hello! And welcome to this project for a school science fair. The main objective behind this project is to study and to use as portfolio.
@@ -111,18 +111,20 @@ Versões futuras virão com mais informações e formas de rodar, com uma versã
 <p>
 
 :us:
-- Creation, Read, Update and Deletion of classes
-- Creation, Read, Update and Deletion of students
-- Creation, Read, Update and Deletion of Areas of Knowledge
-- Creation, Read, Update and Deletion of Grade Systems
-- Creation, Read, Update and Deletion of Science Fair Editions
+- Create, Read, Update, List All, List Active Classes
+- Create, Read, Update, List All, List Active Students
+- Create, Read, Update, List All, List Active Areas of Knowledge
+- Create, Read, Update, List All, List Active Grade Systems
+- Create, Read, Update, List All, List Active Science Fair Editions
+- Create, Read, Update, List All, List Active and Delete Teachers
 
 :brazil:
-- Criação, edição, deleção e listagem de Turmas
-- Criação, edição, deleção e detalhes de Estudante
-- Criação, edição, deleção, listagem e detalhes de Área do Conhecimento
-- Criação, edição, deleção, listagem e detalhes de Sistemas Avaliativos
-- Criação, edição, deleção, listagem e detalhes de Edição da Feira de Ciências
+- Criação, edição, deleção, detalhes e listagem (todas / ativas) de Turmas
+- Criação, edição, deleção, detalhes e listagem (todas / ativas) de Estudante
+- Criação, edição, deleção, detalhes e listagem (todas / ativas) de Área do Conhecimento
+- Criação, edição, deleção, detalhes e listagem (todas / ativas) de Sistemas Avaliativos
+- Criação, edição, deleção, detalhes e listagem (todas / ativas) de Edição da Feira de Ciências
+- Criação, edição, deleção, detalhes e listagem (todas / ativas) de Professores
 </p>
 <h2 align="center"> :bicyclist: Upcoming Features / Próximas funcionalidades :bicyclist:</h2>
 <p>
@@ -130,10 +132,10 @@ Versões futuras virão com mais informações e formas de rodar, com uma versã
 :us:
 - creating, listing, editing and deleting assessments
 - link students in assessments and assessments in science fair issues
-- creation of teachers, users and permissions
+- Security: users and access modifiers
 
 :brazil:
 - criação, listagem, edição e deleção de avaliações
 - vincular estudantes em trabalhos e trabalhos em edições de feiras de ciências
-- criação de professores, usuários e permissões
+- Segurança: usuários e modificadores de acesso
 </p>

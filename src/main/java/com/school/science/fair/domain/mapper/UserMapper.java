@@ -11,6 +11,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
+import java.util.List;
+
 import static org.mapstruct.ReportingPolicy.IGNORE;
 
 @Mapper(componentModel = "spring",  unmappedTargetPolicy = IGNORE)
@@ -23,5 +25,7 @@ public interface UserMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateModelFromDto(UserRequestDto userRequestDto, @MappingTarget Users entity);
     UserRequestDto updateToDto(UpdateUserRequest updateUserRequest);
+    List<UserDto> listEntityToListDto(List<Users> users);
+    List<UserResponse> listDtoToListResponse(List<UserDto> userDtos);
 
 }

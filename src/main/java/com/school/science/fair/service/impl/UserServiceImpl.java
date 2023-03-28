@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -59,6 +60,18 @@ public class UserServiceImpl implements UserService {
         userMapper.updateModelFromDto(updateUserDto, foundUsers);
         Users updatedUsers = userRepository.save(foundUsers);
         return userMapper.entityToDto(updatedUsers);
+    }
+
+    @Override
+    public List<UserDto> getAllUsersByType(UserTypeEnum userTypeEnum) {
+        List<Users> foundUsers = userRepository.findAllByUserType(userTypeEnum);
+        return userMapper.listEntityToListDto(foundUsers);
+    }
+
+    @Override
+    public List<UserDto> getAllActiveUsersByType(UserTypeEnum userTypeEnum) {
+        List<Users> foundUsers = userRepository.findAllByActiveTrueAndUserType(userTypeEnum);
+        return userMapper.listEntityToListDto(foundUsers);
     }
 
     private Users findUserByRegistrationAndTypeOrThrowException(Long id, UserTypeEnum userTypeEnum) {

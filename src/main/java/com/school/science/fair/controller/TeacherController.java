@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class TeacherController implements TeacherApi {
 
@@ -47,5 +49,17 @@ public class TeacherController implements TeacherApi {
     public ResponseEntity<UserResponse> deleteTeacher(Long teacherRegistration) {
         UserDto deletedTeacher = userService.deleteUser(teacherRegistration, UserTypeEnum.TEACHER);
         return ResponseEntity.ok().body(userMapper.dtoToResponse(deletedTeacher));
+    }
+
+    @Override
+    public ResponseEntity<List<UserResponse>> getAllActiveTeachers() {
+        List<UserDto> foundTeachers = userService.getAllActiveUsersByType(UserTypeEnum.TEACHER);
+        return ResponseEntity.ok().body(userMapper.listDtoToListResponse(foundTeachers));
+    }
+
+    @Override
+    public ResponseEntity<List<UserResponse>> getAllTeachers() {
+        List<UserDto> foundTeachers = userService.getAllUsersByType(UserTypeEnum.TEACHER);
+        return ResponseEntity.ok().body(userMapper.listDtoToListResponse(foundTeachers));
     }
 }

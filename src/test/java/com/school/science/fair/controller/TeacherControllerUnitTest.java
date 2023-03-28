@@ -1,5 +1,6 @@
 package com.school.science.fair.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.school.science.fair.domain.CreateUserRequest;
 import com.school.science.fair.domain.UpdateUserRequest;
@@ -29,6 +30,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import static com.school.science.fair.domain.enumeration.ExceptionMessage.*;
 import static com.school.science.fair.domain.mother.UsersMother.*;
@@ -249,5 +251,52 @@ public class TeacherControllerUnitTest {
                 .andExpect(status().isBadRequest()).andReturn().getResponse();
 
         assertThat(response.getContentAsString(StandardCharsets.UTF_8)).contains(responseBuilder.getExceptionResponse(EMAIL_ALREADY_EXISTS).getMessage());
+    }
+
+    @DisplayName("200 - GET /teacher/all")
+    @Test
+    void givenTeachersWhenGetAllTeachersThenReturns200OkAndListOfUserResponseWithUserTypeTeacher() throws Exception {
+        List<UserDto> returnedUsers = List.of(
+                UserDto.builder().registration(1l).userType(UserTypeEnum.TEACHER).build(),
+                UserDto.builder().registration(2l).userType(UserTypeEnum.TEACHER).build(),
+                UserDto.builder().registration(3l).userType(UserTypeEnum.TEACHER).build()
+        );
+
+        given(userService.getAllUsersByType(UserTypeEnum.TEACHER)).willReturn(returnedUsers);
+
+        MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get("/teacher/all"))
+                .andExpect(status().isOk()).andReturn().getResponse();
+
+        List<UserResponse> userResponses = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), new TypeReference<List<UserResponse>>() {
+        });
+
+        for(UserResponse user : userResponses) {
+            assertThat(user.getUserType()).isEqualTo(UserTypeEnum.TEACHER.toString());
+        }
+        assertThat(userResponses.size()).isEqualTo(returnedUsers.size());
+    }
+
+    @DisplayName("200 - GET /teacher/all/active")
+    @Test
+    void givenTeachersWhenGetAllActiveTeachersThenReturns200OkAndListOfUserResponseWithUserTypeTeacherAndActiveTrue() throws Exception {
+        List<UserDto> returnedUsers = List.of(
+                UserDto.builder().registration(1l).active(true).userType(UserTypeEnum.TEACHER).build(),
+                UserDto.builder().registration(2l).active(true).userType(UserTypeEnum.TEACHER).build(),
+                UserDto.builder().registration(3l).active(true).userType(UserTypeEnum.TEACHER).build()
+        );
+
+        given(userService.getAllUsersByType(UserTypeEnum.TEACHER)).willReturn(returnedUsers);
+
+        MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get("/teacher/all"))
+                .andExpect(status().isOk()).andReturn().getResponse();
+
+        List<UserResponse> userResponses = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), new TypeReference<List<UserResponse>>() {
+        });
+
+        for(UserResponse user : userResponses) {
+            assertThat(user.getUserType()).isEqualTo(UserTypeEnum.TEACHER.toString());
+            assertThat(user.getActive()).isEqualTo(true);
+        }
+        assertThat(userResponses.size()).isEqualTo(returnedUsers.size());
     }
 }

@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class StudentController implements StudentApi {
 
@@ -47,5 +49,17 @@ public class StudentController implements StudentApi {
         UserRequestDto userRequestDto = userMapper.updateToDto(updateStudentRequest);
         UserDto updatedStudent = userService.updateUser(studentRegistration, userRequestDto, UserTypeEnum.STUDENT);
         return ResponseEntity.ok().body(userMapper.dtoToResponse(updatedStudent));
+    }
+
+    @Override
+    public ResponseEntity<List<UserResponse>> getAllActiveStudents() {
+        List<UserDto> foundStudents = userService.getAllActiveUsersByType(UserTypeEnum.STUDENT);
+        return ResponseEntity.ok().body(userMapper.listDtoToListResponse(foundStudents));
+    }
+
+    @Override
+    public ResponseEntity<List<UserResponse>> getAllStudents() {
+        List<UserDto> foundStudents = userService.getAllUsersByType(UserTypeEnum.STUDENT);
+        return ResponseEntity.ok().body(userMapper.listDtoToListResponse(foundStudents));
     }
 }

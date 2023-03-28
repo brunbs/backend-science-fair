@@ -121,6 +121,38 @@ paths:
               schema:
                 $ref: '#/components/schemas/ResourceNotFoundResponse'
 
+  /teacher/all:
+    get:
+      tags:
+        - teacher
+      summary: Get all Teachers
+      operationId: getAllTeachers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponse'
+
+  /teacher/all/active:
+    get:
+      tags:
+        - teacher
+      summary: Get all active Teachers
+      operationId: getAllActiveTeachers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponse'
+
 components:
   schemas:
     CreateUserRequest:

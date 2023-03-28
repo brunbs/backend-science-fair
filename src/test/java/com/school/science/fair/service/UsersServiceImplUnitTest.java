@@ -22,6 +22,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.school.science.fair.domain.enumeration.ExceptionMessage.*;
@@ -40,7 +41,7 @@ public class UsersServiceImplUnitTest {
     private UserRepository userRepository;
 
     @InjectMocks
-    private UserServiceImpl studentService;
+    private UserServiceImpl userService;
 
     @Spy
     private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
@@ -74,7 +75,7 @@ public class UsersServiceImplUnitTest {
         given(userRepository.save(usersEntity)).willReturn(createdUsers);
         given(userMapper.entityToDto(createdUsers)).willReturn(createdUserDto);
 
-        UserDto returnedStudent = studentService.createUser(userRequestDto, UserTypeEnum.STUDENT);
+        UserDto returnedStudent = userService.createUser(userRequestDto, UserTypeEnum.STUDENT);
 
         assertThat(returnedStudent).usingRecursiveComparison().isEqualTo(createdUserDto);
         assertThat(returnedStudent.getUserType()).isEqualTo(UserTypeEnum.STUDENT);
@@ -92,7 +93,7 @@ public class UsersServiceImplUnitTest {
         given(userRepository.findByEmailOrRegistration(anyString(), anyLong())).willReturn(Optional.of(getStudentEntity()));
 
         assertThatThrownBy(
-                () -> studentService.createUser(userRequestDto, UserTypeEnum.STUDENT)).isInstanceOf(ResourceAlreadyExistsException.class)
+                () -> userService.createUser(userRequestDto, UserTypeEnum.STUDENT)).isInstanceOf(ResourceAlreadyExistsException.class)
                 .hasMessage(USER_ALREADY_EXISTS.getMessageKey());
     }
 
@@ -103,7 +104,7 @@ public class UsersServiceImplUnitTest {
 
         given(userRepository.findByRegistrationAndUserType(anyLong(), any(UserTypeEnum.class))).willReturn(Optional.of(usersEntity));
 
-        UserDto returnedStudent = studentService.getUser(1l, UserTypeEnum.STUDENT);
+        UserDto returnedStudent = userService.getUser(1l, UserTypeEnum.STUDENT);
 
         assertThat(returnedStudent).usingRecursiveComparison().isEqualTo(usersEntity);
     }
@@ -115,7 +116,7 @@ public class UsersServiceImplUnitTest {
         given(userRepository.findById(anyLong())).willReturn(Optional.empty());
 
         assertThatThrownBy(
-                () -> studentService.getUser(1l, UserTypeEnum.STUDENT)).isInstanceOf(ResourceNotFoundException.class)
+                () -> userService.getUser(1l, UserTypeEnum.STUDENT)).isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage(STUDENT_NOT_FOUND.getMessageKey());
     }
 
@@ -126,7 +127,7 @@ public class UsersServiceImplUnitTest {
         given(userRepository.findByRegistrationAndUserType(anyLong(), any(UserTypeEnum.class))).willReturn(Optional.empty());
 
         assertThatThrownBy(
-                () -> studentService.getUser(1l, UserTypeEnum.TEACHER)).isInstanceOf(ResourceNotFoundException.class)
+                () -> userService.getUser(1l, UserTypeEnum.TEACHER)).isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage(TEACHER_NOT_FOUND.getMessageKey());
     }
 
@@ -137,7 +138,7 @@ public class UsersServiceImplUnitTest {
 
         given(userRepository.findByRegistrationAndUserType(anyLong(), any(UserTypeEnum.class))).willReturn(Optional.of(foundUsers));
 
-        UserDto deletedUserDto = studentService.deleteUser(1l, UserTypeEnum.STUDENT);
+        UserDto deletedUserDto = userService.deleteUser(1l, UserTypeEnum.STUDENT);
 
         assertThat(deletedUserDto.isActive()).isFalse();
 
@@ -151,7 +152,7 @@ public class UsersServiceImplUnitTest {
 
         given(userRepository.findByRegistrationAndUserType(anyLong(), any(UserTypeEnum.class))).willReturn(Optional.of(foundUsers));
 
-        UserDto updatedStudent = studentService.updateUser(1l, updateInfo, UserTypeEnum.STUDENT);
+        UserDto updatedStudent = userService.updateUser(1l, updateInfo, UserTypeEnum.STUDENT);
 
         assertThat(updatedStudent.getName()).isEqualTo(updateInfo.getName());
         verify(userRepository).save(foundUsers);
@@ -167,7 +168,7 @@ public class UsersServiceImplUnitTest {
         given(userRepository.findByRegistrationAndUserType(anyLong(), any(UserTypeEnum.class))).willReturn(Optional.of(foundUsers));
         given(userRepository.findByEmail(anyString())).willReturn(Optional.empty());
 
-        UserDto updatedStudent = studentService.updateUser(1l, updateInfo, UserTypeEnum.STUDENT);
+        UserDto updatedStudent = userService.updateUser(1l, updateInfo, UserTypeEnum.STUDENT);
 
         assertThat(updatedStudent.getEmail()).isEqualTo(updateInfo.getEmail());
         verify(userRepository).save(foundUsers);
@@ -184,9 +185,43 @@ public class UsersServiceImplUnitTest {
         given(userRepository.findByEmail(anyString())).willReturn(Optional.of(foundUsers));
 
         assertThatThrownBy(
-                () -> studentService.updateUser(1l, updateInfo, UserTypeEnum.STUDENT)).isInstanceOf(ResourceAlreadyExistsException.class)
+                () -> userService.updateUser(1l, updateInfo, UserTypeEnum.STUDENT)).isInstanceOf(ResourceAlreadyExistsException.class)
                 .hasMessage(EMAIL_ALREADY_EXISTS.getMessageKey());
+    }
 
+    @DisplayName("Get all users by type returns all users with given type")
+    @Test
+    void givenUserTypeWhenGetAllUsersByTypeThenReturnsUserDtoListOfWithGivenTypeOnly() {
+        testEntityManager.persistAndFlush(Users.builder().registration(1l).active(true).userType(UserTypeEnum.STUDENT).build());
+        testEntityManager.persistAndFlush(Users.builder().registration(2l).active(false).userType(UserTypeEnum.STUDENT).build());
+        testEntityManager.persistAndFlush(Users.builder().registration(3l).active(true).userType(UserTypeEnum.STUDENT).build());
+        testEntityManager.persistAndFlush(Users.builder().registration(4l).active(false).userType(UserTypeEnum.TEACHER).build());
+        testEntityManager.persistAndFlush(Users.builder().registration(5l).active(true).userType(UserTypeEnum.TEACHER).build());
+        testEntityManager.persistAndFlush(Users.builder().registration(6l).active(true).userType(UserTypeEnum.TEACHER).build());
+
+        List<UserDto> returnedUsers = userService.getAllUsersByType(UserTypeEnum.STUDENT);
+
+        for(UserDto user : returnedUsers) {
+            assertThat(user.getUserType()).isEqualTo(UserTypeEnum.STUDENT);
+        }
+    }
+
+    @DisplayName("Get all active users by type returns all users with given type and active true")
+    @Test
+    void givenUserTypeWhenGetAllActiveUsersByTypeThenReturnsUserDtoListOfWithGivenTypeOnlyAndActiveTrue() {
+        testEntityManager.persistAndFlush(Users.builder().registration(1l).active(true).userType(UserTypeEnum.STUDENT).build());
+        testEntityManager.persistAndFlush(Users.builder().registration(2l).active(false).userType(UserTypeEnum.STUDENT).build());
+        testEntityManager.persistAndFlush(Users.builder().registration(3l).active(true).userType(UserTypeEnum.STUDENT).build());
+        testEntityManager.persistAndFlush(Users.builder().registration(4l).active(false).userType(UserTypeEnum.TEACHER).build());
+        testEntityManager.persistAndFlush(Users.builder().registration(5l).active(true).userType(UserTypeEnum.TEACHER).build());
+        testEntityManager.persistAndFlush(Users.builder().registration(6l).active(true).userType(UserTypeEnum.TEACHER).build());
+
+        List<UserDto> returnedUsers = userService.getAllActiveUsersByType(UserTypeEnum.STUDENT);
+
+        for(UserDto user : returnedUsers) {
+            assertThat(user.getUserType()).isEqualTo(UserTypeEnum.STUDENT);
+            assertThat(user.isActive()).isTrue();
+        }
     }
 
 }
