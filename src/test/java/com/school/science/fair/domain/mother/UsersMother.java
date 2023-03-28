@@ -7,7 +7,7 @@ import com.school.science.fair.domain.dto.UserRequestDto;
 import com.school.science.fair.domain.entity.Users;
 import com.school.science.fair.domain.enumeration.UserTypeEnum;
 
-public class StudentMother {
+public class UsersMother {
 
     public static Users getStudentEntity() {
         return Users.builder()
@@ -20,7 +20,7 @@ public class StudentMother {
                 .build();
     }
 
-    public static UserRequestDto getStudentRequestDto() {
+    public static UserRequestDto getUserRequestDto() {
         return UserRequestDto.builder()
                 .name("Student A")
                 .email("student@email.com")
@@ -28,7 +28,7 @@ public class StudentMother {
                 .build();
     }
 
-    public static UserDto getStudentDto() {
+    public static UserDto getUserDto() {
         return UserDto.builder()
                 .registration(1l)
                 .email("student@email.com")
@@ -39,7 +39,7 @@ public class StudentMother {
                 .build();
     }
 
-    public static CreateUserRequest getCreateStudentRequest() {
+    public static CreateUserRequest getCreateUserRequest() {
         return CreateUserRequest.builder()
                 .registration(1l)
                 .name("Student A")
@@ -47,7 +47,7 @@ public class StudentMother {
                 .build();
     }
 
-    public static UserResponse getStudentResponse() {
+    public static UserResponse getUserResponse() {
         return UserResponse.builder()
                 .active(true)
                 .email("student@email.com")

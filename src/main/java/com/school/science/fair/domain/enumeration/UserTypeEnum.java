@@ -6,11 +6,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum UserTypeEnum {
-    COORDINATOR("Coordinator"),
-    TEACHER("Teacher"),
-    STUDENT("Student");
-
-    private String description;
+    COORDINATOR,
+    TEACHER,
+    STUDENT;
 
     public static ExceptionMessage getNotFoundMessage(UserTypeEnum userTypeEnum) {
         if(userTypeEnum.equals(STUDENT)) {

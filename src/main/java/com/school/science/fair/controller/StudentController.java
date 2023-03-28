@@ -2,7 +2,7 @@ package com.school.science.fair.controller;
 
 import com.school.science.fair.api.StudentApi;
 import com.school.science.fair.domain.CreateUserRequest;
-import com.school.science.fair.domain.UpdateStudentRequest;
+import com.school.science.fair.domain.UpdateUserRequest;
 import com.school.science.fair.domain.UserResponse;
 import com.school.science.fair.domain.dto.UserDto;
 import com.school.science.fair.domain.dto.UserRequestDto;
@@ -43,7 +43,7 @@ public class StudentController implements StudentApi {
     }
 
     @Override
-    public ResponseEntity<UserResponse> updateStudent(Long studentRegistration, UpdateStudentRequest updateStudentRequest) {
+    public ResponseEntity<UserResponse> updateStudent(Long studentRegistration, UpdateUserRequest updateStudentRequest) {
         UserRequestDto userRequestDto = userMapper.updateToDto(updateStudentRequest);
         UserDto updatedStudent = userService.updateUser(studentRegistration, userRequestDto, UserTypeEnum.STUDENT);
         return ResponseEntity.ok().body(userMapper.dtoToResponse(updatedStudent));

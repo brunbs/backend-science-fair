@@ -25,7 +25,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import java.util.Optional;
 
 import static com.school.science.fair.domain.enumeration.ExceptionMessage.*;
-import static com.school.science.fair.domain.mother.StudentMother.*;
+import static com.school.science.fair.domain.mother.UsersMother.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
@@ -50,7 +50,7 @@ public class UsersServiceImplUnitTest {
 
     @DisplayName("Database save student")
     @Test
-    void givenStudentEntityWhenSaveStudentThenReturnSavedEntityWithRightDetails() {
+    void givenUserEntityWhenSaveUserThenReturnSavedEntityWithRightDetails() {
         Users usersEntity = getStudentEntity();
 
         Users storedUsersEntity = testEntityManager.persistAndFlush(usersEntity);
@@ -63,11 +63,11 @@ public class UsersServiceImplUnitTest {
 
     @DisplayName("Create a student")
     @Test
-    void givenValidStudentRequestDtoWhenCreateStudentThenCreatesStudentAndReturnStudentDto() {
-        UserRequestDto userRequestDto = getStudentRequestDto();
+    void givenValidUserRequestDtoWhenCreateUserThenCreatesStudentAndReturnStudentDto() {
+        UserRequestDto userRequestDto = getUserRequestDto();
         Users usersEntity = getStudentEntity();
         Users createdUsers = getStudentEntity();
-        UserDto createdUserDto = getStudentDto();
+        UserDto createdUserDto = getUserDto();
 
         given(userRepository.findByEmailOrRegistration(anyString(), anyLong())).willReturn(Optional.empty());
         given(userMapper.createDtoToEntity(userRequestDto)).willReturn(usersEntity);
@@ -86,8 +86,8 @@ public class UsersServiceImplUnitTest {
 
     @DisplayName("Create Student when registration or email already exists Should Throw ResourceAlreadyExistsException")
     @Test
-    void givenStudentRequestDtoWithEmailOrRegistrationAlreadyInUseWhenCreateStudentThenThrowsResourceAlreadyExistsException() {
-        UserRequestDto userRequestDto = getStudentRequestDto();
+    void givenUserRequestDtoWithEmailOrRegistrationAlreadyInUseWhenCreateUserThenThrowsResourceAlreadyExistsException() {
+        UserRequestDto userRequestDto = getUserRequestDto();
 
         given(userRepository.findByEmailOrRegistration(anyString(), anyLong())).willReturn(Optional.of(getStudentEntity()));
 
@@ -96,9 +96,9 @@ public class UsersServiceImplUnitTest {
                 .hasMessage(USER_ALREADY_EXISTS.getMessageKey());
     }
 
-    @DisplayName("Get a student")
+    @DisplayName("Get a student user")
     @Test
-    void givenValidStudentRegistrationWhenGetStudentThenReturnsStudentDto() {
+    void givenValidRegistrationWhenGetStudentUserThenReturnsUserDto() {
         Users usersEntity = getStudentEntity();
 
         given(userRepository.findByRegistrationAndUserType(anyLong(), any(UserTypeEnum.class))).willReturn(Optional.of(usersEntity));
@@ -108,7 +108,7 @@ public class UsersServiceImplUnitTest {
         assertThat(returnedStudent).usingRecursiveComparison().isEqualTo(usersEntity);
     }
 
-    @DisplayName("Get a not existent student should throw ResourceNotFoundException")
+    @DisplayName("Get a not existent student user should throw ResourceNotFoundException")
     @Test
     void givenInvalidRegistrationWhenGetStudentThenThrowResourceNotFoundExceptionWithCorrectMessage() {
 
@@ -117,12 +117,22 @@ public class UsersServiceImplUnitTest {
         assertThatThrownBy(
                 () -> studentService.getUser(1l, UserTypeEnum.STUDENT)).isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage(STUDENT_NOT_FOUND.getMessageKey());
-
     }
 
-    @DisplayName("Delete student should change active to false")
+    @DisplayName("Get a not existent teacher user should throw ResourceNotFoundException")
     @Test
-    void givenValidStudentRegistrationWhenDeleteStudentThenChangeEntityActiveToFalseAndReturnStudentDto() {
+    void givenInvalidRegistrationWhenGetTeacherUserThenThrowResourceNotFoundExceptionWithCorrectMessage() {
+
+        given(userRepository.findByRegistrationAndUserType(anyLong(), any(UserTypeEnum.class))).willReturn(Optional.empty());
+
+        assertThatThrownBy(
+                () -> studentService.getUser(1l, UserTypeEnum.TEACHER)).isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage(TEACHER_NOT_FOUND.getMessageKey());
+    }
+
+    @DisplayName("Delete user should change active to false")
+    @Test
+    void givenValidUserRegistrationWhenDeleteUserThenChangeEntityActiveToFalseAndReturnUserDto() {
         Users foundUsers = getStudentEntity();
 
         given(userRepository.findByRegistrationAndUserType(anyLong(), any(UserTypeEnum.class))).willReturn(Optional.of(foundUsers));
@@ -133,9 +143,9 @@ public class UsersServiceImplUnitTest {
 
     }
 
-    @DisplayName("Update student")
+    @DisplayName("Update user")
     @Test
-    void givenValidNameStudentRequestDtoWhenUpdateStudentThenReturnStudentDto() {
+    void givenValidNameUserRequestDtoWhenUpdateUserThenReturnStudentDto() {
         Users foundUsers = getStudentEntity();
         UserRequestDto updateInfo = UserRequestDto.builder().name("Student B").build();
 
@@ -148,9 +158,9 @@ public class UsersServiceImplUnitTest {
 
     }
 
-    @DisplayName("Update student")
+    @DisplayName("Update user")
     @Test
-    void givenValidEmailStudentRequestDtoWhenUpdateStudentThenReturnStudentDto() {
+    void givenValidEmailUserRequestDtoWhenUpdateUserThenReturnStudentDto() {
         Users foundUsers = getStudentEntity();
         UserRequestDto updateInfo = UserRequestDto.builder().email("newemail@email.com").build();
 
@@ -164,9 +174,9 @@ public class UsersServiceImplUnitTest {
 
     }
 
-    @DisplayName("Update student")
+    @DisplayName("Update user with email already registered")
     @Test
-    void givenEmailAlreadyRegisteredWhenUpdateStudentThenThrowsResourceAlreadyExistsExceptionWithCorrectMessage() {
+    void givenEmailAlreadyRegisteredWhenUpdateUserThenThrowsResourceAlreadyExistsExceptionWithCorrectMessage() {
         Users foundUsers = getStudentEntity();
 
         UserRequestDto updateInfo = UserRequestDto.builder().email("newemail@email.com").build();

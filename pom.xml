@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.school</groupId>
 	<artifactId>science.fair</artifactId>
-	<version>0.1.6</version>
+	<version>0.2.2</version>
 	<name>science.fair</name>
 	<description>Science fair system</description>
 	<properties>
@@ -253,6 +253,38 @@
 						<configuration>
 							<inputSpec>
 								./api-contract/science-fair/science-fair-api.yml
+							</inputSpec>
+							<generatorName>spring</generatorName>
+							<apiPackage>com.school.science.fair.api</apiPackage>
+							<modelPackage>com.school.science.fair.domain</modelPackage>
+							<supportingFilesToGenerate>
+								ApiUtil.java
+							</supportingFilesToGenerate>
+							<configOptions>
+								<sourceFolder>swagger</sourceFolder>
+								<delegatePattern>true</delegatePattern>
+								<interfaceOnly>true</interfaceOnly>
+								<!--suppress UnresolvedMavenProperty -->
+								<additionalModelTypeAnnotations>@lombok.Builder @lombok.NoArgsConstructor
+									@lombok.AllArgsConstructor
+								</additionalModelTypeAnnotations>
+							</configOptions>
+							<typeMappings>
+								<typeMapping>OffsetDateTime=java.time.LocalDateTime</typeMapping>
+							</typeMappings>
+							<importMappings>
+								<importMapping>java.time.OffsetDateTime=java.time.LocalDateTime</importMapping>
+							</importMappings>
+						</configuration>
+					</execution>
+					<execution>
+						<id>teacher</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>
+								./api-contract/teacher/teachers-api.yml
 							</inputSpec>
 							<generatorName>spring</generatorName>
 							<apiPackage>com.school.science.fair.api</apiPackage>

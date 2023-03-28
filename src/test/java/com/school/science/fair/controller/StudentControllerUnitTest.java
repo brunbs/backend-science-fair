@@ -2,7 +2,7 @@ package com.school.science.fair.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.school.science.fair.domain.CreateUserRequest;
-import com.school.science.fair.domain.UpdateStudentRequest;
+import com.school.science.fair.domain.UpdateUserRequest;
 import com.school.science.fair.domain.UserResponse;
 import com.school.science.fair.domain.builder.ExceptionResponseBuilder;
 import com.school.science.fair.domain.dto.UserDto;
@@ -31,7 +31,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import java.nio.charset.StandardCharsets;
 
 import static com.school.science.fair.domain.enumeration.ExceptionMessage.*;
-import static com.school.science.fair.domain.mother.StudentMother.*;
+import static com.school.science.fair.domain.mother.UsersMother.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -41,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
 @EnableWebMvc
 @AutoConfigureMockMvc
-public class UsersControllerUnitTest {
+public class StudentControllerUnitTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -60,10 +60,10 @@ public class UsersControllerUnitTest {
     @DisplayName("201 - POST /student - Create a Student")
     @Test
     void givenValidCreateStudentRequestWhenCreateStudentThenReturnStudentDtoAnd201Created() throws Exception {
-        CreateUserRequest createStudentRequest = getCreateStudentRequest();
+        CreateUserRequest createStudentRequest = getCreateUserRequest();
 
-        UserDto createdUserDto = getStudentDto();
-        UserResponse studentResponse = getStudentResponse();
+        UserDto createdUserDto = getUserDto();
+        UserResponse studentResponse = getUserResponse();
 
         given(studentService.createUser(any(UserRequestDto.class), any(UserTypeEnum.class))).willReturn(createdUserDto);
 
@@ -89,7 +89,7 @@ public class UsersControllerUnitTest {
         MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.post("/student")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType("application/json")
-                        .content(new ObjectMapper().writeValueAsString(getCreateStudentRequest())))
+                        .content(new ObjectMapper().writeValueAsString(getCreateUserRequest())))
                 .andExpect(status().isBadRequest()).andReturn().getResponse();
 
         assertThat(response.getContentAsString(StandardCharsets.UTF_8)).contains(responseBuilder.getExceptionResponse(USER_ALREADY_EXISTS).getMessage());
@@ -99,7 +99,7 @@ public class UsersControllerUnitTest {
     @Test
     void givenValidRegistrationWhenGetStudentThenReturn200OkAndStudentResponse() throws Exception {
 
-        UserDto returnedStudent = getStudentDto();
+        UserDto returnedStudent = getUserDto();
 
         given(studentService.getUser(anyLong(), any(UserTypeEnum.class))).willReturn(returnedStudent);
 
@@ -134,7 +134,7 @@ public class UsersControllerUnitTest {
     @Test
     void givenValidRegistrationWhenDeleteStudentThenReturn200OkAndStudentWithActiveFalse() throws Exception {
 
-        UserDto deletedStudent = getStudentDto();
+        UserDto deletedStudent = getUserDto();
         deletedStudent.setActive(false);
 
         given(studentService.deleteUser(anyLong(), any(UserTypeEnum.class))).willReturn(deletedStudent);
@@ -170,8 +170,8 @@ public class UsersControllerUnitTest {
     @Test
     void givenValidRegistrationAndRequestNameWhenUpdateStudentThenReturn200OkAndStudentResponse() throws Exception {
 
-        UpdateStudentRequest updateStudentRequest = UpdateStudentRequest.builder().name("Student B").build();
-        UserDto userDto = getStudentDto();
+        UpdateUserRequest updateStudentRequest = UpdateUserRequest.builder().name("Student B").build();
+        UserDto userDto = getUserDto();
         userDto.setName(updateStudentRequest.getName());
 
         given(studentService.updateUser(anyLong(), any(UserRequestDto.class), any(UserTypeEnum.class))).willReturn(userDto);
@@ -191,8 +191,8 @@ public class UsersControllerUnitTest {
     @Test
     void givenValidRegistrationAndRequestEmailWhenUpdateStudentThenReturn200OkAndStudentResponse() throws Exception {
 
-        UpdateStudentRequest updateStudentRequest = UpdateStudentRequest.builder().email("newemail@email.com").build();
-        UserDto userDto = getStudentDto();
+        UpdateUserRequest updateStudentRequest = UpdateUserRequest.builder().email("newemail@email.com").build();
+        UserDto userDto = getUserDto();
         userDto.setEmail(updateStudentRequest.getEmail());
 
         given(studentService.updateUser(anyLong(), any(UserRequestDto.class), any(UserTypeEnum.class))).willReturn(userDto);
@@ -212,7 +212,7 @@ public class UsersControllerUnitTest {
     @Test
     void givenInvalidRegistrationWhenUpdateStudentThenReturn404NotFound() throws Exception {
 
-        UpdateStudentRequest updateStudentRequest = UpdateStudentRequest.builder().email("newemail@email.com").build();
+        UpdateUserRequest updateStudentRequest = UpdateUserRequest.builder().email("newemail@email.com").build();
 
         given(studentService.updateUser(anyLong(), any(UserRequestDto.class), any(UserTypeEnum.class))).willThrow(new ResourceNotFoundException(HttpStatus.NOT_FOUND, STUDENT_NOT_FOUND));
 
@@ -229,7 +229,7 @@ public class UsersControllerUnitTest {
     @Test
     void givenExistingEmailWhenUpdateStudentThenReturn404NotFound() throws Exception {
 
-        UpdateStudentRequest updateStudentRequest = UpdateStudentRequest.builder().email("newemail@email.com").build();
+        UpdateUserRequest updateStudentRequest = UpdateUserRequest.builder().email("newemail@email.com").build();
 
         given(studentService.updateUser(anyLong(), any(UserRequestDto.class), any(UserTypeEnum.class))).willThrow(new ResourceAlreadyExistsException(HttpStatus.BAD_REQUEST, EMAIL_ALREADY_EXISTS));
 
