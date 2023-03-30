@@ -15,4 +15,5 @@ public interface TopicMapper {
     List<Topic> listDtoToListEntity (List<TopicDto> topicDto);
     List<TopicDto> listEntityToListDto(List<Topic> topics);
     List<TopicResponse> listDtoToListResponse(List<TopicDto> topics);
+    Topic dtoToEntity(TopicDto topicDto);
 }

@@ -14,12 +14,12 @@
     :construction:  Project in Development  :construction:
 </h3>
 
-![tests](https://img.shields.io/badge/passed%20tests-117-informational)
+![tests](https://img.shields.io/badge/passed%20tests-121-informational)
 
-![version](https://img.shields.io/badge/version-v0.3.0-brightgreen)
+![version](https://img.shields.io/badge/version-v0.3.1-brightgreen)
 
 <h2 align="center"> :alembic: Introduction / Introdução :alembic: </h2>
-<p> :us: Hello! And welcome to this project for a school science fair. The main objective behind this project is to study and to use as portfolio.
+<p> :us: Hello! And welcome to this icProject for a school science fair. The main objective behind this icProject is to study and to use as portfolio.
 Hope you enjoy as much as I do.
 
 :brazil: Olá! E bem-vindo a este projeto para uma feira de ciências escolar. O principal objetivo do projeto é estudar e usá-lo como portfólio. Espero que goste tanto quanto eu!
@@ -88,10 +88,10 @@ The front end of this application can be found here: **** WILL BE DEVELOPED AFTE
 O front end da aplicação pode ser encontrado aqui: **** SERÁ DESENVOLVIDO APÓS O TÉRMINO DO BACK END ****
 </p>
 
-<h2 align="center"> :hammer_and_wrench: How can I build this project locally? / Como posso rodar esse projeto localmente? </h2>
+<h2 align="center"> :hammer_and_wrench: How can I build this icProject locally? / Como posso rodar esse projeto localmente? </h2>
 <p>
 
-:us: To run it in the current state of development, you can just clone this repository, under the main branch you will find the latest stable release, you can open it using the IDE you like, download dependencies and run it (OBS: it is important to run mvn clean compile before running the project)! Then, use Postman to make requests to the API.
+:us: To run it in the current state of development, you can just clone this repository, under the main branch you will find the latest stable release, you can open it using the IDE you like, download dependencies and run it (OBS: it is important to run mvn clean compile before running the icProject)! Then, use Postman to make requests to the API.
 It runs in the localhost 8080 port, so you can use the links:
 
 - Swagger: http://localhost:8080/swagger-ui/index.html

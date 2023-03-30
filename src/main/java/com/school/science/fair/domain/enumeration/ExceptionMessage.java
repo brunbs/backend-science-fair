@@ -15,6 +15,7 @@ public enum ExceptionMessage {
   //Area of Knowledge and Topics messages
   AREA_OF_KNOWLEDGE_ALREADY_EXISTS("error.area-of-knowledge.already-exists-error"),
   AREA_OF_KNOWLEDGE_NOT_FOUND("error.area-of-knowledge.not-found-error"),
+  TOPIC_NOT_FOUND("error.topic.not-found-error"),
 
   // Grade System exception messages
   GRADE_VALUES_BIGGER_THEN_GRADE_SYSTEM_MAX_VALUE("error.grade.grades-values-bigger-than-grade-system-max-value-error"),
