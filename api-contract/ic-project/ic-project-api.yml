@@ -1,0 +1,161 @@
+openapi: 3.0.1
+info:
+  title: Science Fair System
+  description: Documentation of the Science Fair Endpoints
+  version: 0.0.1
+
+tags:
+  - name: project
+    description: Projects endpoints
+
+paths:
+  /project/science-fair/{scienceFairId}:
+    post:
+      tags:
+        - project
+      summary: Create Project
+      operationId: createProject
+      parameters:
+        - name: scienceFairId
+          in: path
+          description: Science Fair id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Project info to save
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+
+
+components:
+  schemas:
+    CreateProjectRequest:
+      type: object
+      required:
+        - title
+        - description
+        - topicId
+        - studentsRegistrations
+      properties:
+        title:
+          type: string
+          example: Project Name
+        description:
+          type: string
+          example: Project Description
+        topicId:
+          type: integer
+          format: int64
+          example: 1
+        studentsRegistrations:
+          type: array
+          items:
+            type: integer
+            format: int64
+            example: 1
+
+    ProjectResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        title:
+          type: string
+          example: Project Title
+        description:
+          type: string
+          example: Project Description
+        topic:
+          type: object
+          $ref: '#/components/schemas/TopicResponse'
+        students:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectUserResponse'
+        teacher:
+          type: object
+          $ref: '#/components/schemas/ProjectUserResponse'
+        grades:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectGradeResponse'
+
+    TopicResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Biology
+
+    ProjectUserResponse:
+      type: object
+      properties:
+        registration:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Biology
+        email:
+          type: string
+          example: User name
+
+    ProjectGradeResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Grade A
+        description:
+          type: string
+          example: Grade description
+        maxValue:
+          type: number
+          format: double
+        gradeValue:
+          type: number
+          format: double
+
+    BadRequestResponse:
+      type: object
+      properties:
+        propertyName:
+          type: string
+          description: Error message
+          example: can't be empty
+
+    ResourceNotFoundResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: Error timestamp
+          example: 17-Feb-2023 04:07:04
+        message:
+          type: string
+          description: Error message
+          example: Science Fair not found

@@ -117,4 +117,13 @@ public class AreaOfKnowledgeServiceImpl implements AreaOfKnowledgeService {
         }
         return topicsToReturn;
     }
+
+    @Override
+    public Topic getTopicOrThrowException(Long id) {
+        Optional<Topic> foundTopic = topicRepository.findById(id);
+        if(foundTopic.isPresent()) {
+            return foundTopic.get();
+        }
+        throw new ResourceNotFoundException(HttpStatus.NOT_FOUND, ExceptionMessage.TOPIC_NOT_FOUND);
+    }
 }

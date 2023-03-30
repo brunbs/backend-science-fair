@@ -159,4 +159,19 @@ public class GradeSystemMother {
         return Arrays.asList(gradeSystemA, gradeSystemB, gradeSystemC);
     }
 
+    public static List<GradeDto> getGradeDtoList() {
+        return Arrays.asList(GradeDto.builder()
+                        .id(1l)
+                        .name("Grade A")
+                        .description("Existent grade")
+                        .maxValue(0.3)
+                        .build(),
+                GradeDto.builder()
+                        .id(2l)
+                        .name("Grade B")
+                        .description("New Grade")
+                        .maxValue(0.7)
+                        .build());
+    }
+
 }

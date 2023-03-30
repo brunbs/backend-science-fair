@@ -64,6 +64,10 @@ public class AreaOfKnowledgeMother {
                 TopicDto.builder().id(2l).name("Topic B").build());
     }
 
+    public static TopicDto getATopicDto() {
+        return TopicDto.builder().id(1l).name("Topic A").build();
+    }
+
     public static List<AreaOfKnowledge> getAllAreaOfKnowledgeList() {
         AreaOfKnowledge areaA = getAreaOfKnowledgeEntity();
         areaA.setActive(true);
