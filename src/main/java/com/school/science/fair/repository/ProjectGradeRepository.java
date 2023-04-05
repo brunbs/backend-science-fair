@@ -10,5 +10,6 @@ import java.util.List;
 public interface ProjectGradeRepository extends JpaRepository<ProjectGrade, ProjectGradePK> {
 
     List<ProjectGrade> findByIdIcProjectId(Long id);
+    List<ProjectGrade> findAllByIdIcProjectId(Long id);
 
 }

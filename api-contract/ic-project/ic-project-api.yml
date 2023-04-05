@@ -43,6 +43,34 @@ paths:
               schema:
                 $ref: '#/components/schemas/BadRequestResponse'
 
+  /project/{projectId}:
+    get:
+      tags:
+        - project
+      summary: Get a Project details
+      operationId: getProject
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+
 
 components:
   schemas:
@@ -98,6 +126,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProjectGradeResponse'
+        gradeSum:
+          type: number
+          format: double
+
 
     TopicResponse:
       type: object

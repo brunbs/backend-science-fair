@@ -57,4 +57,15 @@ public class UsersMother {
                 .build();
     }
 
+    public static Users getTeacherEntity() {
+        return Users.builder()
+                .registration(3l)
+                .name("Teacher")
+                .email("teaher@email.com")
+                .active(true)
+                .password("1")
+                .userType(UserTypeEnum.TEACHER)
+                .build();
+    }
+
 }

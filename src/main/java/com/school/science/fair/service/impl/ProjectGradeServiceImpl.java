@@ -49,4 +49,10 @@ public class ProjectGradeServiceImpl implements ProjectGradeService {
 
         return projectGradeDtos;
     }
+
+    @Override
+    public List<ProjectGradeDto> getProjectGrades(Long projectId) {
+        List<ProjectGrade> projectGrades = projectGradeRepository.findAllByIdIcProjectId(projectId);
+        return projectGradeMapper.listEntityToListDto(projectGrades);
+    }
 }

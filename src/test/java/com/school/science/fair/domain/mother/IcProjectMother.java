@@ -9,10 +9,10 @@ import java.util.List;
 
 import static com.school.science.fair.domain.mother.AreaOfKnowledgeMother.getATopicDto;
 import static com.school.science.fair.domain.mother.AreaOfKnowledgeMother.getTopicEntity;
-import static com.school.science.fair.domain.mother.ProjectGradeDtoMother.getProjectGradeDtos;
+import static com.school.science.fair.domain.mother.ProjectGradeMother.getProjectGradeDtos;
 import static com.school.science.fair.domain.mother.ScienceFairMother.getScienceFairEntity;
-import static com.school.science.fair.domain.mother.UserProjectMother.getStudentsUserProjectDtoList;
-import static com.school.science.fair.domain.mother.UserProjectMother.getTeacherUserProjectDto;
+import static com.school.science.fair.domain.mother.ProjectUserMother.getStudentsUserProjectDtoList;
+import static com.school.science.fair.domain.mother.ProjectUserMother.getTeacherUserProjectDto;
 
 public class IcProjectMother {
 
