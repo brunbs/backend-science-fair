@@ -3,6 +3,7 @@ package com.school.science.fair.service;
 import com.school.science.fair.domain.dto.GradeDto;
 import com.school.science.fair.domain.dto.ProjectDto;
 import com.school.science.fair.domain.dto.ProjectGradeDto;
+import com.school.science.fair.domain.entity.ProjectGrade;
 import com.school.science.fair.domain.mapper.GradeMapper;
 import com.school.science.fair.domain.mapper.IcProjectMapper;
 import com.school.science.fair.domain.mapper.ProjectGradeMapper;
@@ -22,8 +23,10 @@ import java.util.List;
 
 import static com.school.science.fair.domain.mother.GradeSystemMother.getGradeDtoList;
 import static com.school.science.fair.domain.mother.IcProjectMother.getProjectDto;
+import static com.school.science.fair.domain.mother.ProjectGradeMother.getProjectGrades;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 
@@ -60,6 +63,22 @@ public class ProjectGradeServiceImplUnitTest {
         projectGradeDtos.forEach(grade -> {
             assertThat(grade.getGradeValue()).isEqualTo(0.0);
         });
+
+    }
+
+    @DisplayName("Get a project grades")
+    @Test
+    void givenValidProjectWhenGetProjectGradesThenReturnsGradeDtoList() {
+        List<ProjectGrade> projectGrades = getProjectGrades();
+        given(projectGradeRepository.findAllByIdIcProjectId(anyLong())).willReturn(projectGrades);
+
+        List<ProjectGradeDto> projectGradeDtos = projectGradeService.getProjectGrades(1l);
+        for(int i = 0; i < projectGradeDtos.size(); i++) {
+            assertThat(projectGradeDtos.get(i).getGradeValue()).isEqualTo(projectGrades.get(i).getGradeValue());
+            assertThat(projectGradeDtos.get(i).getName()).isEqualTo(projectGrades.get(i).getGradeName());
+            assertThat(projectGradeDtos.get(i).getDescription()).isEqualTo(projectGrades.get(i).getGradeDescription());
+        }
+
 
     }
 

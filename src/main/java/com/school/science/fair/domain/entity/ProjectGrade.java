@@ -1,6 +1,7 @@
 package com.school.science.fair.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.EmbeddedId;

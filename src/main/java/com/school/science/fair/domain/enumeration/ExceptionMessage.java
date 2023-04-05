@@ -24,6 +24,9 @@ public enum ExceptionMessage {
   // Science Fair Exception messages
   SCIENCE_FAIR_NOT_FOUND("error.science-fair.not-found.error"),
 
+  // Project Exception messages
+  PROJECT_NOT_FOUND("error.project.not-found.error"),
+
   // Student exception messages
   STUDENT_NOT_FOUND("error.student.not-found-error"),
   USER_NOT_FOUND("error.user.not-found-error"),

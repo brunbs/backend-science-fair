@@ -14,9 +14,9 @@
     :construction:  Project in Development  :construction:
 </h3>
 
-![tests](https://img.shields.io/badge/passed%20tests-121-informational)
+![tests](https://img.shields.io/badge/passed%20tests-127-informational)
 
-![version](https://img.shields.io/badge/version-v0.3.1-brightgreen)
+![version](https://img.shields.io/badge/version-v0.3.2-brightgreen)
 
 <h2 align="center"> :alembic: Introduction / Introdução :alembic: </h2>
 <p> :us: Hello! And welcome to this icProject for a school science fair. The main objective behind this icProject is to study and to use as portfolio.

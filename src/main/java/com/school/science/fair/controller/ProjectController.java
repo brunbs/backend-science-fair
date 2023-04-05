@@ -27,4 +27,10 @@ public class ProjectController implements ProjectApi {
         ProjectDto createdProject = icProjectService.createProject(scienceFairId, projectToCreate);
         return ResponseEntity.status(HttpStatus.CREATED).body(icProjectMapper.dtoToResponse(createdProject));
     }
+
+    @Override
+    public ResponseEntity<ProjectResponse> getProject(Long projectId) {
+        ProjectDto foundProject = icProjectService.getProject(projectId);
+        return ResponseEntity.ok().body(icProjectMapper.dtoToResponse(foundProject));
+    }
 }

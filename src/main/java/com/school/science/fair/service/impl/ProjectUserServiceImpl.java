@@ -1,7 +1,7 @@
 package com.school.science.fair.service.impl;
 
 import com.school.science.fair.domain.dto.ProjectDto;
-import com.school.science.fair.domain.dto.UserProjectDto;
+import com.school.science.fair.domain.dto.ProjectUserDto;
 import com.school.science.fair.domain.entity.IcProject;
 import com.school.science.fair.domain.entity.ProjectUser;
 import com.school.science.fair.domain.entity.Users;
@@ -33,22 +33,39 @@ public class ProjectUserServiceImpl implements ProjectUserService {
     private IcProjectMapper icProjectMapper;
 
     @Override
-    public List<UserProjectDto> insertUsersInProject(List<Long> usersRegistrations, ProjectDto projectDto) {
+    public List<ProjectUserDto> insertUsersInProject(List<Long> usersRegistrations, ProjectDto projectDto) {
 
         IcProject project = icProjectMapper.DtoToEntity(projectDto);
 
         List<Users> users = new ArrayList<>();
         usersRegistrations.forEach(registration -> users.add(userMapper.dtoToEntity(userService.getUser(registration, UserTypeEnum.STUDENT))));
 
-        List<UserProjectDto> usersDto = new ArrayList<>();
+        List<ProjectUserDto> usersDto = new ArrayList<>();
         for(Users user : users) {
             ProjectUser projectUser = new ProjectUser();
             projectUser.setUsers(user);
             projectUser.setIcProject(project);
             projectUser.setRole(user.getUserType());
             projectUserRepository.save(projectUser);
-            usersDto.add(UserProjectDto.builder().name(user.getName()).email(user.getEmail()).registration(user.getRegistration()).build());
+            usersDto.add(ProjectUserDto.builder().name(user.getName()).role(user.getUserType()).email(user.getEmail()).registration(user.getRegistration()).build());
         }
         return usersDto;
+    }
+
+    @Override
+    public List<ProjectUserDto> getProjectUsers(Long projectId) {
+        List<ProjectUserDto> usersDto = new ArrayList<>();
+        List<ProjectUser> projectUsers = projectUserRepository.findAllByIcProjectId(projectId);
+        projectUsers.forEach(projectUser -> usersDto.add(buildProjectUserDto(projectUser)));
+        return usersDto;
+    }
+
+    private ProjectUserDto buildProjectUserDto(ProjectUser projectUser) {
+        return ProjectUserDto.builder()
+                .name(projectUser.getUsers().getName())
+                .role(projectUser.getUsers().getUserType())
+                .email(projectUser.getUsers().getEmail())
+                .registration(projectUser.getUsers().getRegistration())
+                .build();
     }
 }

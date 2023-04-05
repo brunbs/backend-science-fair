@@ -2,7 +2,7 @@ package com.school.science.fair.service;
 
 import com.school.science.fair.domain.dto.ProjectDto;
 import com.school.science.fair.domain.dto.UserDto;
-import com.school.science.fair.domain.dto.UserProjectDto;
+import com.school.science.fair.domain.dto.ProjectUserDto;
 import com.school.science.fair.domain.entity.ProjectUser;
 import com.school.science.fair.domain.enumeration.UserTypeEnum;
 import com.school.science.fair.domain.mapper.IcProjectMapper;
@@ -22,9 +22,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static com.school.science.fair.domain.mother.IcProjectMother.getProjectDto;
+import static com.school.science.fair.domain.mother.ProjectUserMother.getProjectUsers;
 import static com.school.science.fair.domain.mother.UsersMother.getUserDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -61,9 +63,21 @@ public class ProjectUserServiceImplUnitTest {
         given(userService.getUser(2l, UserTypeEnum.STUDENT)).willReturn(studentB);
         given(projectUserRepository.save(any(ProjectUser.class))).willReturn(mock(ProjectUser.class));
 
-        List<UserProjectDto> returnedUserProjectDtos = projectUserService.insertUsersInProject(studentsRegistrations, projectDto);
+        List<ProjectUserDto> returnedProjectUserDtos = projectUserService.insertUsersInProject(studentsRegistrations, projectDto);
 
-        assertThat(returnedUserProjectDtos.get(0)).usingRecursiveComparison().ignoringFields("password", "active", "userType").isEqualTo(studentA);
-        assertThat(returnedUserProjectDtos.get(1)).usingRecursiveComparison().ignoringFields("password", "active", "userType").isEqualTo(studentB);
+        assertThat(returnedProjectUserDtos.get(0)).usingRecursiveComparison().ignoringFields("password", "active", "userType", "role").isEqualTo(studentA);
+        assertThat(returnedProjectUserDtos.get(1)).usingRecursiveComparison().ignoringFields("password", "active", "userType", "role").isEqualTo(studentB);
+    }
+
+    @DisplayName("Get a project users")
+    @Test
+    void givenValidProjectWhenGetProjectUsersThenReturnListWithProjectUserDto() {
+        List<ProjectUser> projectUsers = getProjectUsers();
+        given(projectUserRepository.findAllByIcProjectId(anyLong())).willReturn(projectUsers);
+
+        List<ProjectUserDto> projectUserDtos = projectUserService.getProjectUsers(1l);
+        assertThat(projectUserDtos.get(0)).usingRecursiveComparison().ignoringFields("icProject", "id", "password", "active", "userType", "projectUser", "role").isEqualTo(projectUsers.get(0).getUsers());
+        assertThat(projectUserDtos.get(1)).usingRecursiveComparison().ignoringFields("icProject", "id", "password", "active", "userType", "projectUser", "role").isEqualTo(projectUsers.get(1).getUsers());
+        assertThat(projectUserDtos.get(2)).usingRecursiveComparison().ignoringFields("icProject", "id", "password", "active", "userType", "projectUser", "role").isEqualTo(projectUsers.get(2).getUsers());
     }
 }

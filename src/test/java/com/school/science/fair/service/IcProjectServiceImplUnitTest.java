@@ -3,6 +3,8 @@ package com.school.science.fair.service;
 import com.school.science.fair.domain.dto.*;
 import com.school.science.fair.domain.entity.IcProject;
 import com.school.science.fair.domain.entity.Topic;
+import com.school.science.fair.domain.enumeration.UserTypeEnum;
+import com.school.science.fair.domain.exception.ResourceNotFoundException;
 import com.school.science.fair.domain.mapper.GradeMapper;
 import com.school.science.fair.domain.mapper.IcProjectMapper;
 import com.school.science.fair.domain.mapper.ScienceFairMapper;
@@ -22,14 +24,18 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.util.List;
+import java.util.Optional;
 
+import static com.school.science.fair.domain.enumeration.ExceptionMessage.PROJECT_NOT_FOUND;
 import static com.school.science.fair.domain.mother.AreaOfKnowledgeMother.getTopicEntity;
 import static com.school.science.fair.domain.mother.IcProjectMother.getCreateProjectDto;
 import static com.school.science.fair.domain.mother.IcProjectMother.getIcProjectEntity;
-import static com.school.science.fair.domain.mother.ProjectGradeDtoMother.getProjectGradeDtos;
+import static com.school.science.fair.domain.mother.ProjectGradeMother.getProjectGradeDtos;
+import static com.school.science.fair.domain.mother.ProjectUserMother.getProjectUserDtos;
+import static com.school.science.fair.domain.mother.ProjectUserMother.getStudentsUserProjectDtoList;
 import static com.school.science.fair.domain.mother.ScienceFairMother.getScienceFairDto;
-import static com.school.science.fair.domain.mother.UserProjectMother.getStudentsUserProjectDtoList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 
@@ -74,13 +80,13 @@ public class IcProjectServiceImplUnitTest {
         Topic foundTopic = getTopicEntity();
         CreateProjectDto createProjectDto = getCreateProjectDto();
         IcProject createdIcProjectEntity = getIcProjectEntity();
-        List<UserProjectDto> userProjectDtos = getStudentsUserProjectDtoList();
+        List<ProjectUserDto> projectUserDtos = getStudentsUserProjectDtoList();
         List<ProjectGradeDto> projectGradeDtos = getProjectGradeDtos();
 
         given(scienceFairService.getScienceFair(anyLong())).willReturn(foundScienceFair);
         given(areaOfKnowledgeService.getTopicOrThrowException(anyLong())).willReturn(foundTopic);
         given(icProjectRepository.save(any(IcProject.class))).willReturn(createdIcProjectEntity);
-        given(projectUserService.insertUsersInProject(anyList(), any(ProjectDto.class))).willReturn(userProjectDtos);
+        given(projectUserService.insertUsersInProject(anyList(), any(ProjectDto.class))).willReturn(projectUserDtos);
         given(projectGradeService.insertGradesIntoProject(anyList(), any(ProjectDto.class))).willReturn(projectGradeDtos);
 
         ProjectDto createdProject = icProjectService.createProject(1l, createProjectDto);
@@ -89,9 +95,43 @@ public class IcProjectServiceImplUnitTest {
         assertThat(createdProject.getDescription()).isEqualTo(createProjectDto.getDescription());
         assertThat(createdProject.getTopic().getId()).isEqualTo(foundTopic.getId());
         assertThat(createdProject.getTopic().getName()).isEqualTo(foundTopic.getName());
-        createdProject.getStudents().forEach(student -> assertThat(student).isIn(userProjectDtos));
+        createdProject.getStudents().forEach(student -> assertThat(student).isIn(projectUserDtos));
         assertThat(createdProject.getTeacher()).isNull();
         createdProject.getGrades().forEach(grade -> assertThat(grade).isIn(projectGradeDtos));
+    }
+
+    @DisplayName("Get project details")
+    @Test
+    void givenValidProjectIdWhenGetProjectThenReturnsProjectDto() {
+        IcProject foundProject = getIcProjectEntity();
+        List<ProjectUserDto> projectUsers = getProjectUserDtos();
+        List<ProjectGradeDto> projectGrades = getProjectGradeDtos();
+        Double expectedGradeSum = 0.0;
+        for(ProjectGradeDto gradeDto : projectGrades) {
+            expectedGradeSum += gradeDto.getGradeValue();
+        }
+
+        given(icProjectRepository.findById(anyLong())).willReturn(Optional.of(foundProject));
+        given(projectUserService.getProjectUsers(anyLong())).willReturn(projectUsers);
+        given(projectGradeService.getProjectGrades(anyLong())).willReturn(projectGrades);
+
+        ProjectDto projectDto = icProjectService.getProject(1l);
+
+        assertThat(projectDto.getTeacher()).isEqualTo(projectUsers.get(2));
+        assertThat(projectDto.getTeacher().getRole()).isEqualTo(UserTypeEnum.TEACHER);
+        projectDto.getStudents().forEach(student -> assertThat(student.getRole()).isEqualTo(UserTypeEnum.STUDENT));
+        projectDto.getStudents().forEach(student -> assertThat(student).isIn(projectUsers));
+        assertThat(projectDto).usingRecursiveComparison().ignoringFields("grades", "students", "teacher", "scienceFair", "gradeSum").isEqualTo(foundProject);
+
+        assertThat(projectDto.getGradeSum()).isEqualTo(expectedGradeSum);
+    }
+
+    @DisplayName("Get project with invalid ID throws Resource Not Found Exception")
+    @Test
+    void givenInvalidIdWhenGetProjectThenThrowsResourceNotFoundException() {
+        given(icProjectRepository.findById(anyLong())).willReturn(Optional.empty());
+
+        assertThatThrownBy(() -> icProjectService.getProject(1l)).isInstanceOf(ResourceNotFoundException.class).hasMessage(PROJECT_NOT_FOUND.getMessageKey());
     }
 
 }

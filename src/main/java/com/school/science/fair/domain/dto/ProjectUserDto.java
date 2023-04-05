@@ -6,8 +6,9 @@ import lombok.Data;
 
 @Data
 @Builder
-public class UserProjectDto {
+public class ProjectUserDto {
     private Long registration;
     private String name;
     private String email;
+    private UserTypeEnum role;
 }

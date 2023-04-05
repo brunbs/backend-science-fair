@@ -285,9 +285,9 @@ public class TeacherControllerUnitTest {
                 UserDto.builder().registration(3l).active(true).userType(UserTypeEnum.TEACHER).build()
         );
 
-        given(userService.getAllUsersByType(UserTypeEnum.TEACHER)).willReturn(returnedUsers);
+        given(userService.getAllActiveUsersByType(UserTypeEnum.TEACHER)).willReturn(returnedUsers);
 
-        MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get("/teacher/all"))
+        MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get("/teacher/all/active"))
                 .andExpect(status().isOk()).andReturn().getResponse();
 
         List<UserResponse> userResponses = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), new TypeReference<List<UserResponse>>() {

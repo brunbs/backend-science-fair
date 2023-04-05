@@ -9,5 +9,6 @@ import java.util.List;
 public interface ProjectGradeService {
 
     List<ProjectGradeDto> insertGradesIntoProject(List<GradeDto> grades, ProjectDto projectDto);
+    List<ProjectGradeDto> getProjectGrades(Long projectId);
 
 }
