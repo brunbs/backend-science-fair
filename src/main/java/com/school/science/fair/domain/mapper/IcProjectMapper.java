@@ -8,6 +8,8 @@ import com.school.science.fair.domain.entity.IcProject;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 import static org.mapstruct.ReportingPolicy.IGNORE;
 
 @Mapper(componentModel = "spring",  unmappedTargetPolicy = IGNORE)
@@ -18,4 +20,6 @@ public interface IcProjectMapper {
     IcProject createDtoToEntity(CreateProjectDto createProjectDto);
     CreateProjectDto createRequestToCreateDto (CreateProjectRequest createProjectRequest);
     ProjectResponse dtoToResponse(ProjectDto projectDto);
+    List<ProjectDto> listEntityToListDto(List<IcProject> entities);
+    List<ProjectResponse> listDtoToListResponse(List<ProjectDto> projectDtos);
 }

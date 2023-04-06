@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class ProjectController implements ProjectApi {
 
@@ -32,5 +34,11 @@ public class ProjectController implements ProjectApi {
     public ResponseEntity<ProjectResponse> getProject(Long projectId) {
         ProjectDto foundProject = icProjectService.getProject(projectId);
         return ResponseEntity.ok().body(icProjectMapper.dtoToResponse(foundProject));
+    }
+
+    @Override
+    public ResponseEntity<List<ProjectResponse>> getAllScienceFairProjects(Long scienceFairId) {
+        List<ProjectDto> projectDtos = icProjectService.getAllProjectsFromScienceFair(scienceFairId);
+        return ResponseEntity.ok().body(icProjectMapper.listDtoToListResponse(projectDtos));
     }
 }

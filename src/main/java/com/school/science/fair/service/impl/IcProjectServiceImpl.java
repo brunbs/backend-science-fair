@@ -69,21 +69,16 @@ public class IcProjectServiceImpl implements IcProjectService {
     @Override
     public ProjectDto getProject(Long projectId) {
         IcProject foundProject = findProjectOrThrowException(projectId);
-        ProjectDto projectToReturn = icProjectMapper.entityToDto(foundProject);
-        List<ProjectUserDto> projectUsers = projectUserService.getProjectUsers(projectId);
-        List<ProjectUserDto> projectStudents = new ArrayList<>();
-        projectUsers.forEach(projectUser -> {
-            if(projectUser.getRole().equals(UserTypeEnum.STUDENT)) {
-                projectStudents.add(projectUser);
-            } else if(projectUser.getRole().equals(UserTypeEnum.TEACHER)) {
-                projectToReturn.setTeacher(projectUser);
-            }
-        });
-        projectToReturn.setStudents(projectStudents);
-        List<ProjectGradeDto> projectGrades = projectGradeService.getProjectGrades(projectId);
-        projectToReturn.setGrades(projectGrades);
-        projectToReturn.updateGradeSum();
-        return projectToReturn;
+        return getProjectDetails(icProjectMapper.entityToDto(foundProject));
+    }
+
+    @Override
+    public List<ProjectDto> getAllProjectsFromScienceFair(Long scienceFairId) {
+        ScienceFairDto foundScienceFair = scienceFairService.getScienceFair(scienceFairId);
+        List<IcProject> foundProjects = icProjectRepository.findAllByScienceFairId(foundScienceFair.getId());
+        List<ProjectDto> projectDtos = icProjectMapper.listEntityToListDto(foundProjects);
+        projectDtos.forEach(this::getProjectDetails);
+        return projectDtos;
     }
 
     private IcProject findProjectOrThrowException(Long projectId) {
@@ -92,5 +87,22 @@ public class IcProjectServiceImpl implements IcProjectService {
             throw new ResourceNotFoundException(HttpStatus.NOT_FOUND, ExceptionMessage.PROJECT_NOT_FOUND);
         }
         return foundProject.get();
+    }
+
+    private ProjectDto getProjectDetails(ProjectDto projectDto) {
+        List<ProjectUserDto> projectUsers = projectUserService.getProjectUsers(projectDto.getId());
+        List<ProjectUserDto> projectStudents = new ArrayList<>();
+        projectUsers.forEach(projectUser -> {
+            if(projectUser.getRole().equals(UserTypeEnum.STUDENT)) {
+                projectStudents.add(projectUser);
+            } else if(projectUser.getRole().equals(UserTypeEnum.TEACHER)) {
+                projectDto.setTeacher(projectUser);
+            }
+        });
+        projectDto.setStudents(projectStudents);
+        List<ProjectGradeDto> projectGrades = projectGradeService.getProjectGrades(projectDto.getId());
+        projectDto.setGrades(projectGrades);
+        projectDto.updateGradeSum();
+        return projectDto;
     }
 }
