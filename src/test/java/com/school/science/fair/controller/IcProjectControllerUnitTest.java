@@ -1,12 +1,12 @@
 package com.school.science.fair.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.school.science.fair.domain.CreateProjectRequest;
 import com.school.science.fair.domain.ProjectResponse;
 import com.school.science.fair.domain.builder.ExceptionResponseBuilder;
 import com.school.science.fair.domain.dto.CreateProjectDto;
 import com.school.science.fair.domain.dto.ProjectDto;
-import com.school.science.fair.domain.enumeration.ExceptionMessage;
 import com.school.science.fair.domain.exception.ResourceNotFoundException;
 import com.school.science.fair.domain.mapper.IcProjectMapper;
 import com.school.science.fair.service.impl.IcProjectServiceImpl;
@@ -27,13 +27,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
-import static com.school.science.fair.domain.enumeration.ExceptionMessage.GRADE_SYSTEM_NOT_FOUND;
 import static com.school.science.fair.domain.enumeration.ExceptionMessage.PROJECT_NOT_FOUND;
+import static com.school.science.fair.domain.enumeration.ExceptionMessage.SCIENCE_FAIR_NOT_FOUND;
 import static com.school.science.fair.domain.mother.IcProjectMother.getCreateProjectRequest;
 import static com.school.science.fair.domain.mother.IcProjectMother.getProjectDto;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -86,7 +86,6 @@ public class IcProjectControllerUnitTest {
     @DisplayName("200 - GET /project/{projectId} - get project details")
     @Test
     void givenValidProjectIdWhenGetProjectThenReturns200OkAndProjectResponse() throws Exception {
-
         ProjectDto projectDto = getProjectDto();
 
         given(icProjectService.getProject(anyLong())).willReturn(projectDto);
@@ -102,12 +101,38 @@ public class IcProjectControllerUnitTest {
     @DisplayName("404 - GET /project/{projectId} get project details with invalid id")
     @Test
     void givenInvalidProjectIdWhenGetProjectThenReturns404NotFound() throws Exception {
-
         given(icProjectService.getProject(anyLong())).willThrow(new ResourceNotFoundException(HttpStatus.NOT_FOUND, PROJECT_NOT_FOUND));
 
         MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get("/project/1")).andExpect(status().isNotFound()).andReturn().getResponse();
         assertThat(response.getContentAsString(StandardCharsets.UTF_8)).contains(responseBuilder.getExceptionResponse(PROJECT_NOT_FOUND).getMessage());
+    }
 
+    @DisplayName("200 - GET /project/science-fair/{scienceFairId}/projects get all projects from a science fair")
+    @Test
+    void givenValidScienceFairIdWhenGetAllProjectsFromScienceFairThenReturns200OkAndProjectResponseList() throws Exception {
+        ProjectDto projectADto = getProjectDto();
+        ProjectDto projectBDto = getProjectDto();
+        projectBDto.setTitle("Project B");
+        projectBDto.setDescription("Project B Description");
+        List<ProjectDto> projectDtos = List.of(projectADto, projectBDto);
+
+        given(icProjectService.getAllProjectsFromScienceFair(anyLong())).willReturn(projectDtos);
+
+        MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get("/project/science-fair/1/projects"))
+                .andExpect(status().isOk()).andReturn().getResponse();
+
+        List<ProjectResponse> returnedProjects = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), new TypeReference<List<ProjectResponse>>() {});
+        assertThat(returnedProjects).usingRecursiveComparison().isEqualTo(projectDtos);
+    }
+
+    @DisplayName("404 - GET /project/science-fair/{scienceFairId}/projects with invalid scienceFairId")
+    @Test
+    void givenInvalidScienceFairIdWhenGetAllProjectsFromScienceFairThenReturns404NotFound() throws Exception {
+        given(icProjectService.getAllProjectsFromScienceFair(anyLong())).willThrow(new ResourceNotFoundException(HttpStatus.NOT_FOUND, SCIENCE_FAIR_NOT_FOUND));
+
+        MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get("/project/science-fair/1/projects"))
+                .andExpect(status().isNotFound()).andReturn().getResponse();
+        assertThat(response.getContentAsString(StandardCharsets.UTF_8)).contains(responseBuilder.getExceptionResponse(SCIENCE_FAIR_NOT_FOUND).getMessage());
     }
 
 }

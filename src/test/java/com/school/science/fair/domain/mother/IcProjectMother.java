@@ -56,4 +56,24 @@ public class IcProjectMother {
                 .build();
     }
 
+    public static List<IcProject> getProjectEntityList() {
+        return List.of(
+                IcProject.builder()
+                        .id(1l)
+                        .scienceFair(getScienceFairEntity())
+                        .topic(getTopicEntity())
+                        .title("Project A")
+                        .description("Project A Description")
+                        .build(),
+                IcProject.builder()
+                        .id(2l)
+                        .scienceFair(getScienceFairEntity())
+                        .topic(getTopicEntity())
+                        .title("Project B")
+                        .description("Project B Description")
+                        .build()
+
+        );
+    }
+
 }

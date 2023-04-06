@@ -2,6 +2,7 @@ package com.school.science.fair.service;
 
 import com.school.science.fair.domain.dto.*;
 import com.school.science.fair.domain.entity.IcProject;
+import com.school.science.fair.domain.entity.ScienceFair;
 import com.school.science.fair.domain.entity.Topic;
 import com.school.science.fair.domain.enumeration.UserTypeEnum;
 import com.school.science.fair.domain.exception.ResourceNotFoundException;
@@ -28,12 +29,12 @@ import java.util.Optional;
 
 import static com.school.science.fair.domain.enumeration.ExceptionMessage.PROJECT_NOT_FOUND;
 import static com.school.science.fair.domain.mother.AreaOfKnowledgeMother.getTopicEntity;
-import static com.school.science.fair.domain.mother.IcProjectMother.getCreateProjectDto;
-import static com.school.science.fair.domain.mother.IcProjectMother.getIcProjectEntity;
+import static com.school.science.fair.domain.mother.IcProjectMother.*;
 import static com.school.science.fair.domain.mother.ProjectGradeMother.getProjectGradeDtos;
 import static com.school.science.fair.domain.mother.ProjectUserMother.getProjectUserDtos;
 import static com.school.science.fair.domain.mother.ProjectUserMother.getStudentsUserProjectDtoList;
 import static com.school.science.fair.domain.mother.ScienceFairMother.getScienceFairDto;
+import static com.school.science.fair.domain.mother.ScienceFairMother.getScienceFairEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
@@ -132,6 +133,44 @@ public class IcProjectServiceImplUnitTest {
         given(icProjectRepository.findById(anyLong())).willReturn(Optional.empty());
 
         assertThatThrownBy(() -> icProjectService.getProject(1l)).isInstanceOf(ResourceNotFoundException.class).hasMessage(PROJECT_NOT_FOUND.getMessageKey());
+    }
+
+    @DisplayName("Get all projects from a science fair")
+    @Test
+    void givenValidScienceFairIdWhenGetAllScienceFairProjectsThenReturnsProjectDtoList() {
+        ScienceFairDto foundScienceFairDto = getScienceFairDto();
+        List<IcProject> foundProjects = getProjectEntityList();
+        List<ProjectUserDto> projectAUsers = getProjectUserDtos();
+        List<ProjectUserDto> projectBUsers = getProjectUserDtos();
+        projectBUsers.get(0).setRegistration(4L);
+        projectBUsers.get(1).setRegistration(5L);
+        projectBUsers.get(2).setRegistration(6L);
+        List<ProjectGradeDto> projectAGrades = getProjectGradeDtos();
+        List<ProjectGradeDto> projectBGrades = getProjectGradeDtos();
+        projectBGrades.get(0).setGradeValue(0.3);
+        projectBGrades.get(1).setGradeValue(0.0);
+
+        given(scienceFairService.getScienceFair(anyLong())).willReturn(foundScienceFairDto);
+        given(icProjectRepository.findAllByScienceFairId(anyLong())).willReturn(foundProjects);
+        given(projectUserService.getProjectUsers(1L)).willReturn(projectAUsers);
+        given(projectUserService.getProjectUsers(2L)).willReturn(projectBUsers);
+        given(projectGradeService.getProjectGrades(1L)).willReturn(projectAGrades);
+        given(projectGradeService.getProjectGrades(2L)).willReturn(projectBGrades);
+
+        List<ProjectDto> projectDtos = icProjectService.getAllProjectsFromScienceFair(1l);
+
+        assertThat(projectDtos.get(0).getTeacher()).isEqualTo(projectAUsers.get(2));
+        assertThat(projectDtos.get(0).getTeacher().getRole()).isEqualTo(UserTypeEnum.TEACHER);
+        projectDtos.get(0).getStudents().forEach(student -> assertThat(student.getRole()).isEqualTo(UserTypeEnum.STUDENT));
+        projectDtos.get(0).getStudents().forEach(student -> assertThat(student).isIn(projectAUsers));
+        assertThat(projectDtos.get(0)).usingRecursiveComparison().ignoringFields("grades", "students", "teacher", "scienceFair", "gradeSum").isEqualTo(foundProjects.get(0));
+
+        assertThat(projectDtos.get(1).getTeacher()).isEqualTo(projectBUsers.get(2));
+        assertThat(projectDtos.get(1).getTeacher().getRole()).isEqualTo(UserTypeEnum.TEACHER);
+        projectDtos.get(1).getStudents().forEach(student -> assertThat(student.getRole()).isEqualTo(UserTypeEnum.STUDENT));
+        projectDtos.get(1).getStudents().forEach(student -> assertThat(student).isIn(projectBUsers));
+        assertThat(projectDtos.get(1)).usingRecursiveComparison().ignoringFields("grades", "students", "teacher", "scienceFair", "gradeSum").isEqualTo(foundProjects.get(1));
+
     }
 
 }
