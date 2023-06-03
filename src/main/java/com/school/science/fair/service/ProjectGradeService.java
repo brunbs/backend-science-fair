@@ -10,5 +10,6 @@ public interface ProjectGradeService {
 
     List<ProjectGradeDto> insertGradesIntoProject(List<GradeDto> grades, ProjectDto projectDto);
     List<ProjectGradeDto> getProjectGrades(Long projectId);
+    void deleteAllProjectGrades(Long projectId);
 
 }

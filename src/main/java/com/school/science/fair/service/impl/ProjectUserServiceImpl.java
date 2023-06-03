@@ -60,6 +60,12 @@ public class ProjectUserServiceImpl implements ProjectUserService {
         return usersDto;
     }
 
+    @Override
+    public void deleteProjectUsers(Long projectId) {
+        List<ProjectUser> projectUsers = projectUserRepository.findAllByIcProjectId(projectId);
+        projectUsers.forEach(userOfProject -> projectUserRepository.delete(userOfProject));
+    }
+
     private ProjectUserDto buildProjectUserDto(ProjectUser projectUser) {
         return ProjectUserDto.builder()
                 .name(projectUser.getUsers().getName())
