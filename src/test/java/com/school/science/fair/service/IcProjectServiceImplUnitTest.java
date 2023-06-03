@@ -39,6 +39,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 
 @ExtendWith({MockitoExtension.class, SoftAssertionsExtension.class})
 @DataJpaTest
@@ -171,6 +172,19 @@ public class IcProjectServiceImplUnitTest {
         projectDtos.get(1).getStudents().forEach(student -> assertThat(student).isIn(projectBUsers));
         assertThat(projectDtos.get(1)).usingRecursiveComparison().ignoringFields("grades", "students", "teacher", "scienceFair", "gradeSum").isEqualTo(foundProjects.get(1));
 
+    }
+
+    @DisplayName("Delete a project")
+    @Test
+    void givenValidProjectIdWhenDeleteProjectThenDeletesProjectAndReturnsDeletedProjectDto() {
+        IcProject project = getIcProjectEntity();
+        ProjectDto projectDto = getProjectDto();
+        given(icProjectRepository.findById(anyLong())).willReturn(Optional.of(project));
+        given(icProjectMapper.entityToDto(any(IcProject.class))).willReturn(projectDto);
+        doNothing().when(projectUserService).deleteProjectUsers(anyLong());
+        doNothing().when(projectGradeService).deleteAllProjectGrades(anyLong());
+        ProjectDto returnedProjectDto = icProjectService.deleteProject(1l);
+        assertThat(returnedProjectDto).usingRecursiveComparison().isEqualTo(projectDto);
     }
 
 }
