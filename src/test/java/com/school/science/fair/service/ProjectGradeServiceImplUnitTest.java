@@ -25,10 +25,10 @@ import static com.school.science.fair.domain.mother.GradeSystemMother.getGradeDt
 import static com.school.science.fair.domain.mother.IcProjectMother.getProjectDto;
 import static com.school.science.fair.domain.mother.ProjectGradeMother.getProjectGrades;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith({MockitoExtension.class, SoftAssertionsExtension.class})
 public class ProjectGradeServiceImplUnitTest {
@@ -78,8 +78,17 @@ public class ProjectGradeServiceImplUnitTest {
             assertThat(projectGradeDtos.get(i).getName()).isEqualTo(projectGrades.get(i).getGradeName());
             assertThat(projectGradeDtos.get(i).getDescription()).isEqualTo(projectGrades.get(i).getGradeDescription());
         }
+    }
 
-
+    @DisplayName("Delete all grades of a project")
+    @Test
+    void givenValidProjectIdWhenDeleteAllProjectGradesThenDeletesAllGrades() {
+        List<ProjectGrade> projectGrades = getProjectGrades();
+        given(projectGradeRepository.findAllByIdIcProjectId(anyLong())).willReturn(projectGrades);
+        doNothing().when(projectGradeRepository).deleteAll(projectGrades);
+        projectGradeService.deleteAllProjectGrades(1l);
+        verify(projectGradeRepository).findAllByIdIcProjectId(anyLong());
+        verify(projectGradeRepository).deleteAll(projectGrades);
     }
 
 }

@@ -41,4 +41,10 @@ public class ProjectController implements ProjectApi {
         List<ProjectDto> projectDtos = icProjectService.getAllProjectsFromScienceFair(scienceFairId);
         return ResponseEntity.ok().body(icProjectMapper.listDtoToListResponse(projectDtos));
     }
+
+    @Override
+    public ResponseEntity<ProjectResponse> deleteProject(Long projectId) {
+        ProjectDto deletedProject = icProjectService.deleteProject(projectId);
+        return ResponseEntity.ok().body(icProjectMapper.dtoToResponse(deletedProject));
+    }
 }

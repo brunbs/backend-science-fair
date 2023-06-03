@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 @ExtendWith({MockitoExtension.class, SoftAssertionsExtension.class})
 public class ProjectUserServiceImplUnitTest {
@@ -79,5 +79,16 @@ public class ProjectUserServiceImplUnitTest {
         assertThat(projectUserDtos.get(0)).usingRecursiveComparison().ignoringFields("icProject", "id", "password", "active", "userType", "projectUser", "role").isEqualTo(projectUsers.get(0).getUsers());
         assertThat(projectUserDtos.get(1)).usingRecursiveComparison().ignoringFields("icProject", "id", "password", "active", "userType", "projectUser", "role").isEqualTo(projectUsers.get(1).getUsers());
         assertThat(projectUserDtos.get(2)).usingRecursiveComparison().ignoringFields("icProject", "id", "password", "active", "userType", "projectUser", "role").isEqualTo(projectUsers.get(2).getUsers());
+    }
+
+    @DisplayName("Delete all project users of a project")
+    @Test
+    void givenValidProjectWhenDeleteProjectUsersThenDeletesProjectUsers() {
+        List<ProjectUser> projectUsers = getProjectUsers();
+        given(projectUserRepository.findAllByIcProjectId(anyLong())).willReturn(projectUsers);
+        doNothing().when(projectUserRepository).delete(any(ProjectUser.class));
+        projectUserService.deleteProjectUsers(1l);
+        verify(projectUserRepository).findAllByIcProjectId(1l);
+        verify(projectUserRepository, times(projectUsers.size())).delete(any(ProjectUser.class));
     }
 }

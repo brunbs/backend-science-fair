@@ -39,8 +39,8 @@ public class ProjectGradeServiceImpl implements ProjectGradeService {
         List<ProjectGrade> projectGrades = new ArrayList<>();
 
         for(GradeDto grade : grades) {
-            ProjectGrade novoProjectGrade = new ProjectGrade(project, gradeMapper.requestDtoToEntity(grade));
-            projectGrades.add(novoProjectGrade);
+            ProjectGrade newProjectGrade = new ProjectGrade(project, gradeMapper.requestDtoToEntity(grade));
+            projectGrades.add(newProjectGrade);
         }
 
         projectGradeRepository.saveAll(projectGrades);
@@ -54,5 +54,11 @@ public class ProjectGradeServiceImpl implements ProjectGradeService {
     public List<ProjectGradeDto> getProjectGrades(Long projectId) {
         List<ProjectGrade> projectGrades = projectGradeRepository.findAllByIdIcProjectId(projectId);
         return projectGradeMapper.listEntityToListDto(projectGrades);
+    }
+
+    @Override
+    public void deleteAllProjectGrades(Long projectId) {
+        List<ProjectGrade> projectGrades = projectGradeRepository.findAllByIdIcProjectId(projectId);
+        projectGradeRepository.deleteAll(projectGrades);
     }
 }

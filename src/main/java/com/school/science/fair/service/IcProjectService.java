@@ -9,7 +9,7 @@ public interface IcProjectService {
 
     ProjectDto createProject(Long scienceFairId, CreateProjectDto createProjectDto);
     ProjectDto getProject(Long projectId);
-
     List<ProjectDto> getAllProjectsFromScienceFair(Long scienceFairId);
+    ProjectDto deleteProject(Long projectId);
 
 }

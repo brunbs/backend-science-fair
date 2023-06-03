@@ -9,5 +9,6 @@ public interface ProjectUserService {
 
     List<ProjectUserDto> insertUsersInProject(List<Long> usersRegistrations, ProjectDto projectDto);
     List<ProjectUserDto> getProjectUsers(Long projectId);
+    void deleteProjectUsers(Long projectId);
 
 }

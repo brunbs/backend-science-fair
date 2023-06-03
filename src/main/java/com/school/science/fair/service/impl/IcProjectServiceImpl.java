@@ -105,4 +105,13 @@ public class IcProjectServiceImpl implements IcProjectService {
         projectDto.updateGradeSum();
         return projectDto;
     }
+
+    @Override
+    @Transactional
+    public ProjectDto deleteProject(Long projectId) {
+        ProjectDto foundProjectDto = getProject(projectId);
+        projectUserService.deleteProjectUsers(foundProjectDto.getId());
+        projectGradeService.deleteAllProjectGrades(foundProjectDto.getId());
+        return foundProjectDto;
+    }
 }

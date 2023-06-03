@@ -1,7 +1,9 @@
 package com.school.science.fair.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.school.science.fair.domain.ClassResponse;
 import com.school.science.fair.domain.CreateProjectRequest;
 import com.school.science.fair.domain.ProjectResponse;
 import com.school.science.fair.domain.builder.ExceptionResponseBuilder;
@@ -26,6 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -133,6 +136,28 @@ public class IcProjectControllerUnitTest {
         MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.get("/project/science-fair/1/projects"))
                 .andExpect(status().isNotFound()).andReturn().getResponse();
         assertThat(response.getContentAsString(StandardCharsets.UTF_8)).contains(responseBuilder.getExceptionResponse(SCIENCE_FAIR_NOT_FOUND).getMessage());
+    }
+
+    @DisplayName("200 - DELETE /project/{projectId} with valid projectId")
+    @Test
+    void givenValidProjectIdWhenDeleteProjectThenReturns200OkAndDeletedProject() throws Exception {
+        ProjectDto projectDto = getProjectDto();
+        given(icProjectService.deleteProject(anyLong())).willReturn(projectDto);
+
+        MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.delete("/project/1")).andExpect(status().isOk()).andReturn().getResponse();
+        ProjectResponse projectResponse = mapper.readValue(response.getContentAsString(StandardCharsets.UTF_8), ProjectResponse.class);
+
+        assertThat(projectResponse).usingRecursiveComparison().isEqualTo(projectDto);
+    }
+
+    @DisplayName("404 - DELETE /project/{projectId} with invalid projectId")
+    @Test
+    void givenInvalidProjectIdWhenDeleteProjectThenReturns404NotFound() throws Exception {
+        given(icProjectService.deleteProject(anyLong())).willThrow(new ResourceNotFoundException(HttpStatus.NOT_FOUND, PROJECT_NOT_FOUND));
+
+        MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.delete("/project/1"))
+                .andExpect(status().isNotFound()).andReturn().getResponse();
+        assertThat(response.getContentAsString(StandardCharsets.UTF_8)).contains(responseBuilder.getExceptionResponse(PROJECT_NOT_FOUND).getMessage());
     }
 
 }
